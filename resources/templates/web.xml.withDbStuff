@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2.2.dtd">
+
+<web-app>
+    <servlet>
+        <servlet-name>
+            DBBroker
+        </servlet-name>
+        <servlet-class>
+            com.devdaily.DBBroker
+        </servlet-class>
+
+        <init-param>
+            <param-name>
+               Driver
+            </param-name>
+            <param-value>
+               org.postgresql.Driver
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>
+               ConnectString
+            </param-name>
+            <param-value>
+               jdbc:postgresql://localhost/devdaily
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>
+               UserName
+            </param-name>
+            <param-value>
+               dduser
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>
+               PW
+            </param-name>
+            <param-value>
+              butthead
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>
+               LogPath
+            </param-name>
+            <param-value>
+               /web/sites/my.devdaily.com/data/pool.log
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>
+               MinConnections
+            </param-name>
+            <param-value>
+               5
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>
+               MaxConnections
+            </param-name>
+            <param-value>
+               25
+            </param-value>
+        </init-param>
+
+       <init-param>
+            <param-name>
+               ResetTime
+            </param-name>
+            <param-value>
+               1.00
+            </param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+
+    <servlet-mapping>
+        <servlet-name>
+            DBBroker
+        </servlet-name>
+        <url-pattern>
+            /DBBroker
+        </url-pattern>
+    </servlet-mapping>
+
+
+
+
+<!--         Set up the session stuff           -->
+    <session-config>
+       <session-timeout>
+          240
+       </session-timeout>
+    </session-config>
+</web-app>

@@ -1,0 +1,5 @@
+
+**FOREACH_FIELD**
+parameters.put("**DB_COLUMN_NAME**", **CLASS_INSTANCE_NAME**.get**FIELD_LABEL**());
+**END_FOREACH_FIELD**
+

@@ -1,0 +1,68 @@
+<project name="Cato" default="create-bundle" basedir=".">
+
+    <!-- assumes appbundler-1.0.jar is in the current dir -->
+    <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="appbundler-1.0.jar" />
+    <property environment="env" />
+
+    <!-- input stuff -->
+    <property name="current.dir" value="." />
+    <property name="assemblyJarFile" value="../target/scala-2.10/CatoGui-assembly-1.0.jar" />
+
+    <!-- output stuff -->
+    <property name="release.dir" value="release" />
+
+    <!-- CLEAN -->
+    <target name="clean">
+        <echo message="clean task ..." />
+        <!-- just needed for the first-time setup -->
+        <mkdir dir="${release.dir}"/>
+        <!-- remove old versions -->
+        <delete dir="${release.dir}/Cato.app" />
+    </target>
+
+    <!-- CREATE MAC BUNDLE (new for Java7+) -->
+    <!-- SEE http://www.intransitione.com/blog/take-java-to-app-store/ and                       -->
+    <!--     http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/packagingAppsForMac.html -->
+    <target name="create-bundle" depends="clean">
+        <bundleapp outputdirectory="${release.dir}"
+            name="Cato"
+            displayname="Cato"
+            identifier="com.devdaily.dbgrinder.Main"
+            shortversion="1.0"
+            icon="cato.icns"
+            copyright="Alvin Alexander"
+            applicationCategory="public.app-category.utilities"
+            mainclassname="com/devdaily/kickstart/KickStartMain">
+
+            <runtime dir="${env.JAVA_HOME}" />
+            <classpath file="${assemblyJarFile}" />
+
+            <!-- use 'argument' here? see Info.plist, it has VMOptions and VMArguments -->
+
+            <!-- jvm settings -->
+            <!-- don't use these, the app was crashing with them (like an out of memory crash) -->
+            <!--
+            <option value="-Xms32m"/>
+            <option value="-Xmx256m"/>
+            <option value="-XX:PermSize=20m"/>
+            <option value="-XX:MaxPermSize=20m"/>
+            -->
+
+            <!-- per http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/gc01/index.html -->
+            <!-- "use cms for desktop ui" -->
+            <option value="-XX:+UseConcMarkSweepGC"/>
+            <option value="-XX:ParallelCMSThreads=2"/>
+
+            <option value="-Xdock:icon=Contents/Resources/cato.icns"/>
+            <option value="-Dapple.laf.useScreenMenuBar=true"/>
+            <option value="-Dcom.apple.macos.use-file-dialog-packages=true"/>
+            <option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
+            <option value="-Dapple.awt.application.name=Cato"/>
+            <option value="-Dcom.apple.smallTabs=true"/>
+
+        </bundleapp>
+    </target>
+
+</project>
+
+

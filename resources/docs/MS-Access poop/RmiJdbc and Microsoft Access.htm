@@ -1,0 +1,138 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<TITLE>RmiJdbc and Microsoft Access</TITLE>
+</HEAD>
+
+<body BGCOLOR="#FFFFFF">
+
+<center>
+<H1>RmiJdbc and Microsoft Access</H1>
+<a href="/rmijdbc/index.html">RmiJdbc Home Page</a><br>
+</center>
+
+<HR>
+Connect an MS Access database, using:
+<ul>
+<li>
+The JDBC/ODBC Bridge (local)
+</li>
+<li>
+RmiJdbc and the JDBC/ODBC Bridge (allows remote client/server)
+</li>
+</ul>
+
+Or how to make the JDBC/ODBC Bridge become a Type 3 (client/server)
+JDBC Driver!<p>
+<HR>
+
+<h2>Setup the ODBC datasource</h2>
+
+You should first install Microsoft Access (of course !), ODBC, the Microsoft
+Access ODBC Driver, and MS Query to test your ODBC data source:
+It's all on the Microsoft Office CD-Rom.<p>
+
+Then, download the sample database file that comes with this demo:
+<a href=rjdemo.mdb>rjdemo.mdb</a> (an MS Access DB file - 
+here's a version for <a href=rjdemo97.mdb>office 97</a> - rename it into "rjdemo.mdb" before use).<br>
+To check everything's right, we suggest you open rjdemo.mdb with MS Access,
+and query it: <code>select * from contact</code><p>
+
+<i>If you still have trouble with Access versions, create the DB yourself:
+<ul>
+<li>Create a new DB</li>
+<li>Create a table named "contact", with two columns: "name" and "email"
+(character strings)</li>
+<li>Insert a few data</li>
+<li>Save the DB as "rjdemo.mdb", and use it to run the example!</li>
+</ul></i>
+<p>
+
+It works ?  Now setup your ODBC data source:<br>
+
+<ul>
+<li>
+In the Configuration Panel, double-click ODBC
+</li>
+<li>
+Click "System DSN...", then "Add..."
+</li>
+<li>
+Choose "Microsoft Access Driver (*.mdb)"
+</li>
+<li>
+Type "rjdemo" in the DSN name text box, and browse to select "rjdemo.mdb"
+as the corresponding database.
+</li>
+<li>
+Setup the user name and password in the extended options
+(in the example, I use "admin" as user name and "rjdemo" as password).
+</li>
+</ul>
+
+Then, test your ODBC data source with MS Query; Try the following SQL:<br>
+<code>select * from contact</code><p>
+
+If it does not work, your ODBC data source is not properly configured:
+don't go further until it works fine.<br>
+
+
+<h2>Make a local test with the JDBC/ODBC Bridge</h2>
+
+Of course, you need a Java Development Kit (JDK 1.1 or later):
+Download & installation instructions available at
+<a href=http://java.sun.com/products/jdbc>Javasoft's JDBC web pages</a>.<br>
+
+Here's a <a href=localdemo.java>local example</a> based on the JDBC/ODBC
+Bridge: compile it (<code>javac localdemo.java</code>) and run it
+(<code>java localdemo</code>), it should display some data on the screen.<p>
+
+Don't go further until the local example works: it is necessary to make sure
+the whole chain, from a java application to MS Access data, is well
+configured.<br>
+
+<h2>Install and start RmiJdbc</h2>
+
+<ul>
+<li>
+<a href="http://www.objectweb.org/rmijdbc/download.html">
+Download and install RmiJdbc</a> (for example, install it in a C:\RmiJdbc
+directory).
+</li>
+<li>
+Make your CLASSPATH point on RmiJdbc.jar<br>
+(<code>set CLASSPATH=%CLASSPATH%;C:\RmiJdbc\RmiJdbc.jar</code>,
+or update the CLASSPATH Environment variable in the System part of the
+Configuration Panel if on Windows NT).
+</li>
+<li>
+Start the RmiJdbc server as follows:<br>
+<code>java org.objectweb.rmijdbc.RJJdbcServer</code>
+</li>
+</ul>
+
+<h2>Network the JDBC/ODBC test with RmiJdbc</h2>
+
+The same example as before, but <a href=rjdemo.java>using RmiJdbc !</a><br>
+Compile it (<code>javac rjdemo.java</code>) and run it:<br>
+<code>java rjdemo</code><br>
+Of course, the CLASSPATH needs to point on RmiJdbc.jar, otherwise rjdemo won't
+find the RmiJdbc classes.<p>
+
+Note only two lines of code have really changed to make the demo client/server:<br>
+<code>Class.forName("org.objectweb.rmijdbc.Driver").newInstance();</code>
+now registers the RmiJdbc Driver instead of the JDBC/ODBC bridge,
+and the <code>DriverManager.getConnection(...);</code> first parameter has
+changed, it has been extended to specify a server host address.<p>
+
+<HR><P>
+Note: the example WON'T RUN if org.objectweb.rmijdbc.RJJdbcServer is not
+properly launched !!
+<br>
+You can stop org.objectweb.rmijdbc.RJJdbcServer then start the application to
+see what happens (an exception is raised and there's no data available),
+then restart org.objectweb.rmijdbc.RJJdbcServer and restart the application
+(it should work fine again).
+</BODY>
+</HTML>
+

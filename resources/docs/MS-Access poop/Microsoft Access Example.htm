@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0057)http://gfrweb.gfr.ch/gfr_engineering/ms-access/index.html -->
+<HTML><HEAD><TITLE>Microsoft Access Example</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+
+<BODY text=#000000 vLink=#336699 link=#ff0000 bgColor=#ffffff>
+<H2>Sourcecode / Example<BR>Publishing MS-Access Data on the Web</H2><B>This
+Java servlet allows you to call a Microsoft Access database from any web browser
+and from any computer - only through HTML, no applet is required. The servlet
+itself must be located on a Windows NT system. The code is 100% Java - so you
+can forget MS/DAO. No special packages or drivers are required.</B>
+<BR>&nbsp;<BR>*** With some minor modifications, this example will also work
+fine for any other database like Oracle or MS SQL Server ***
+<BR>&nbsp;<BR>Please follow the instructions at the source code comment.
+<BR>&nbsp;<BR>
+<HR>
+
+
+
+<H2>Sourcecode</H2><BR><PRE><XMP>
+/* ********** ********** ********** ********** ********** ********** ********** **
+
+>>> To make this example running you must have a web server on your NT system that
+    supports java servlets like the Java Web Server from SUN or a Netscape Server.
+    And of course you need an access database (*.mdb) - any file is ok.
+
+
+CONFIGURATION
+-------------
+
+1.0  REGISTER YOUR ACCESS DB INSIDE WINDOWS NT ON ODBC
+
+1.1) On your NT system coose SETTINGS > CONTROL PANEL > ODBC
+1.2) Choose "System DSN - Add.." and select the "Microsoft Access Driver"
+1.3) Browse to the file location of your MS Access DB, then set the (new) ODBC-DB
+     name and the description
+1.4) Set the (new) ODBC-DB username and password
+
+
+2.0  COMPILE AN INSTALL THE SEVLET
+
+2.1) Modify on this servlet DB_NAME, DB_USER and DB_PASSWORD and compile the
+     servlet. If you have given under step 1.x "test" for the DB name, the
+     DB user and for the DB password you don't need to do this - you can
+     just download the compiled class.
+2.2) Copy the servlet class file to the servlet dirctory of your web server
+     and install the servlet - no parameters are needed.
+
+
+3.0  TRYOUT THE SERVLET
+
+3.1) Make a html file like this and store it on your web server:
+
+     <html>
+     <head><title>Call MS Access DB</title></head>
+     <body>
+     <form action="http://192.9.200.20/servlet/GFRdbSmsAccess" method="GET">
+     <table width=100%>
+     <tr><td>Query:</td><td><input type="TEXT" name="query" size=60></td></tr>
+     </table>
+     <input type="SUBMIT" value="Try it">
+     </form>
+     </body></html>
+
+     >>> Replace 192.9.200.20 with the TCP/IP address of your own computer.
+
+3.2) Now you can call the DB from any computer by loading the html page from the
+     web browser
+3.3) At the form field "Query" enter any SQL query like SELECT * FROM "EMPLOYEES"
+3.4) Hint - you don't need a form to for a query - you can also make some
+     direct html links with static queries like this:
+
+     http://192.9.200.20/servlet/GFRdbSmsAccess?query=SELECT+*+FROM+"EMPLOYEES"
+
+=================================================================================
+
+Written by David Fischer
+Version 1.1  -  7 MAY 1998 01:18 AM
+Based on some examples from Sun and on some own ideas
+
+.. and to have no problems:
+Java is a trade mark of Sun Microsystems
+WINDOWS NT and MS ACCESS is a trade mark of Microsoft
+
+** ********** ********** ********** ********** ********** ********** ********** */
+
+
+import java.io.*;
+import java.util.*;
+import java.net.*;
+import java.sql.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+
+public class GFRdbSmsAccess extends HttpServlet
+{
+
+    // *** modify this constants
+    final static String DB_NAME     = "test";
+    final static String DB_USER     = "test";
+    final static String DB_PASSWORD = "test";
+    // *** end modify
+
+    String dbUrl    = "jdbc:odbc:" + DB_NAME;
+    Connection con  = null;
+
+
+    public void doGet (HttpServletRequest req, HttpServletResponse res)
+        throws ServletException, IOException
+    {
+        Statement stmt = null;
+
+        // get the servlet output stream
+        ServletOutputStream out = res.getOutputStream();
+
+        // set the content type
+        res.setContentType("text/html");
+
+        // set the html header
+        out.println("<HEAD><TITLE> GFRdbSmsAccess</TITLE></HEAD><BODY>");
+
+        // get the query parameter from the html form or from the direct call
+        String query = req.getParameter("query");
+	if (query == null)
+        {
+            out.println("Parameter/Value \"query\" required");
+            out.println("</BODY>");
+            out.close();
+            return;
+        }
+
+        // execute query and display result
+        // --------------------------------
+
+        try
+        {
+            // Load the sun jdbc-odbc bridge driver
+            Class.forName ("sun.jdbc.odbc.JdbcOdbcDriver");
+
+            // connect to the jdbc-odbc bridge driver
+            con = DriverManager.getConnection(dbUrl, DB_USER, DB_PASSWORD);
+
+            // Check for, and display and warnings generated by the connect
+            checkForWarning(con.getWarnings (), out);
+
+            // Get the DatabaseMetaData object and display
+            // some information about the connection
+            DatabaseMetaData dma = con.getMetaData ();
+
+            out.println("\nConnected to " + dma.getURL() + "<BR>");
+            out.println("Driver       " + dma.getDriverName() + "<BR>");
+            out.println("Version      " + dma.getDriverVersion() + "<BR>");
+            out.println("&nbsp;<BR><HR>");
+
+            // Create a Statement so we can submit SQL statements to the driver
+            stmt = con.createStatement();
+            // Submit the query, creating a ResultSet object
+            out.println("Execute Query: " + query + "<BR><HR>");
+            ResultSet rs = stmt.executeQuery (query);
+
+            // Display all columns and rows from the result set
+            dispResultSet(rs, out);
+
+            // Close the result set
+            rs.close();
+
+            // Close the statement
+            stmt.close();
+
+            // Close the connection
+            con.close();
+            }
+
+        catch (SQLException ex)
+            {
+                // Error, a SQLException was generated. Display the error information
+                out.println ("<BR><B>*** SQLException caught ***</B><BR>");
+                try { out.println("Warning =   " + stmt.getWarnings() + "<BR>"); }
+                catch (Exception x) {}
+                // get all sql error messages in a loop
+                while (ex != null)
+                {
+                    out.println ("ErrorCode: " + ex.getErrorCode () + "<BR>");
+                    out.println ("SQLState:  " + ex.getSQLState () + "<BR>");
+                    out.println ("Message:   " + ex.getMessage () + "<BR>");
+                    out.println ("&nbsp;<BR>");
+                    ex = ex.getNextException();
+                }
+            }
+        catch (java.lang.Exception ex)
+            {   // All other types of exceptions
+                out.println("Exception: " + ex + "<BR>");
+            }
+
+        // html output done - end of main servlet method doGet
+        out.println("</BODY>");
+        out.close();
+    }
+
+
+
+    private boolean checkForWarning (SQLWarning warn, ServletOutputStream out)
+            throws SQLException, IOException
+    //-------------------------------------------------------------------
+    // Check any SQL warning. Returns true if a warning occurs
+    //-------------------------------------------------------------------
+    {
+        boolean result = false;
+
+        // any warning ?
+        if (warn != null)
+        {
+            out.println ("<BR><B>*** SQL Warning ***</B><BR>");
+            result = true;
+            while (warn != null)
+            {
+                out.println ("ErrorCode: " + warn.getErrorCode () + "<BR>");
+                out.println ("SQLState:  " + warn.getSQLState () + "<BR>");
+                out.println ("Message:   " + warn.getMessage () + "<BR>");
+                out.println ("&nbsp;<BR>");
+                warn = warn.getNextWarning ();
+            }
+        }
+        return result;
+    }
+
+
+
+    private void dispResultSet (ResultSet rs, ServletOutputStream out)
+        throws SQLException, IOException
+    //-------------------------------------------------------------------
+    // Displays the result of the sql query
+    //-------------------------------------------------------------------
+    {
+        // Get the metadata info
+        ResultSetMetaData rsmd = rs.getMetaData ();
+        int numCols = rsmd.getColumnCount ();
+
+        // Display first the column headings
+        out.println("<BR><B>");
+        for (int i=1; i<=numCols; i++)
+        {
+            if (i > 1) out.print(",");
+            out.print(rsmd.getColumnLabel(i));
+        }
+        out.println("</B><BR>");
+
+        // Display result data, fetching until end of the result set
+        while (rs.next())
+        {
+            // Loop through each column and display the data
+            for (int i=1; i<=numCols; i++)
+            {
+                if (i > 1) out.print(",");
+
+                try { out.print(rs.getString(i)); }
+                catch (Exception ex) { out.print("&#139;NULL&#155;"); }
+            }
+            out.println("<BR>");
+        }
+    }
+
+
+} // end of servlet
+
+</XMP></PRE></BODY></HTML>

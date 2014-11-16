@@ -1,0 +1,269 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+        <title> Use Microsoft Access with Java</title>
+        <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+        <meta name="keywords" content=" JDBC, Microsoft Access">
+        <meta name="description" content="">
+        <basefont face="verdana, arial, helvetica" size="2" />
+        <style type="text/css">
+            code {font: 110%;}
+            pre {font: 100%;}
+            td {font: 90%;}
+        </style>
+        <script language="JavaScript">
+            <!--
+            function openBrWindow() {
+                win=window.open("http://www.javaworld.com/channel_content/jw-story-feedback.shtml",'Feedback','width=600,height=330,toolbar=no,location=no,directories=no,menubar=no,scrollbars=yes,resizable=yes');
+            }
+            -->
+        </script>
+    </head>
+    <body bgcolor="#ffffff" text="#000000" link="#990033" vlink="#990033" alink="#990033" topmargin="0" leftmargin="0" rightmargin="0" bottommargin="0" marginheight="0" marginwidth="0">
+        <table align="center" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <td colspan="2" width="186" bgcolor="#006699"><a href="http://www.javaworld.com"><img height=81 src="http://www.javaworld.com/images/top_jwlogo.gif" width=186 border=0 ></a></td>
+                <td bgcolor="#cccccc" width="100%" align="middle" valign="center"><!-- START TOP 468x60 BANNER -->
+<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0">
+<TR>
+<TD>
+<FONT COLOR="#000000" SIZE="-2" FACE="Arial,Helvetica,Sans-serif">
+Advertisement: Support JavaWorld, click here!</FONT><BR>
+<NOLAYER>
+<IFRAME SRC="http://ad.doubleclick.net/adi/idg.us.idgnet.javaworld/articles;pos=top;sz=468x60;tile=1;ord=456811?" width="468" height="60" frameborder="no" border="0" MARGINWIDTH="0" MARGINHEIGHT="0" SCROLLING="no">
+<A HREF="http://ad.doubleclick.net/jump/idg.us.idgnet.javaworld/articles;abr=!ie;pos=top;sz=468x60;tile=1;ord=456811?"><IMG SRC="http://ad.doubleclick.net/ad/idg.us.idgnet.javaworld/articles;abr=!ie;pos=top;sz=468x60;tile=1;ord=456811?" border="0" height="60" width="468"></A>
+</IFRAME>
+</NOLAYER>
+<ILAYER id="layer1" visibility="hidden" width=468 height=60></ILAYER>
+</TD>
+</TR>
+</TABLE>
+<!-- END TOP 468x60 BANNER --></td>
+            </tr>
+        </table>
+        <table align="center" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <td bgcolor="#006699" width="160"><img height=8 src="http://www.javaworld.com/images/spacer.gif" width=160 border=0 ></td>
+                <td width="26" valign="top" align="left" bgcolor="#ffffff"><img height=8 src="http://www.javaworld.com/images/c_whtbottom.gif" width=8 border=0 ></td>
+                <td width="100%"><img height=1 src="http://www.javaworld.com/images/spacer.gif" width=8 border=0 ></td>
+            </tr>
+        </table>
+        <table align="center" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <td bgcolor="#006699" width="160" align="middle" valign="center" nowrap><nobr><font face="Verdana, Arial, Sans-serif" color="#ffffff" size="1">September 2000</font></nobr><img height=1 src="http://www.javaworld.com/images/spacer.gif" width=160 border=0 ></td>
+                <td width="8"><img height=1 src="http://www.javaworld.com/images/spacer.gif" width=8 border=0 ></td>
+                <td bgcolor="#006699" width="8" valign="top"><img height=8 src="http://www.javaworld.com/images/c_bltlft.gif" width=8 border=0 ></td>
+                <td bgcolor="#006699" width="100%" align="middle" valign="center">    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+        <tr>
+            <td align="middle" bgcolor="#006699"><a href="http://www.javaworld.com"><font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff">HOME</font></a></td>
+            <td align="middle" bgcolor="#006699"><a href="http://www.javaworld.com/features/index.shtml"><font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff">FEATURED TUTORIALS</font></a></td>
+            <td align="middle" bgcolor="#006699"><a href="http://www.javaworld.com/columns/index.shtml"><font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff">COLUMNS</font></a></td>
+            <td align="middle" bgcolor="#006699"><a href="http://www.javaworld.com/news-reviews/index.shtml"><font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff">NEWS & REVIEWS</font></a></td>
+            <td align="middle" bgcolor="#006699"><a href="http://forums.devworld.com/webx?13@@.ee6b802"><font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff">FORUM</font></a></td>
+            <td align="middle" bgcolor="#006699"><a href="http://www.javaworld.com/resources/index.shtml"><font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff">JW RESOURCES</font></a></td>
+            <td align="middle" bgcolor="#006699"><a href="http://www.javaworld.com/info/jw-about-index.shtml"><font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff">ABOUT JW</font></a></td>
+        </tr>
+    </table></td>
+                <td bgcolor="#006699" width="8" align="right" valign="top"><img height=8 src="http://www.javaworld.com/images/c_bltrt.gif" width=8 border=0 ></td>
+                <td width="8"><img height=1 src="http://www.javaworld.com/images/spacer.gif" width=8 border=0 ></td>
+            </tr>
+        </table>
+<!--        <table align="center" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr valign="top">
+                <td bgcolor="#006699" width="160" align="middle" valign="top">
+                    <table width="160" border="0" cellspacing="0" cellpadding="0" bgcolor="#006699" summary=""> -->
+                        <!-- #include snippets/jw-search-snippet.txt -->
+                   <!--     <tr>
+                            <td width="8"><img height=1 alt="" src="http://www.javaworld.com/images/spacer.gif" width=8 ></td>
+                            <td><img height=1 alt="" src="http://www.javaworld.com/images/rule_ltblue.gif" width=144 vspace=2 ><br>
+                                <font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff"><strong>ARCHIVE</strong></font><br>
+                                <img height=1 alt="" src="http://www.javaworld.com/images/rule_ltblue.gif" width=144 vspace=2 ><br>
+                                <strong><a href="http://www.javaworld.com/channel_content/jw-topical-index.shtml"><font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff">TOPICAL INDEX</font></a></strong></font><br>--><!-- #include snippets/jw-topical-generic.txt -->
+       <!--                         <img height=1 alt="" src="http://www.javaworld.com/images/rule_ltblue.gif" width=144 vspace=2 ><br>
+                                <font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff"><strong>FREE JAVAWORLD NEWSLETTERS</strong></font><br>
+                                 <img height=1 alt="" src="images/rule_ltblue.gif" width=144 vspace=2 ><br></td>
+                            <td width="8"><img height=1 alt="" src="http://www.javaworld.com/images/spacer.gif" width=8 ></td>
+                        </tr>
+                        <tr valign="bottom">
+                            <td width="8"><img height=1 alt="" src="http://www.javaworld.com/images/spacer.gif" width=8 ></td>
+                            <td> </td>
+                            <td width="8"><img height=8 alt="" src="http://www.javaworld.com/images/c_gryblbottom.gif" width=8 ></td>
+                        </tr>
+                        <tr>
+                            <td width="8" bgcolor="#cccccc"> </td>
+                            <td bgcolor="#cccccc"> </td>
+                            <td width="8" bgcolor="#cccccc"> </td>
+                        </tr>
+                        <tr>
+                       <td width="8" bgcolor="#cccccc"><img height=1 alt="" src="http://www.javaworld.com/images/spacer.gif" width=8 ></td>
+                           <td align="middle" bgcolor="#cccccc">  -->  <!-- #include snippets/jw-articles-left-ad.txt -->    <!--      </td>
+                       <td width="8" bgcolor="#cccccc"><img height=8 alt="" src="http://www.javaworld.com/images/spacer.gif" width=8></td>
+                        </tr>
+                        <tr>
+                            <td width="8" bgcolor="#cccccc"> </td>
+                            <td bgcolor="#cccccc"> </td>
+                            <td width="8" bgcolor="#cccccc"> </td>
+                        </tr>
+                        <tr valign="top">
+                            <td width="8"><img height=1 alt="" src="http://www.javaworld.com/images/spacer.gif" width=8 ></td>
+                            <td> </td>
+                            <td width="8"><img height=8 alt="" src="http://www.javaworld.com/images/c_grybltop.gif" width=8 ></td>
+                        </tr>
+                    </table> -->
+                    <img height=8 src="http://www.javaworld.com/images/spacer.gif" width=160 border=0 ></td>
+					<td width="8"><img height=1 alt="" src="http://www.javaworld.com/images/spacer.gif" width=8 ></td>
+                <td width="100%">
+				    <!-- ## MAIN CONTENT STARTS HERE ### -->
+                    <font face="verdana, arial, helvetica" size="2">
+                       <P> <strong> Java Q&A</strong></p>
+                        <p>
+                            <h1 align="CENTER"> Use Microsoft Access with Java</h1>
+                            <h3 align="CENTER"> How do you connect to an Access-based database with JDBC?</h3>
+                        </p>
+                        <!--<BLOCKQUOTE><STRONG>Summary</STRONG><BR>-->
+                        
+                        <!--</BLOCKQUOTE>-->
+                        <STRONG>By  Tony Sintes</STRONG>
+                        <p><img src="http://www.javaworld.com/images/rule_ltblue.gif" width="100%" height="2"></p>
+
+                        <p><br /></p>
+                        <!-- #include snippets/jw-articles-336x280.txt -->
+                        <p><P>
+<img align="left" width="28" height="24" SRC="/javaworld/abcs/q.gif" alt="Q"><STRONG>Two questions: <ol> <li>How do you connect to a Microsoft Access-based database (in a Windows system) using JDBC?</li> <li>In <code>Class.forName(....)</code> and <code>DriverManager.getConnection(....)</code>, what driver and URL should you use?</li> </ol> </STRONG> <P>
+<img align="left" width="26" height="24" SRC="/javaworld/abcs/a.gif" alt="A">There are two techniques available for connecting to a data source using JDBC. First, if your program will talk to an ODBC data source, you can use the JDBC-ODBC bridge included with your JDK. In the case of Sun, you would use <code>sun.jdbc.odbc.JbdcOdbcDriver</code>. <P>
+Specifically, using <code>Class.forName</code>: <P>
+<CODE><P>
+<BR>
+
+Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");<BR>
+</CODE><P>
+or the command line: <P>
+<CODE><P>
+<BR>
+
+java -Djdbc.drivers=sun.jdbc.odbc.JdbcOdbcDriver &lt;program name&gt;<BR>
+</CODE><P>
+Second, you can connect to your data source through a third-party, vendor-specific bridge. In the case of a third party driver, you simply substitute that driver for the JDBC-ODBC bridge driver. <P>
+See the <a href="#resources">Resources</a> section below for a link to Sun's database of available drivers. <P>
+Once you have a driver loaded and your data source set up, getting a connection is a simple matter of feeding the correct URL, name, and password to the <code>getConnection()</code> method. <P>
+A JDBC URL takes the following form: <P>
+<CODE><P>
+<BR>
+
+jdbc:&lt;subprotocol&gt;:&lt;subname&gt;<BR>
+</CODE><P>
+In the case of Microsoft Access and the ODBC bridge, it would take the form: <P>
+<CODE><P>
+<BR>
+
+jdbc:odbc:&lt;NAME&gt;<BR>
+</CODE><P>
+where <code>&lt;NAME&gt;</code> is the name that you gave the data source when you set it up.
+<P>
+As an aside for those using other drivers, <code>&lt;subprotocol&gt;</code> is the name of the connectivity mechanism used by the driver. <P>
+In my answer, I've assumed quite a bit of JDBC knowledge. If you're completely new to JDBC,  or even if you just need to brush up your skills a bit, head on over to the JDBC Short Course (see <a href="#resources">Resources</a>), an excellent training course that will get you up to speed quickly. <br /></p>
+                        <p><STRONG>About the author</STRONG><BR> 
+
+<a href="http://www.javaworld.com/javaworld/feedback/jw-feedback-form.html" target="_blank">Tony Sintes</a> is a principal consultant at <a href="http://www.broadvision.com">BroadVision</a>. Tony, a Sun-certified Java 1.1 programmer and Java 2 developer, has worked with Java since 1997.
+
+<br /></p>
+                        <p><ul><A NAME="resources"></a><STRONG>Resources</STRONG>
+<BR>
+
+<LI>Want more? See the <strong>Java Q&A</strong> Index for the full Q&A catalog: <BR><A HREF="http://www.javaworld.com/javaworld/javaqa/javaqa-index.html">http://www.javaworld.com/javaworld/javaqa/javaqa-index.html
+</A><BR>
+
+
+<LI>Sun's JDBC driver database: <BR><A HREF="http://industry.java.sun.com/products/jdbc/drivers">http://industry.java.sun.com/products/jdbc/drivers
+</A><BR>
+
+
+<LI>JDBC Short Course from Java.sun.com: <BR><A HREF="http://developer.java.sun.com/developer/onlineTraining/Database/JDBCShortCourse/index.html">http://developer.java.sun.com/developer/onlineTraining/Database/JDBCShortCourse/index.html
+</A><BR>
+
+
+</ul><br /></p>
+                        <!-- REPLACE SIDEBAR -->
+                    </font>
+                    <!-- ## MAIN CONTENT ENDS HERE ### -->
+                </td>
+                <td width="8"><img height=1 src="http://www.javaworld.com/images/spacer.gif" width=8 border=0 ></td>
+            </tr>
+        </table>
+        <table align="center" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <td width="186" bgcolor="#006699" align="middle"><nobr><font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1"></font></nobr><a href="http://www.javaworld.com"><img height=81 src="http://www.javaworld.com/images/top_jwlogo.gif" width=186 border=0></a></td>
+                <td bgcolor="#cccccc" width="8" valign="bottom"><img height=8 src="http://www.javaworld.com/images/c_blgrylftbottom.gif" width=8 border=0 ></td>
+                <td bgcolor="#cccccc" width="100%" align="middle" valign="center"><!-- BOTTOM 468x60 AD STARTS HERE -->
+<TABLE CELLPADDING="0" CELLSPACING="0" BORDER="0">
+<TR>
+<TD>
+<FONT COLOR="#000000" SIZE="-2" FACE="Arial,Helvetica,Sans-serif">
+Advertisement: Support JavaWorld, click here!</FONT><BR>
+<NOLAYER>
+<IFRAME SRC="http://ad.doubleclick.net/adi/idg.us.idgnet.javaworld/articles;pos=bottom;sz=468x60;tile=4;ord=456811?" width="468" height="60" frameborder="no" border="0" MARGINWIDTH="0" MARGINHEIGHT="0" SCROLLING="no">
+<A HREF="http://ad.doubleclick.net/jump/idg.us.idgnet.javaworld/articles;abr=!ie;pos=bottom;sz=468x60;tile=4;ord=456811?"><IMG SRC="http://ad.doubleclick.net/ad/idg.us.idgnet.javaworld/articles;abr=!ie;pos=bottom;sz=468x60;tile=4;ord=456811?" border=0 height="60" width="468"></A>
+</IFRAME>
+</NOLAYER>
+<ILAYER id="layer4" visibility="hidden" width=468 height=60></ILAYER>
+</TD>
+</TR>
+</TABLE>
+<!-- BOTTOM 468x60 AD ENDS HERE -->
+</td>
+                <td width="8"><img height=8 src="http://www.javaworld.com/images/spacer.gif" width=8 border=0 ></td>
+            </tr>
+        </table>
+        <table bgcolor="#006699" align="center" width="100%" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <td width="100%" align="middle" valign="center">    <font face="Verdana,Geneva,Arial,Helvetica,sans-serif" size="1" color="#ffffff">
+        <p>
+            <br />
+            <a href="http://www.javaworld.com"><font color="#ffffff">HOME</font></a>&nbsp;|&nbsp;
+            <a href="http://www.javaworld.com/features/index.shtml"><font color="#ffffff">FEATURED TUTORIALS</font></a>&nbsp;|&nbsp;
+            <a href="http://www.javaworld.com/columns/index.shtml"><font color="#ffffff">COLUMNS</font></a>&nbsp;|&nbsp;
+            <a href="http://www.javaworld.com/news-reviews/index.shtml"><font color="#ffffff">NEWS & REVIEWS</font></a>&nbsp;|&nbsp;
+            <a href="http://forums.devworld.com/webx?13@@.ee6b802"><font color="#ffffff">FORUM</font></a>&nbsp;|&nbsp;
+            <a href="http://www.javaworld.com/resources/index.shtml"><font color="#ffffff">JW RESOURCES</font></a>&nbsp;|&nbsp;
+            <a href="http://www.javaworld.com/info/jw-about-index.shtml"><font color="#ffffff">ABOUT JW</font></a>&nbsp;|&nbsp;
+            <a href="http://www.javaworld.com/feedback"><font color="#ffffff">FEEDBACK</font></a>
+        </p>
+        <p>
+
+            <a href="http://www.javaworld.com/javaworld/common/jw-copyright.html"><font color="#ffffff">Copyright © 2002</font></a> JavaWorld.com, an IDG Communications company
+        </p>
+    </font>
+</td>
+                <td bgcolor="#ffffff" width="8"><img height=8 src="http://www.javaworld.com/images/spacer.gif" width=8 border=0 ></td>
+            </tr>
+            <tr>
+                <td width="100%" align="right" valign="top"><img height=8 src="http://www.javaworld.com/images/c_blrtbottom.gif" width=8 border=0 ></td>
+                <td bgcolor="#ffffff" width="8"><img height=8 src="http://www.javaworld.com/images/spacer.gif" width=8 border=0 ></td>
+            </tr>
+        </table>
+        <!-- USA JavaWorld.com Pixel -->
+        <a href="http://ad.doubleclick.net/jump/idg.pixel.usa.jw/5.31.01usajw;sz=1x1;ord=456811?"><img src="http://ad.doubleclick.net/ad/idg.pixel.usa.jw/5.31.01usajw;sz=1x1;ord=456811?" border=0 height="1" width="1"></a>
+        <!--TOP_BANNER-->
+<LAYER SRC="http://ad.doubleclick.net/adl/idg.us.idgnet.javaworld/articles;pos=top;sz=468x60;tile=1;ord=456811?" width=468 height=60 visibility="hidden" onLoad="moveToAbsolute(layer1.pageX,layer1.pageY);clip.height=60;clip.width=468;visibility='show';">
+</LAYER>
+
+<!--125x125-->
+<LAYER SRC="http://ad.doubleclick.net/adl/idg.us.idgnet.javaworld/articles;pos=med;sz=125x125;tile=2;ord=456811?" width=125 height=125 visibility="hidden" onLoad="moveToAbsolute(layer2.pageX,layer2.pageY);clip.height=125;clip.width=125;visibility='show';">
+</LAYER>
+
+<!--SKYSCRAPER-->
+<LAYER SRC="http://ad.doubleclick.net/adl/idg.us.idgnet.javaworld/articles;pos=skyscraper;sz=120x600;tile=3;ord=456811?" width=120 height=600 visibility="hidden" onLoad="moveToAbsolute(layer3.pageX,layer3.pageY);clip.height=600;clip.width=120;visibility='show';">
+</LAYER>
+
+<!--BOTTOM_BANNER-->
+<LAYER SRC="http://ad.doubleclick.net/adl/idg.us.idgnet.javaworld/articles;pos=bottom;sz=468x60;tile=4;ord=456811?" width=468 height=60 visibility="hidden" onLoad="moveToAbsolute(layer4.pageX,layer4.pageY);clip.height=60;clip.width=468;visibility='show';">
+</LAYER>
+
+<!--Big AD-->
+<LAYER SRC="http://ad.doubleclick.net/adl/idg.us.idgnet.javaworld/articles;pos=rectangle;sz=336x280;tile=5;ord=456811" width=336 height=280 visibility="hidden" onLoad="moveToAbsolute(layer5.pageX,layer5.pageY);clip.height=280;clip.width=336;visibility='show';">
+</LAYER>
+    </body>
+<!-- stories1.idg.net -->
+<!-- DOCID 659072 -->
+</html>
+<!-- EX: 951984000 -->

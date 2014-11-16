@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2.2.dtd">
+
+<web-app>
+
+**FOREACH_CLASS**
+
+    <servlet>
+        <servlet-name>
+            **CLASS_NAME**Controller
+        </servlet-name>
+        <servlet-class>
+            **PACKAGE_NAME**.controller.**CLASS_NAME**Controller
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>
+            **CLASS_NAME**Controller
+        </servlet-name>
+        <url-pattern>
+            /**CLASS_NAME**Controller
+        </url-pattern>
+    </servlet-mapping>
+**END_FOREACH_CLASS**
+
+<!--  Set up the session stuff -->
+    <session-config>
+       <session-timeout>
+          240
+       </session-timeout>
+    </session-config>
+</web-app>
