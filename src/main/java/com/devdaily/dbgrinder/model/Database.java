@@ -35,7 +35,7 @@ public class Database
   throws SQLException,ClassNotFoundException
   {
     Class.forName(this.driver);
-    connection = DriverManager.getConnection(this.url,this.username,this.password);
+    connection = DriverManager.getConnection(url, username, password);
   }
 
   /**
@@ -53,7 +53,7 @@ public class Database
   throws SQLException
   {
     _metaData = connection.getMetaData();
-    printDatabaseMetaDataInformation();
+    //printDatabaseMetaDataInformation();
     return _metaData;
   }
 
@@ -173,9 +173,9 @@ public class Database
     while ( tables.next() )
     {
       tableName = tables.getString(3);
-      System.err.println( "  tableName: " + tableName );
+      //System.err.println( "  tableName: " + tableName );
       String tableType = tables.getString(2);
-      System.err.println( "  tableType: " + tableType );
+      //System.err.println( "  tableType: " + tableType );
       tableNames.addElement(tableName);
     }
     tables.close();
