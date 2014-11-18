@@ -8,6 +8,7 @@ import java.sql.DatabaseMetaData
 import com.alvinalexander.cato.model.Database
 import com.alvinalexander.cato.model.DatabaseUtils
 import com.alvinalexander.cato.model.TableUtils
+import com.devdaily.dbgrinder.utility.StringUtils
 
 /**
 
@@ -47,7 +48,7 @@ object DbTest3 extends App {
     val tableNames = DatabaseUtils.getTableNames(connection, metaData)
     
     // Vector v = Table.getColumnData(currentlySelectedDatabaseTableName,Project.getDatabaseMetaData(),null,null,true);
-    val columns = TableUtils.getColumnData("stocks", metaData, null, null, true).get
+    val columns = TableUtils.getColumnData("transactions", metaData, null, null, true).get
     for (cd <- columns) {
         println(s"ColumnName:  ${cd.getColumnName}")
         println(s"ColumnType:  ${cd.getJavaType}")
@@ -55,15 +56,63 @@ object DbTest3 extends App {
         println("")
     }
     
-    // field names capitalized
-    println("\nField Names Capitalized")
-    println("-----------------------")
+
+    printHeader("Table Names as Class Names")
+    for (t <- tableNames) {
+        println(TableUtils.convertTableNameToClassName(t))
+    }
+    
+
+    printHeader("Table Names as Object Names")
+    for (t <- tableNames) {
+        println(TableUtils.convertTableNameToObjectName(t))
+    }
+    
+
+    printHeader("Prepared Statement Insert String")
+    println(TableUtils.createPreparedStatementInsertString(columns))
+    
+
+    printHeader("Prepared Statement Update String")
+    val fieldNamesPSUpdate = TableUtils. createPreparedStatementUpdateString(columns)
+    println(fieldNamesPSUpdate)
+    
+
+    printHeader("Field Names")
+    val fieldNames = TableUtils.getFieldNames(columns)
+    fieldNames.foreach(println)
+    
+
+    printHeader("Field Names Capitalized")
     val fieldNamesCapitalized = TableUtils.getFieldNamesCapitalized(columns)
     fieldNamesCapitalized.foreach(println)
     
-    println("\nDatabase Table Names")
-    println("--------------------")
+
+    printHeader("Field Names as CSV")
+    val fieldNamesAsCsv = TableUtils.getFieldNamesAsCsvString(columns)
+    println(fieldNamesAsCsv)
+    
+
+    printHeader("Field Names as CSV Capitalized")
+    val fieldNamesCapsAsCsv = TableUtils.getFieldNamesCapitalizedAsCsvString(columns)
+    println(fieldNamesCapsAsCsv)
+    
+
+    printHeader("Field Names as CSV Camel-Cased")
+    val fieldNamesCamelCasedAsCsv = TableUtils.getFieldNamesCamelCasedAsCsvString(columns)
+    println(fieldNamesCamelCasedAsCsv)
+    
+
+    printHeader("Database Table Names")
     tableNames.foreach(println)
+
+
+    def printHeader(s: String) {
+        println(s"\n$s")
+        println(genUnderlines(s))
+    }
+
+    def genUnderlines(s: String) = s.map(_ => "-").mkString
     
 }
 
