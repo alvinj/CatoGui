@@ -25,25 +25,20 @@ public class ColumnData
   int type;
   int columns;
   String name;
+  boolean isRequired;
 
 /**
   * Standard constructor.
   * Requires name, XOPEN type, number of columns.
   * The last is only used for CHAR(x) and DATE fields.
   */
-  public ColumnData (String name, int origType, int columns)
+  public ColumnData (String name, int origType, int columns, boolean isRequired)
   {
     this.name = name;
     this.type = origType;
     this.columns = columns;
+    this.isRequired = isRequired;
     
-//    Debug.println( "\nColumnData contructor 1 called:" );
-//    Debug.println( "  name: " + name );
-//    Debug.println( "  type: " + type );
-//    Debug.println( "  columns: " + columns );
-//    Debug.println( "  " );
-
-
     switch (type)
     {
       case -1:
@@ -186,14 +181,16 @@ public class ColumnData
 /**
   * Returns the name of the column.
   */
-  public String getName()
-  {
-    return name;
+  public String getName() {
+      return name;
   }
 
-  public String getColumnName()
-  {
-    return name;
+  public String getColumnName() {
+      return name;
+  }
+  
+  public boolean isRequired() {
+      return isRequired;
   }
 
 /**

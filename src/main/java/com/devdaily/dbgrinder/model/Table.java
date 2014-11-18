@@ -43,7 +43,8 @@ public class Table
         cd = null;
         try
         {
-          cd = new ColumnData(colName,Integer.parseInt(colStringType),colCols);
+          // kludge - i don't want to have to update this old code
+          cd = new ColumnData(colName,Integer.parseInt(colStringType),colCols, false);
         }
         catch (NumberFormatException nfe)
         {
@@ -54,7 +55,8 @@ public class Table
       {
         colType = rs.getInt(5);  // column type (XOPEN values)
         colCols = rs.getInt(7);  // size e.g. varchar(20)
-        cd = new ColumnData(colName,colType,colCols);
+        // kludge - i don't want to have to update this old code
+        cd = new ColumnData(colName,colType,colCols, false);
       }
       colData.addElement(cd);
     }

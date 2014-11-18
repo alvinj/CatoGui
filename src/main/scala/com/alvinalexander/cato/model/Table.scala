@@ -29,13 +29,14 @@ object Table {
           val colName = rs.getString(4)
           if (typesAreStrings) {
               colStringType = rs.getString(5)
+              val isNullable = rs.getBoolean(11)
               //colCols = rs.getInt(7)  // size e.g. varchar(20)
               // mm.mysql problemette
               // fudge for now. Not that we use columns yet...
               colCols = 1
               cd = null
               try {
-                  cd = new ColumnData(colName,Integer.parseInt(colStringType),colCols)
+                  cd = new ColumnData(colName,Integer.parseInt(colStringType),colCols, TableUtils.isRequired(isNullable))
               } catch {
                   case e: NumberFormatException => 
               }
@@ -44,7 +45,8 @@ object Table {
           {
               colType = rs.getInt(5)  // column type (XOPEN values)
               colCols = rs.getInt(7)  // size e.g. varchar(20)
-              cd = new ColumnData(colName, colType, colCols)
+              val isNullable = rs.getBoolean(11)
+              cd = new ColumnData(colName, colType, colCols, TableUtils.isRequired(isNullable))
           }
           colData += cd
         }

@@ -57,13 +57,13 @@ object DbTest3 extends App {
     }
     
 
-    printHeader("Table Names as Class Names")
+    printHeader("Class Names")
     for (t <- tableNames) {
         println(TableUtils.convertTableNameToClassName(t))
     }
     
 
-    printHeader("Table Names as Object Names")
+    printHeader("Object Names")
     for (t <- tableNames) {
         println(TableUtils.convertTableNameToObjectName(t))
     }
@@ -83,9 +83,9 @@ object DbTest3 extends App {
     fieldNames.foreach(println)
     
 
-    printHeader("Field Names Capitalized")
-    val fieldNamesCapitalized = TableUtils.getFieldNamesCapitalized(columns)
-    fieldNamesCapitalized.foreach(println)
+    printHeader("Field Names as Variable Names")
+    val fieldNamesAsVariableNames = TableUtils.getCamelCaseVariableNames(columns)
+    fieldNamesAsVariableNames.foreach(println)
     
 
     printHeader("Field Names as CSV")
@@ -93,9 +93,14 @@ object DbTest3 extends App {
     println(fieldNamesAsCsv)
     
 
-    printHeader("Field Names as CSV Capitalized")
-    val fieldNamesCapsAsCsv = TableUtils.getFieldNamesCapitalizedAsCsvString(columns)
-    println(fieldNamesCapsAsCsv)
+    printHeader("Fields Required Status")
+    val fieldsRequired = TableUtils.getFieldsRequiredStatus(columns)
+    println(fieldsRequired)
+    
+
+//    printHeader("Field Names as CSV Capitalized")
+//    val fieldNamesCapsAsCsv = TableUtils.getFieldNamesCapitalizedAsCsvString(columns)
+//    println(fieldNamesCapsAsCsv)
     
 
     printHeader("Field Names as CSV Camel-Cased")

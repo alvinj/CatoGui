@@ -53,24 +53,40 @@ object TableUtils {
         fields
     }
   
-    // TODO refactor
-    def getFieldNamesCapitalized(tableColumns: Seq[ColumnData]): Seq[String] = {
+    def getCamelCaseVariableNames(tableColumns: Seq[ColumnData]): Seq[String] = {
         val fields = new ArrayBuffer[String]()
         for (column <- tableColumns) {
-            fields += column.getColumnName.capitalize
+            fields += CatoUtils.convertUnderscoreNameToCamelCase(column.getColumnName)
         }
         fields
     }
+  
+    def getFieldsRequiredStatus(tableColumns: Seq[ColumnData]): Seq[Boolean] = {
+        val fields = new ArrayBuffer[Boolean]()
+        for (column <- tableColumns) {
+            fields += column.isRequired
+        }
+        fields
+    }
+  
+//    // TODO refactor
+//    def getFieldNamesCapitalized(tableColumns: Seq[ColumnData]): Seq[String] = {
+//        val fields = new ArrayBuffer[String]()
+//        for (column <- tableColumns) {
+//            fields += column.getColumnName.capitalize
+//        }
+//        fields
+//    }
   
     def getFieldNamesAsCsvString(tableColumns: Seq[ColumnData]): String = {
         def noOp(fieldName: String) = fieldName
         loopOverTableFieldsAndReturnCsvString(tableColumns, noOp)
     }
   
-    def getFieldNamesCapitalizedAsCsvString(tableColumns: Seq[ColumnData]): String = {
-        def capField(fieldName: String) = fieldName.capitalize
-        loopOverTableFieldsAndReturnCsvString(tableColumns, capField)
-    }
+//    def getFieldNamesCapitalizedAsCsvString(tableColumns: Seq[ColumnData]): String = {
+//        def capField(fieldName: String) = fieldName.capitalize
+//        loopOverTableFieldsAndReturnCsvString(tableColumns, capField)
+//    }
 
     def getFieldNamesCamelCasedAsCsvString(tableColumns: Seq[ColumnData]): String = {
         def camelCaseField(fieldName: String) = StringUtils.convertUnderscoreNameToUpperCase(fieldName)
@@ -89,7 +105,12 @@ object TableUtils {
     }
 
     
-    
+    /**
+     * 
+     * See `getColumns` on the DatabaseMetaData page:
+     * https://docs.oracle.com/javase/7/docs/api/java/sql/DatabaseMetaData.html
+     * 
+     */
     
     
     // Vector v = Table.getColumnData(currentlySelectedDatabaseTableName,Project.getDatabaseMetaData(),null,null,true);
@@ -117,10 +138,11 @@ object TableUtils {
                 val colName = rs.getString(4)
                 if (typesAreStrings) {
                     colStringType = rs.getString(5)
+                    val isNullable = rs.getBoolean(11)
                     numCols = getNumCols(rs)
                     cd = null
                     try {
-                        cd = new ColumnData(colName, Integer.parseInt(colStringType), numCols)
+                        cd = new ColumnData(colName, Integer.parseInt(colStringType), numCols, isRequired(isNullable))
                     } catch {
                         case e: NumberFormatException => // TODO
                     }
@@ -128,8 +150,9 @@ object TableUtils {
                 else
                 {
                     colType = rs.getInt(5)  // column type (XOPEN values)
+                    val isNullable = rs.getBoolean(11)
                     numCols = getNumCols(rs)
-                    cd = new ColumnData(colName, colType, numCols)
+                    cd = new ColumnData(colName, colType, numCols, isRequired(isNullable))
                 }
                 colData += cd
             }
@@ -137,6 +160,9 @@ object TableUtils {
             colData
         }
     }
+    
+    // isRequired is the opposite of isNullable
+    def isRequired(isNullable: Boolean) = if (isNullable) false else true
   
     /**
      * size e.g. varchar(20)
