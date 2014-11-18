@@ -1,5 +1,0 @@
-
-**FOREACH_FIELD**
-if (**FIELD_NAME**.trim().equals("")) fields.put("**DB_COLUMN_NAME**", "**FIELD_NAME**");
-**END_FOREACH_FIELD**
-

@@ -19,6 +19,7 @@ class MainFrameController (mainController: MainGuiController,
     val tabbedPane = new JTabbedPane
     tabbedPane.addTab("Properties", propertiesPanel)
     tabbedPane.addTab("Generate Code", tablesFieldsTemplatesPanel)
+    //tabbedPane.setEnabledAt(1, false)
     mainFrame.getContentPane.add(tabbedPane)
     
     def displayTheGui {
