@@ -44,67 +44,28 @@ object TableUtils {
         CatoUtils.singularize(StringUtils.convertUnderscoreNameToUpperCase(tableName))
     }
 
-    // TODO refactor
     def getFieldNames(tableColumns: Seq[ColumnData]): Seq[String] = {
-        val fields = new ArrayBuffer[String]()
-        for (column <- tableColumns) {
-            fields += column.getColumnName
-        }
-        fields
+        tableColumns.map((cd: ColumnData) => cd.getColumnName)
     }
   
     def getCamelCaseVariableNames(tableColumns: Seq[ColumnData]): Seq[String] = {
-        val fields = new ArrayBuffer[String]()
-        for (column <- tableColumns) {
-            fields += CatoUtils.convertUnderscoreNameToCamelCase(column.getColumnName)
-        }
-        fields
+        def lambda(cd: ColumnData) = CatoUtils.convertUnderscoreNameToCamelCase(cd.getColumnName)
+        tableColumns.map(lambda)
     }
 
     def getJavaFieldTypes(tableColumns: Seq[ColumnData]): Seq[String] = {
-        def lambda(cd: ColumnData) = cd.getJavaType
-        getColumnDataAttributeAsSeq(tableColumns, lambda)
+        tableColumns.map((cd: ColumnData) => cd.getJavaType)
     }
   
-    /**
-     * Loop over the columns/fields in the database table, and apply the function `f` to
-     * each ColumnData instance, returning a `Seq` of the desired type.
-     */
-    private def getColumnDataAttributeAsSeq[A](tableColumns: Seq[ColumnData], f:(ColumnData) => A): Seq[A] = {
-        val fields = new ArrayBuffer[A]()
-        for (column <- tableColumns) {
-            fields += f(column)
-        }
-        fields
-    }
-    
     def getFieldsRequiredStatus(tableColumns: Seq[ColumnData]): Seq[Boolean] = {
-        val fields = new ArrayBuffer[Boolean]()
-        for (column <- tableColumns) {
-            fields += column.isRequired
-        }
-        fields
+        tableColumns.map((cd: ColumnData) => cd.isRequired)
     }
-  
-//    // TODO refactor
-//    def getFieldNamesCapitalized(tableColumns: Seq[ColumnData]): Seq[String] = {
-//        val fields = new ArrayBuffer[String]()
-//        for (column <- tableColumns) {
-//            fields += column.getColumnName.capitalize
-//        }
-//        fields
-//    }
   
     def getFieldNamesAsCsvString(tableColumns: Seq[ColumnData]): String = {
         def noOp(fieldName: String) = fieldName
         loopOverTableFieldsAndReturnCsvString(tableColumns, noOp)
     }
   
-//    def getFieldNamesCapitalizedAsCsvString(tableColumns: Seq[ColumnData]): String = {
-//        def capField(fieldName: String) = fieldName.capitalize
-//        loopOverTableFieldsAndReturnCsvString(tableColumns, capField)
-//    }
-
     def getFieldNamesCamelCasedAsCsvString(tableColumns: Seq[ColumnData]): String = {
         def camelCaseField(fieldName: String) = StringUtils.convertUnderscoreNameToUpperCase(fieldName)
         loopOverTableFieldsAndReturnCsvString(tableColumns, camelCaseField)
