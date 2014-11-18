@@ -60,7 +60,24 @@ object TableUtils {
         }
         fields
     }
+
+    def getJavaFieldTypes(tableColumns: Seq[ColumnData]): Seq[String] = {
+        def lambda(cd: ColumnData) = cd.getJavaType
+        getColumnDataAttributeAsSeq(tableColumns, lambda)
+    }
   
+    /**
+     * Loop over the columns/fields in the database table, and apply the function `f` to
+     * each ColumnData instance, returning a `Seq` of the desired type.
+     */
+    private def getColumnDataAttributeAsSeq[A](tableColumns: Seq[ColumnData], f:(ColumnData) => A): Seq[A] = {
+        val fields = new ArrayBuffer[A]()
+        for (column <- tableColumns) {
+            fields += f(column)
+        }
+        fields
+    }
+    
     def getFieldsRequiredStatus(tableColumns: Seq[ColumnData]): Seq[Boolean] = {
         val fields = new ArrayBuffer[Boolean]()
         for (column <- tableColumns) {

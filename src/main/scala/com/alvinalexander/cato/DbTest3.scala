@@ -98,6 +98,11 @@ object DbTest3 extends App {
     println(fieldsRequired)
     
 
+    printHeader("Field Types (as Java types)")
+    val fieldTypes = TableUtils.getJavaFieldTypes(columns)
+    println(fieldTypes)
+    
+
 //    printHeader("Field Names as CSV Capitalized")
 //    val fieldNamesCapsAsCsv = TableUtils.getFieldNamesCapitalizedAsCsvString(columns)
 //    println(fieldNamesCapsAsCsv)
