@@ -47,20 +47,29 @@ object DbTest3 extends App {
     val tableNames = DatabaseUtils.getTableNames(connection, metaData)
     
     // Vector v = Table.getColumnData(currentlySelectedDatabaseTableName,Project.getDatabaseMetaData(),null,null,true);
-    val columnData = TableUtils.getColumnData("stocks", metaData, null, null, true).get
-    for (cd <- columnData) {
+    val columns = TableUtils.getColumnData("stocks", metaData, null, null, true).get
+    for (cd <- columns) {
         println(s"ColumnName:  ${cd.getColumnName}")
         println(s"ColumnType:  ${cd.getJavaType}")
         println(s"ColumnWidth: ${cd.getNumColumns}")
         println("")
     }
     
+    // field names capitalized
+    println("\nField Names Capitalized")
+    println("-----------------------")
+    val fieldNamesCapitalized = TableUtils.getFieldNamesCapitalized(columns)
+    fieldNamesCapitalized.foreach(println)
     
     println("\nDatabase Table Names")
     println("--------------------")
     tableNames.foreach(println)
     
 }
+
+
+
+
 
 
 

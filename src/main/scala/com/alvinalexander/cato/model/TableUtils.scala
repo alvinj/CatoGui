@@ -8,6 +8,15 @@ import scala.util.{Try,Success,Failure}
 
 object TableUtils {
 
+  // TODO do this better
+  def getFieldNamesCapitalized(tableColumns: Seq[ColumnData]): Seq[String] = {
+      val fields = new ArrayBuffer[String]()
+      for (column <- tableColumns) {
+          fields += column.getColumnName.capitalize
+      }
+      fields
+  }
+  
   // Vector v = Table.getColumnData(currentlySelectedDatabaseTableName,Project.getDatabaseMetaData(),null,null,true);
   // TODO wrap in Try
   /**
