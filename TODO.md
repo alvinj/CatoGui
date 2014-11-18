@@ -1,6 +1,11 @@
 To-Do List
 ==========
 
+* get list of templates when user chooses a new template dir, or when the second tab is selected
+* get list of database tables when connection is made
+* get list of fields when a table is selected
+
+
 * implement 'connect' button
 * handle mainframe closing event
 * implement templates directory button

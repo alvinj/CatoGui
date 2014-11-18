@@ -20,7 +20,8 @@ public class TablesFieldsTemplatesPanel extends JPanel {
 		return tablesScrollPane;
 	}
 
-	public JList getTablesJList() {
+	// AJA - add <String>
+	public JList<String> getTablesJList() {
 		return tablesJList;
 	}
 
@@ -28,7 +29,8 @@ public class TablesFieldsTemplatesPanel extends JPanel {
 		return fieldsScrollPane;
 	}
 
-	public JList getFieldsJList() {
+    // AJA - add <String>
+	public JList<String> getFieldsJList() {
 		return fieldsJList;
 	}
 
@@ -36,7 +38,8 @@ public class TablesFieldsTemplatesPanel extends JPanel {
 		return templatesScrollPane;
 	}
 
-	public JList getTemplatesJList() {
+    // AJA - add <String>
+	public JList<String> getTemplatesJList() {
 		return templatesJList;
 	}
 
@@ -152,7 +155,7 @@ public class TablesFieldsTemplatesPanel extends JPanel {
 					"primary_role"
 				};
 				public int getSize() { return values.length; }
-				public Object getElementAt(int i) { return values[i]; }
+				public String getElementAt(int i) { return values[i]; }
 			});
 			fieldsScrollPane.setViewportView(fieldsJList);
 		}
@@ -176,7 +179,7 @@ public class TablesFieldsTemplatesPanel extends JPanel {
 					"PlayEditForm"
 				};
 				public int getSize() { return values.length; }
-				public Object getElementAt(int i) { return values[i]; }
+				public String getElementAt(int i) { return values[i]; }
 			});
 			templatesScrollPane.setViewportView(templatesJList);
 		}
@@ -194,18 +197,19 @@ public class TablesFieldsTemplatesPanel extends JPanel {
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
+	// AJA - added "<String>" to fields below
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	private JLabel headerLabel;
 	private JLabel helpText;
 	private JLabel tablesLabel;
 	private JLabel fieldsLabel;
 	private JScrollPane tablesScrollPane;
-	private JList tablesJList;
+	private JList<String> tablesJList;
 	private JScrollPane fieldsScrollPane;
-	private JList fieldsJList;
+	private JList<String> fieldsJList;
 	private JLabel templatesLabel;
 	private JScrollPane templatesScrollPane;
-	private JList templatesJList;
+	private JList<String> templatesJList;
 	private JPanel generateCodeButtonPanel;
 	private JButton button2;
 	// JFormDesigner - End of variables declaration  //GEN-END:variables

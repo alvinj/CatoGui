@@ -8,8 +8,13 @@ import scala.util.{Try, Success, Failure}
 
 trait MainGuiController {
     def tryConnectingToDatabase(db: Database): Try[String]
+    def handleWindowClosingEvent
 }
 
+/**
+ * right now this class is growing into the "main controller" for the gui app.
+ * might want to off-load some of this.
+ */
 class CatoGui extends MainGuiController {
   
     val propertiesController = new PropertiesController(this)
@@ -25,10 +30,21 @@ class CatoGui extends MainGuiController {
         possibleConnection match {
             case Success(conn) => 
                  connection = conn
+                 // TODO get the list of db tables and update the gui
+                 val metaData = DatabaseUtils.getTableMetaData(connection).get //TODO do this right
+                 val dbTableNames = DatabaseUtils.getTableNames(connection, metaData)
+                 tablesFieldsTemplatesController.setTableNames(dbTableNames)
                  Success("")
             case Failure(throwable) =>
                  Failure(throwable)
         }
+    }
+    
+    /**
+     * the user is trying to close the mainframe
+     */
+    def handleWindowClosingEvent {
+        // TODO implement this - ask if sure; close the connection; update prefs?
     }
 
 }
