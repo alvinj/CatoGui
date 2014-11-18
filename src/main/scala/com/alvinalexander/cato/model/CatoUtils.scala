@@ -1,5 +1,8 @@
 package com.alvinalexander.cato.model
 
+import java.io.StringWriter
+import java.io.PrintWriter
+
 object CatoUtils {
 
     /**
@@ -25,5 +28,10 @@ object CatoUtils {
         sb.toString
     }
 
+    def getStackTraceString(t: Throwable) = {
+        val sw = new StringWriter
+        t.printStackTrace(new PrintWriter(sw))
+        sw.toString
+    }
 
 }
