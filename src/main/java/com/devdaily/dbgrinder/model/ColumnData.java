@@ -36,12 +36,12 @@ public class ColumnData
     this.name = name;
     this.type = origType;
     this.columns = columns;
-
-    Debug.println( "\nColumnData contructor 1 called:" );
-    Debug.println( "  name: " + name );
-    Debug.println( "  type: " + type );
-    Debug.println( "  columns: " + columns );
-    Debug.println( "  " );
+    
+//    Debug.println( "\nColumnData contructor 1 called:" );
+//    Debug.println( "  name: " + name );
+//    Debug.println( "  type: " + type );
+//    Debug.println( "  columns: " + columns );
+//    Debug.println( "  " );
 
 
     switch (type)
@@ -176,10 +176,22 @@ public class ColumnData
       System.out.println("Column name : "+name+" Type : "+coltype+" is unknown");
   }
 
+  /**
+   * The number of columns defined for the table field.
+   */
+  public int getNumColumns() {
+      return columns;
+  }
+
 /**
   * Returns the name of the column.
   */
   public String getName()
+  {
+    return name;
+  }
+
+  public String getColumnName()
   {
     return name;
   }

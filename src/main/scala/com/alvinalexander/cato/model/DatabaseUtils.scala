@@ -1,11 +1,18 @@
 package com.alvinalexander.cato.model
 
-import java.sql._
-import java.util._
+import java.sql.{Connection, DatabaseMetaData, DriverManager, ResultSet}
 import scala.util.{Try,Success,Failure}
+import scala.collection.mutable.{ArrayBuffer, Map}
 
 object DatabaseUtils {
 
+    val tableTypes = Array("TABLE", "VIEW", "ALIAS", "SYNONYM", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "SYSTEM TABLE")
+  
+    // TODO log the exception here, or use Try/Success/Failure
+    def makeConnection(db: Database): Try[Connection] = {
+        makeConnection(db.driver, db.url, db.username, db.password)
+    }
+  
     // TODO log the exception here, or use Try/Success/Failure
     def makeConnection(driver: String, url: String, username: String, password: String): Try[Connection] = {
         Try {
@@ -28,44 +35,39 @@ object DatabaseUtils {
             databaseType: String,
             catalog: String,
             schema: String,
-            hashOfTableNames: Hashtable)
+            hashOfTableNames: Map[String, String]): Seq[String] =
     {
-        val tableNames = new Vector
+        val tableNames = new ArrayBuffer[String]()
         var tables: ResultSet = null
 
-        val tableTypes = Array("TABLE", "VIEW", "ALIAS", "SYNONYM", "GLOBAL TEMPORARY",
-                              "LOCAL TEMPORARY", "SYSTEM TABLE")
-  
         tables = getTablesForDbType(connection, metaData, databaseType, catalog, schema, tableTypes)
   
         // works for most db's
         if (databaseType.equals("NORMAL")) {
-          tables = metaData.getTables(catalog, schema, "%", tableTypes)
+            tables = metaData.getTables(catalog, schema, "%", tableTypes)
         }
         else if (databaseType.equals("SOLID")) {
-        // works for the "solid" db
-          val query = "SELECT TABLE_SCHEMA, TABLE_TYPE, TABLE_NAME FROM TABLES"
-          val stmt = connection.createStatement
-          tables = stmt.executeQuery(query)
+            // works for the "solid" db
+            val query = "SELECT TABLE_SCHEMA, TABLE_TYPE, TABLE_NAME FROM TABLES"
+            val stmt = connection.createStatement
+            tables = stmt.executeQuery(query)
         }
 
         var i = 0
         var tableName = ""
     
         while (tables.next) {
-          tableName = tables.getString(3)
-          val tableType = tables.getString(2)
-          //System.err.println( " tableName: " + tableName );
-          //System.err.println( " tableType: " + tableType + " \n" );
-    
-          // If we are using a table list
-          // then check against that first.
-          // If no list then we use everything.
-          //
-          if ((hashOfTableNames == null) || (hashOfTableNames.get(tableName) != null)) {
-            //System.err.println( "  adding " + tableName + " to hashOfTableNames ..." );
-            tableNames.addElement(tableName)
-          }
+            tableName = tables.getString(3)
+            val tableType = tables.getString(2)
+            //System.err.println( " tableName: " + tableName );
+            //System.err.println( " tableType: " + tableType + " \n" );
+            
+            // If we are using a table list then check against that first.
+            // If no list then use everything.
+            if ((hashOfTableNames == null) || (hashOfTableNames.get(tableName) != null)) {
+                //System.err.println( "  adding " + tableName + " to hashOfTableNames ..." );
+                tableNames += tableName
+            }
         }
         tables.close
         tableNames
@@ -84,11 +86,11 @@ object DatabaseUtils {
     
         // works for most db's
         if (databaseType.equals("NORMAL")) {
-            tables = metaData.getTables(catalog, schema, "%", tableTypes)
+            tables = metaData.getTables(catalog, schema, "%", tableTypes.toArray)
         }
         else if (databaseType.equals("SOLID")) {
             // works for the "solid" db
-            val query = "SELECT TABLE_SCHEMA,TABLE_TYPE,TABLE_NAME FROM TABLES"
+            val query = "SELECT TABLE_SCHEMA, TABLE_TYPE, TABLE_NAME FROM TABLES"
             val stmt = connection.createStatement
             tables = stmt.executeQuery(query)
         }
@@ -98,12 +100,9 @@ object DatabaseUtils {
   
     // returns a Java Vector
     // TODO wrap in a Try
-    def getTableNames = {
-        
-        val tableTypes = Array("TABLE", "VIEW", "ALIAS", "SYNONYM",
-                                "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "SYSTEM TABLE")
+    def getTableNames(connection: Connection, metaData: DatabaseMetaData) = {
     
-        var tableNames = new Vector
+        var tableNames = new ArrayBuffer[String]()
         var tables: ResultSet = null
     
         /** @todo -- catalog and schema always set to null! */
@@ -113,16 +112,14 @@ object DatabaseUtils {
         var schema: String  = null
     
         val databaseType = "NORMAL"
-        tables = getTablesAsAResultSet(catalog, databaseType, schema, tableTypes, tables)
+        tables = getTablesAsAResultSet(connection, metaData, catalog, databaseType, schema, tableTypes)
     
         var tableName = ""
-        System.err.println( "about to start looping thru table names ..." );
+        //System.err.println( "about to start looping thru table names ..." );
         while (tables.next) {
             tableName = tables.getString(3)
-            //System.err.println( "  tableName: " + tableName );
             val tableType = tables.getString(2)
-            //System.err.println( "  tableType: " + tableType );
-            tableNames.addElement(tableName)
+            tableNames += tableName
         }
         tables.close
         tableNames
@@ -130,12 +127,12 @@ object DatabaseUtils {
   
   
     def printDatabaseMetaDataInformation(metaData: DatabaseMetaData) {
-        System.out.println("");
-        System.out.println("Database & Driver Information:");
-        System.out.println("------------------------------");
-        System.out.println("Database version : " + metaData.getDatabaseProductVersion);
-        System.out.println("Driver Name : " + metaData.getDriverName);
-        System.out.println("Driver Version : " + metaData.getDriverMajorVersion + "."
+        println("");
+        println("Database & Driver Information:");
+        println("------------------------------");
+        println("Database version : " + metaData.getDatabaseProductVersion);
+        println("Driver Name : " + metaData.getDriverName);
+        println("Driver Version : " + metaData.getDriverMajorVersion + "."
                            + metaData.getDriverMinorVersion)
     
         // AJA: temporary: print database table types
@@ -145,7 +142,6 @@ object DatabaseUtils {
             System.err.println( "Valid table type: " + tableType )
         }
     }
-  
 
     // TODO wrap in try
     def getTablesAsAResultSet(
@@ -154,25 +150,25 @@ object DatabaseUtils {
             catalog: String, 
             databaseType: String,
             schema: String,
-            tableTypes: Seq[String],
-            tables: ResultSet): ResultSet = {
+            tableTypes: Seq[String]): ResultSet = {
 
         /** @todo should be able to determine this artificial "database type" from the metadata
          * without needing this parameter
          */
         if (databaseType.equals("NORMAL")) {
-            tables = metaData.getTables(catalog, schema, "%", tableTypes)
-            tables
-        }
-        else if (databaseType.equals("SOLID")) {
+            metaData.getTables(catalog, schema, "%", tableTypes.toArray)
+        } else {
             // works for the "solid" db
-            val query = "SELECT TABLE_SCHEMA, TABLE_TYPE, TABLE_NAME FROM TABLES"
-            val stmt = connection.createStatement()
-            val tables = stmt.executeQuery(query)
-            tables
+            val stmt = connection.createStatement
+            stmt.executeQuery("SELECT TABLE_SCHEMA, TABLE_TYPE, TABLE_NAME FROM TABLES")
         }
     }
   
+    def closeResultSetIgnoringExceptions(rs: ResultSet) {
+        if (rs == null) return
+        try { rs.close } catch { case t: Throwable => }
+    }
+
 }
 
 

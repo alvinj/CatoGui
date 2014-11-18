@@ -7,7 +7,7 @@ import scala.collection.mutable.ArrayBuffer
  * as TableGen reads the database table(s). Examples are Product,
  * Menu, Topping, etc.
  */
-class DomainObject(packageName: String, className: String) 
+case class DomainObject(packageName: String, className: String) 
 {
     var fields = new ArrayBuffer[Field]()
     var methods = new ArrayBuffer[Method]()

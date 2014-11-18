@@ -5,20 +5,19 @@ import java.util.Enumeration
 import java.util.List
 import java.util.Vector
 import com.devdaily.dbgrinder.utility.StringUtils
+import com.devdaily.dbgrinder.model.ColumnData
 
 object DataObjectFactory {
 
-    // TODO wrap in a Try  
-    /**
-      * Writes out the insert function.
-      */
+    // TODO wrap in a Try
+    // TODO this is currently named "write", but should be renamed to show that it returns a String
     def writeInsert(
             tableName: String,
-            _currentClassName: String,
-            _currentObjectName: String,
-            _colData: Vector,
-            _currentDomainObject: DomainObject,
-            _desiredColumns: List): String =
+            currentClassName: String,
+            currentObjectName: String,
+            columnData: Seq[ColumnData],
+            currentDomainObject: DomainObject,
+            desiredColumns: Seq[String]): String =
     {
         var cd: ColumnData = null
         var columnss: StringBuffer = new StringBuffer("( ")
@@ -32,7 +31,7 @@ object DataObjectFactory {
         s += ("/**")
         s += JavaBeanFactory.getIndentation + " * Inserts the current object values into the database.\n"
         s += JavaBeanFactory.getIndentation + " */\n"
-        s += JavaBeanFactory.getIndentation + "public void insert (Connection conn, " + _currentClassName + " " + _currentObjectName + ")\n"
+        s += JavaBeanFactory.getIndentation + "public void insert (Connection conn, " + currentClassName + " " + currentObjectName + ")\n"
         s += JavaBeanFactory.getIndentation + "throws SQLException\n"
         s += JavaBeanFactory.getIndentation + "{\n"
     
@@ -41,34 +40,29 @@ object DataObjectFactory {
         var count = 0
         
         // TODO fix this
-        for (Enumeration e =_colData.elements; e.hasMoreElements; )
-        {
-            cd = e.nextElement.asInstanceOf[ColumnData]
+        //for (Enumeration e =columnData.elements; e.hasMoreElements; )
+        for (cd <- columnData) {
             // only write out Java code for the database table columns the user has selected
-            if ( _desiredColumns.contains(cd.getName)) {
-                count += 1
-        
+            if (desiredColumns.contains(cd.getName)) {
                 // convert names with underscores to camel-naming as part of this process
-                values.append(StringUtils.sqlQuote(_currentObjectName + "." + StringUtils.convertUnderscoreNameToUpperCase(cd.getName.toLowerCase),cd.getJavaType))
-        
+                values.append(StringUtils.sqlQuote(currentObjectName + "." + StringUtils.convertUnderscoreNameToUpperCase(cd.getName.toLowerCase),cd.getJavaType))
                 columnss.append(cd.getName)
-                val currentSetStatement = preparedStatementName + ".set"
-                                           + StringUtils.firstCharacterUpperCase(cd.getJavaType)
-                                           + "(" + count + ","
-                                           + _currentObjectName + "."
-                                           + ((Method)_currentDomainObject.getMethods.get(count-1)).methodName + ""
-                                           + ")"
-                if (e.hasMoreElements) {
+                val javaTypeCapped = cd.getJavaType.capitalize
+                val currMethodName = currentDomainObject.getMethods(count).methodName
+                val currentSetStatement = s"${preparedStatementName}.set${javaTypeCapped}(${count+1},${currentObjectName}.${currMethodName})"
+                // TODO this is probably wrong; may be close
+                if (count < columnData.length) {
                     values.append("+\",\"+")
                     columnss.append(",")
                     questionMarks.append("?,")
-                    setStatements.append( JavaBeanFactory.getIndentation(3) + currentSetStatement + "\n" )
+                    setStatements.append(JavaBeanFactory.getIndentation(3) + currentSetStatement + "\n")
                 } else {
                     values.append("+\" )\"")
                     columnss.append(" )")
                     questionMarks.append("?")
-                    setStatements.append( JavaBeanFactory.getIndentation(3) + currentSetStatement )
+                    setStatements.append(JavaBeanFactory.getIndentation(3) + currentSetStatement)
                 }
+                count += 1
             }
         }
     
