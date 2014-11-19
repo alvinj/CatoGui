@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent
 import javax.swing.ListSelectionModel
 import scala.collection.JavaConversions._
 import javax.swing.DefaultListModel
+import javax.swing.event.ListSelectionListener
+import javax.swing.event.ListSelectionEvent
+import com.alvinalexander.cato.model.DatabaseUtils
 
 class TablesFieldsTemplatesController (mainController: MainGuiController) {
   
@@ -27,7 +30,10 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
     val fieldsTablesModel = new DefaultListModel[String]
     templatesJList.setModel(templateFilesTablesModel)
     databaseTablesJList.setModel(databaseTablesModel)
-
+    tableFieldsJList.setModel(fieldsTablesModel)
+    
+    // listeners
+    databaseTablesJList.addListSelectionListener(new TablesListSelectionListener(this))
     generateCodeButton.addActionListener(new GenerateCodeButtonListener(this))
     
     def setTableNames(dbTableNames: Seq[String]) {
@@ -45,7 +51,18 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
     }
     
     def clearListOfTemplateFiles { templateFilesTablesModel.clear }
+    
+    def handleDatabaseTableSelectedEvent {
+        val dbTableName = databaseTablesJList.getSelectedValue
+        val fields = mainController.getFieldsForTableName(dbTableName)
+        setListOfTableFields(fields)
+    }
 
+    def setListOfTableFields(newFields: Seq[String]) {
+        fieldsTablesModel.clear
+        for (field <- newFields) fieldsTablesModel.addElement(field)
+    }
+    
 }
 
 class GenerateCodeButtonListener(handler: TablesFieldsTemplatesController) extends ActionListener {
@@ -54,5 +71,11 @@ class GenerateCodeButtonListener(handler: TablesFieldsTemplatesController) exten
         handler.handleGenerateCodeButtonClicked
     }
 
+}
+
+class TablesListSelectionListener(controller: TablesFieldsTemplatesController) extends ListSelectionListener {
+    def valueChanged(e: ListSelectionEvent) {
+        if (e.getValueIsAdjusting() == false) controller.handleDatabaseTableSelectedEvent
+    }
 }
 

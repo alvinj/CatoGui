@@ -6,11 +6,14 @@ import com.alvinalexander.cato.model.DatabaseUtils
 import java.sql.Connection
 import scala.util.{Try, Success, Failure}
 import com.alvinalexander.cato.utils.FileUtils
+import com.alvinalexander.cato.model.TableUtils
+import java.sql.DatabaseMetaData
 
 trait MainGuiController {
     def tryConnectingToDatabase(db: Database): Try[String]
     def handleWindowClosingEvent
     def getListOfTemplateFiles: Option[Seq[String]]
+    def getFieldsForTableName(dbTableName: String): Seq[String]
 }
 
 /**
@@ -24,6 +27,7 @@ class CatoGui extends MainGuiController {
     val mainFrameController = new MainFrameController(this, propertiesController, tablesFieldsTemplatesController)
     
     var connection: Connection = null
+    var metaData: DatabaseMetaData = null
 
     mainFrameController.displayTheGui
     
@@ -33,7 +37,7 @@ class CatoGui extends MainGuiController {
             case Success(conn) => 
                  connection = conn
                  // TODO get the list of db tables and update the gui
-                 val metaData = DatabaseUtils.getTableMetaData(connection).get //TODO do this right
+                 metaData = DatabaseUtils.getTableMetaData(connection).get //TODO do this right
                  val dbTableNames = DatabaseUtils.getTableNames(connection, metaData)
                  tablesFieldsTemplatesController.setTableNames(dbTableNames)
                  Success("")
@@ -49,7 +53,12 @@ class CatoGui extends MainGuiController {
         } else {
             Some(FileUtils.getListOfFilesInDirectory(templatesDir))
         }
-            
+    }
+    
+    def getFieldsForTableName(dbTableName: String): Seq[String] = {
+        // TODO do this properly
+        val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
+        TableUtils.getFieldNames(columnData)
     }
     
     /**
