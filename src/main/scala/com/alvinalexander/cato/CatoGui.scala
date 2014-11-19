@@ -14,6 +14,7 @@ trait MainGuiController {
     def handleWindowClosingEvent
     def getListOfTemplateFiles: Option[Seq[String]]
     def getFieldsForTableName(dbTableName: String): Seq[String]
+    def getTemplateDir: String
 }
 
 /**
@@ -60,6 +61,8 @@ class CatoGui extends MainGuiController {
         val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
         TableUtils.getFieldNames(columnData)
     }
+    
+    def getTemplateDir = propertiesController.getTemplatesDir
     
     /**
      * the user is trying to close the mainframe
