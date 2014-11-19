@@ -20,20 +20,14 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
     databaseTablesJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION)         // one db table
     templatesJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION)              // one template
     tableFieldsJList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) // multiple fields ok
-    
-    // models    
-//    fieldsJList.setModel(new AbstractListModel {
-//    String[] values = {
-//        "id",
-//        "username",
-//        "password",
-//        "email_address",
-//        "primary_role"
-//    };
 
+    // jlist models
+    val templateFilesTablesModel = new DefaultListModel[String]
     val databaseTablesModel = new DefaultListModel[String]
+    val fieldsTablesModel = new DefaultListModel[String]
+    templatesJList.setModel(templateFilesTablesModel)
     databaseTablesJList.setModel(databaseTablesModel)
-    
+
     generateCodeButton.addActionListener(new GenerateCodeButtonListener(this))
     
     def setTableNames(dbTableNames: Seq[String]) {
@@ -44,6 +38,13 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
     def handleGenerateCodeButtonClicked {
         // make sure one table is selected, one or more fields are selected, and a template is selected
     }
+    
+    def setListOfTemplateFiles(listOfTemplateFiles: Seq[String]) {
+        templateFilesTablesModel.clear
+        for (file <- listOfTemplateFiles) templateFilesTablesModel.addElement(file)
+    }
+    
+    def clearListOfTemplateFiles { templateFilesTablesModel.clear }
 
 }
 

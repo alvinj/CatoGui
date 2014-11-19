@@ -5,10 +5,12 @@ import com.alvinalexander.cato.model.Database
 import com.alvinalexander.cato.model.DatabaseUtils
 import java.sql.Connection
 import scala.util.{Try, Success, Failure}
+import com.alvinalexander.cato.utils.FileUtils
 
 trait MainGuiController {
     def tryConnectingToDatabase(db: Database): Try[String]
     def handleWindowClosingEvent
+    def getListOfTemplateFiles: Option[Seq[String]]
 }
 
 /**
@@ -40,11 +42,22 @@ class CatoGui extends MainGuiController {
         }
     }
     
+    def getListOfTemplateFiles: Option[Seq[String]] = {
+        val templatesDir = propertiesController.getTemplatesDir
+        if (templatesDir==null || templatesDir.trim=="") {
+            None
+        } else {
+            Some(FileUtils.getListOfFilesInDirectory(templatesDir))
+        }
+            
+    }
+    
     /**
      * the user is trying to close the mainframe
      */
     def handleWindowClosingEvent {
         // TODO implement this - ask if sure; close the connection; update prefs?
+        System.exit(0)
     }
 
 }
@@ -55,4 +68,13 @@ class CatoGui extends MainGuiController {
 object CatoGui extends App {
     new CatoGui
 }
+
+
+
+
+
+
+
+
+
 

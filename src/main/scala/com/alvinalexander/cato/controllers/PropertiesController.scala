@@ -97,6 +97,8 @@ class PropertiesController (mainController: MainGuiController) {
         val fileDialog = SwingUtils.letUserChooseFile(null, null)  // (mainFrame, defaultDir)
         SwingUtils.getCanonicalFilenameFromFileDialog(fileDialog)
     }
+    
+    def getTemplatesDir = templatesDirectoryField.getText
   
 }
 
