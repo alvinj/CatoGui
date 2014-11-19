@@ -8,6 +8,8 @@ import scala.util.{Try, Success, Failure}
 import com.alvinalexander.cato.utils.FileUtils
 import com.alvinalexander.cato.model.TableUtils
 import java.sql.DatabaseMetaData
+import com.alvinalexander.cato.utils.GuiUtils
+import com.alvinalexander.cato.model.CatoUtils
 
 trait MainGuiController {
     def tryConnectingToDatabase(db: Database): Try[String]
@@ -78,7 +80,14 @@ class CatoGui extends MainGuiController {
  * Just start the app.
  */
 object CatoGui extends App {
-    new CatoGui
+    
+    try {
+        new CatoGui
+    } catch {
+        case t: Throwable => GuiUtils.showErrorDialogWithLongText(
+                                 "Boom!", 
+                                 CatoUtils.getStackTraceString(t))
+    }
 }
 
 

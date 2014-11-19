@@ -11,40 +11,52 @@ import anorm.SqlQuery
 //-----------------
 // 1 THE CASE CLASS
 //-----------------
+
 // TODO delete the trailing comma
-case class <<$classname|capitalize>> (
-<<section name=id loop=$camelcase_fields>>
-<<if ($field_is_reqd[id] == true) >>
-var <<$camelcase_fields[id]>>: <<$scala_field_types[id]>>,
-<<else>>
-var <<$camelcase_fields[id]>>: Option[<<$scala_field_types[id]>>],
-<</if>>
-<</section>>
+<#-- TODO get the "if/else" syntax right -->
+case class ${classname} (
+<#list fields as field>
+<#if field.isRequired() >
+    var ${field.fieldName}: ${field.fieldType},
+<#else>
+    var ${field.fieldName}: Option[${field.fieldType}],
+</#if>
+</#list>
+
 )
 
-object <<$classname|capitalize>> {
 
-  val sqlQuery = SQL("SELECT * FROM <<$tablename>> ORDER BY id ASC")
+object ${classname} {
 
-  //-----------------------------------
-  // 2 THE DATABASE 'SELECT ALL' METHOD
-  //-----------------------------------
-  // TODO - delete trailing comma
-  import play.api.Play.current 
-  import play.api.db.DB
-  def selectAll(): List[<<$classname|capitalize>>] = DB.withConnection { implicit connection => 
-    sqlQuery().map ( row =>
-      <<$classname|capitalize>>(
-<<section name=id loop=$camelcase_fields>>
-<<if ($field_is_reqd[id] == true) >>
-row[<<$scala_field_types[id]>>]("<<$fields[id]>>"),
-<<else>>
-row[Option[<<$scala_field_types[id]>>]]("<<$fields[id]>>"),
-<</if>>
-<</section>>
-      )
-    ).toList
-  }
+    val sqlQuery = SQL("SELECT * FROM ${tablename} ORDER BY id ASC")
+
+    //-----------------------------------
+    // 2 THE DATABASE 'SELECT ALL' METHOD
+    //-----------------------------------
+    // TODO - delete trailing comma
+    import play.api.Play.current 
+    import play.api.db.DB
+    def selectAll(): List[${classname}] = DB.withConnection { implicit connection => 
+        sqlQuery().map ( row =>
+            ${classname}(
+<#list fields as field>
+<#if field.isRequired() >
+                row[${field.fieldType}]("${field.fieldName}"),
+<#else>
+                row[Option[${field.fieldType}]]("${field.fieldName}"),
+</#if>
+</#list>
+            )
+        ).toList
+    }
 
 }
+
+
+
+
+
+
+
+
 

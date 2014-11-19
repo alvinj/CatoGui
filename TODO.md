@@ -1,6 +1,8 @@
 To-Do List
 ==========
 
+* does Freemarker support methods like 'capitalize'?
+
 * work through @TODO items in the controllers
 * implement 'generate code' button
   * choose and use a template engine

@@ -20,6 +20,7 @@ import java.awt.Font
 import com.alvinalexander.cato.utils.StringUtils
 import com.alvinalexander.cato.utils.GuiUtils
 import scala.collection.mutable.ArrayBuffer
+import com.alvinalexander.cato.Field
 
 class TablesFieldsTemplatesController (mainController: MainGuiController) {
   
@@ -97,13 +98,14 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
         data += ("classname" -> "User")
         data += ("objectame" -> "user")
         
-        val fields = new ArrayBuffer[String]
-        fields += "id"
-        fields += "username"
-        fields += "password"
-        fields += "email_address"
-        val fieldsAsJavaList : java.util.List[String] = fields
-        data.put("countries", fieldsAsJavaList)
+        // TODO i want to create "fields" as a collection of Field java beans (i think)
+        val fields = new ArrayBuffer[Field]
+        fields += new Field("id", "int", true)
+        fields += new Field("username", "String", true)
+        fields += new Field("password", "String", true)
+        fields += new Field("email", "String", false)
+        val fieldsAsJavaList : java.util.List[Field] = fields
+        data.put("fields", fieldsAsJavaList)
         data.toMap
     }
 
