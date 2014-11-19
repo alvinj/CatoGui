@@ -1,6 +1,7 @@
 To-Do List
 ==========
 
+* get rid of `connectImageLabel`
 * get list of templates when user chooses a new template dir, or when the second tab is selected
 * get list of database tables when connection is made
 * get list of fields when a table is selected
