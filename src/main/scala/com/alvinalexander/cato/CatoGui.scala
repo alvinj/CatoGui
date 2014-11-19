@@ -10,6 +10,7 @@ import com.alvinalexander.cato.model.TableUtils
 import java.sql.DatabaseMetaData
 import com.alvinalexander.cato.utils.GuiUtils
 import com.alvinalexander.cato.model.CatoUtils
+import scala.collection.mutable.ArrayBuffer
 
 trait MainGuiController {
     def tryConnectingToDatabase(db: Database): Try[String]
@@ -17,6 +18,7 @@ trait MainGuiController {
     def getListOfTemplateFiles: Option[Seq[String]]
     def getFieldsForTableName(dbTableName: String): Seq[String]
     def getTemplateDir: String
+    def getFieldDataForTableName(dbTableName: String): Seq[Field]
 }
 
 /**
@@ -62,6 +64,20 @@ class CatoGui extends MainGuiController {
         // TODO do this properly
         val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
         TableUtils.getFieldNames(columnData)
+    }
+    
+    def getFieldDataForTableName(dbTableName: String): Seq[Field] = {
+        // TODO do this properly
+        val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
+        val fieldNames = TableUtils.getFieldNames(columnData)
+        val fieldTypes = TableUtils.getJavaFieldTypes(columnData)
+        val fieldRequiredValues = TableUtils.getFieldsRequiredStatus(columnData)
+        val numFields = fieldNames.length
+        val fields = new ArrayBuffer[Field]
+        for (i <- 0 until numFields) {
+            fields += new Field(fieldNames(i), fieldTypes(i), fieldRequiredValues(i))
+        }
+        fields.toSeq
     }
     
     def getTemplateDir = propertiesController.getTemplatesDir

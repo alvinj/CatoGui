@@ -21,6 +21,7 @@ import com.alvinalexander.cato.utils.StringUtils
 import com.alvinalexander.cato.utils.GuiUtils
 import scala.collection.mutable.ArrayBuffer
 import com.alvinalexander.cato.Field
+import com.alvinalexander.cato.model.TableUtils
 
 class TablesFieldsTemplatesController (mainController: MainGuiController) {
   
@@ -73,7 +74,7 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
     // TODO *** NEED TO DO A LOT OF VALIDATION HERE ***
     def handleGenerateCodeButtonClicked {
         val dbTable = databaseTablesJList.getSelectedValue
-        val fields = tableFieldsJList.getSelectedValues
+        val fields = tableFieldsJList.getSelectedValuesList
         val localTemplateFilename = templatesJList.getSelectedValue
         if (!tftDataIsValid(dbTable, fields, localTemplateFilename)) {
             GuiUtils.showErrorDialog("Invalid Data", "Choose a table, one or more fields, and one template.")
@@ -83,7 +84,7 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
         val templateText = JavaFileUtils.readFileAsString(canonTemplateFilename)
 
         // build up the `data` object from the selected Table and Fields
-        val data = buildDataObjectForTemplate
+        val data = buildDataObjectForTemplate(dbTable: String, fields: Seq[String])
 
         // apply the data to the template to get the desired code
         val generatedCode = CodeGenerator.generateCode(templateText, data)
@@ -92,20 +93,20 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
     }
     
     // TODO get this data correctly
-    private def buildDataObjectForTemplate: Map[String, Object] = {
+    private def buildDataObjectForTemplate(dbTablename: String, fields: Seq[String]): Map[String, Object] = {
         val data = scala.collection.mutable.Map[String, Object]()
-        data += ("tablename" -> "user")
-        data += ("classname" -> "User")
-        data += ("objectame" -> "user")
         
-        // TODO i want to create "fields" as a collection of Field java beans (i think)
-        val fields = new ArrayBuffer[Field]
-        fields += new Field("id", "int", true)
-        fields += new Field("username", "String", true)
-        fields += new Field("password", "String", true)
-        fields += new Field("email", "String", false)
+        // create the single values that the templates need
+        data += ("tablename" -> dbTablename)
+        data += ("classname" -> TableUtils.convertTableNameToClassName(dbTablename))
+        data += ("objectame" -> TableUtils.convertTableNameToObjectName(dbTablename))
+
+        // create the array for "fields" for the template
+        val fields = mainController.getFieldDataForTableName(dbTablename)
         val fieldsAsJavaList : java.util.List[Field] = fields
         data.put("fields", fieldsAsJavaList)
+        
+        // return the Map the code generator will use
         data.toMap
     }
 

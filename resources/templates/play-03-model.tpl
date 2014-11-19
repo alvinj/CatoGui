@@ -1,4 +1,6 @@
-// copy this file to your Play 'app/models/<<$classname>>.scala' file.
+
+// ===================================================================
+// copy this file to your Play 'app/models/${classname}.scala' file.
 // ===================================================================
 
 package models
