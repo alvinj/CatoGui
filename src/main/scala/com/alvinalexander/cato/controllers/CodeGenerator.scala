@@ -1,5 +1,12 @@
 package com.alvinalexander.cato.controllers
 
+import java.io._
+import java.util._
+import freemarker.template._
+import scala.collection.JavaConversions._
+import scala.collection.mutable.ArrayBuffer
+import com.alvinalexander.cato.TemplateEngine
+ 
 object CodeGenerator {
 
     /**
@@ -9,5 +16,32 @@ object CodeGenerator {
     def generateCode(template: String): String = {
         template
     }
+    
+    /**
+     * This code shows a demo of how this needs to work with FreeMarker.
+     * The real method will need to accept (templateAsString, data) as
+     * arguments, and return the transformed String.
+     */
+    def generateCodeExample(templateAsString: String): String = {
+        val data = scala.collection.mutable.Map[String, Object]()
+        data += ("message" -> "Hello, world!")
+    
+        val countries = new ArrayBuffer[String]
+        countries += ("India")
+        countries += ("United States")
+        countries += ("Germany")
+        countries += ("France")
+    
+        // convert the data to java data types before calling the freemarker-based method.
+        // http://www.scala-lang.org/api/current/index.html#scala.collection.JavaConversions$
+        val jlist : java.util.List[String] = countries
+        data.put("countries", jlist)    
+        val jmap = new java.util.HashMap[String, Object](data)
+        
+        val result = TemplateEngine.applyDataToTemplate(templateAsString, jmap)
+        result
+    }
   
 }
+
+
