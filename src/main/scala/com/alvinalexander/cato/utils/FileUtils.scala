@@ -4,6 +4,8 @@ import java.io.File
 
 object FileUtils {
 
+    val SLASH = System.getProperty("file.separator")
+    
     /**
      * Get a recursive listing of all files underneath the given directory.
      * from stackoverflow.com/questions/2637643/how-do-i-list-all-files-in-a-subdirectory-in-scala

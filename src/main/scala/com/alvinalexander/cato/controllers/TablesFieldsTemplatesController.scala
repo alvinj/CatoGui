@@ -17,6 +17,9 @@ import javax.swing.JOptionPane
 import javax.swing.JScrollPane
 import javax.swing.JTextArea
 import java.awt.Font
+import com.alvinalexander.cato.utils.StringUtils
+import com.alvinalexander.cato.utils.GuiUtils
+import scala.collection.mutable.ArrayBuffer
 
 class TablesFieldsTemplatesController (mainController: MainGuiController) {
   
@@ -68,24 +71,59 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
     
     // TODO *** NEED TO DO A LOT OF VALIDATION HERE ***
     def handleGenerateCodeButtonClicked {
-        // TODO make sure one table is selected, one or more fields are selected, and a template is selected
         val dbTable = databaseTablesJList.getSelectedValue
         val fields = tableFieldsJList.getSelectedValues
-        val localTemplateFile = templatesJList.getSelectedValue
-        // TODO validate all of those
-        val templateDir = mainController.getTemplateDir
-        // TODO use the system's file separator
-        val canonTemplateFile = templateDir + "/" + localTemplateFile
-        val templateText = JavaFileUtils.readFileAsString(canonTemplateFile) 
-        val generatedCode = CodeGenerator.generateCode(templateText)
+        val localTemplateFilename = templatesJList.getSelectedValue
+        if (!tftDataIsValid(dbTable, fields, localTemplateFilename)) {
+            GuiUtils.showErrorDialog("Invalid Data", "Choose a table, one or more fields, and one template.")
+            return
+        }
+        val canonTemplateFilename = createCanonicalTemplateFilename(localTemplateFilename)
+        val templateText = JavaFileUtils.readFileAsString(canonTemplateFilename)
+
+        // build up the `data` object from the selected Table and Fields
+        val data = buildDataObjectForTemplate
+
+        // apply the data to the template to get the desired code
+        val generatedCode = CodeGenerator.generateCode(templateText, data)
         // show output
         showSourceCodeDialog("Generated Source Code", generatedCode)
+    }
+    
+    // TODO get this data correctly
+    private def buildDataObjectForTemplate: Map[String, Object] = {
+        val data = scala.collection.mutable.Map[String, Object]()
+        data += ("tablename" -> "user")
+        data += ("classname" -> "User")
+        data += ("objectame" -> "user")
+        
+        val fields = new ArrayBuffer[String]
+        fields += "id"
+        fields += "username"
+        fields += "password"
+        fields += "email_address"
+        val fieldsAsJavaList : java.util.List[String] = fields
+        data.put("countries", fieldsAsJavaList)
+        data.toMap
+    }
+
+    // TODO probably need some validation here
+    private def createCanonicalTemplateFilename(localTemplateFilename: String) = {
+        val templateDir = mainController.getTemplateDir
+        templateDir + FileUtils.SLASH + localTemplateFilename
+    }
+    
+    private def tftDataIsValid(dbTable: String, dbFields: Seq[Object], templateFilename: String): Boolean = {
+        if (StringUtils.isNullOrEmpty(dbTable)) false
+        else if (StringUtils.isNullOrEmpty(templateFilename)) false
+        else if (dbFields == null || dbFields.size==0) false
+        else true
     }
 
     
     private def createTextareaWidgetInsideScrollPane(text: String): JScrollPane = {
         // TODO come up with a smarter way of setting the editor/dialog size
-        val textArea = new JTextArea(50, 130)
+        val textArea = new JTextArea(40, 130)
         textArea.setFont(new Font("Monaco", Font.PLAIN, 12))
         textArea.setText(text)
         textArea.setCaretPosition(0)
