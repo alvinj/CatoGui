@@ -12,5 +12,10 @@ object FileUtils {
         val fileArray = dir.listFiles
         fileArray ++ fileArray.filter(_.isDirectory).flatMap(getRecursiveListOfFiles)
     }
+    
+    def getListOfFilesInDirectory(directoryName: String): Seq[String] = {
+        val dir = new File(directoryName)
+        dir.list
+    }
 
 }
