@@ -84,7 +84,7 @@ object DbTest3 extends App {
     
 
     printHeader("Field Names as Variable Names")
-    val fieldNamesAsVariableNames = TableUtils.getCamelCaseVariableNames(columns)
+    val fieldNamesAsVariableNames = TableUtils.getCamelCaseFieldNames(columns)
     fieldNamesAsVariableNames.foreach(println)
     
 
@@ -96,6 +96,11 @@ object DbTest3 extends App {
     printHeader("Fields Required Status")
     val fieldsRequired = TableUtils.getFieldsRequiredStatus(columns)
     println(fieldsRequired)
+    
+
+    printHeader("Field Types (as Database types)")
+    val dbFieldTypes = TableUtils.getDatabaseFieldTypes(columns)
+    println(dbFieldTypes)
     
 
     printHeader("Field Types (as Java types)")

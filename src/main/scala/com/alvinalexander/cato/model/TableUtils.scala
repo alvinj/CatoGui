@@ -48,11 +48,15 @@ object TableUtils {
         tableColumns.map((cd: ColumnData) => cd.getColumnName)
     }
   
-    def getCamelCaseVariableNames(tableColumns: Seq[ColumnData]): Seq[String] = {
+    def getCamelCaseFieldNames(tableColumns: Seq[ColumnData]): Seq[String] = {
         def lambda(cd: ColumnData) = CatoUtils.convertUnderscoreNameToCamelCase(cd.getColumnName)
         tableColumns.map(lambda)
     }
 
+    def getDatabaseFieldTypes(tableColumns: Seq[ColumnData]): Seq[String] = {
+        tableColumns.map((cd: ColumnData) => cd.getDatabaseColumnType)
+    }
+  
     def getJavaFieldTypes(tableColumns: Seq[ColumnData]): Seq[String] = {
         tableColumns.map((cd: ColumnData) => cd.getJavaType)
     }

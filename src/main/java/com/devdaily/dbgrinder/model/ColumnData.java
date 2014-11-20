@@ -25,6 +25,7 @@ public class ColumnData
   int type;
   int columns;
   String name;
+  String columnType;
   boolean isRequired;
 
 /**
@@ -144,6 +145,7 @@ public class ColumnData
   {
     this.name = name;
     this.columns = columns;
+    this.columnType = coltype;
 
     Debug.println( "\nColumnData contructor 2 called:" );
     Debug.println( "  name: " + name );
@@ -298,4 +300,94 @@ public class ColumnData
 
     return jType;
   }
+
+
+  /**
+   * Some of these could be different. They can probably also be all-caps or all lowercase.
+   * @see http://www.w3schools.com/sql/sql_datatypes_general.asp
+   */
+  public String getDatabaseColumnType()
+  {
+    String cType = null;
+
+    switch (type)
+    {
+      case 1:
+      case 12:
+      case 13:
+      case 22:
+        cType = "Text";
+        break;
+
+      case 2:
+        cType = "Byte";
+        break;
+
+      case 3:
+        cType = "Long";
+        break;
+
+      case 4:
+        cType = "Integer";
+        break;
+
+      case 5:
+        cType = "Integer";  // short
+        break;
+
+      case 6:
+      case 8:
+        cType = "Double";
+        break;
+
+      case 9:
+      case 10:
+        cType = "Double";  // java.math.BigDecimal
+        break;
+
+      case 7:
+        cType = "Double"; // float
+        break;
+
+      case 11:
+        cType = "Date";
+        // always return Timestamp as it's more accurate
+        // and is a superset of Date
+        // NOPE - lets follow Suns recommendations, so...
+        //jType = "Timestamp";
+        break;
+
+      case 14:
+        cType = "Timestamp";
+        break;
+
+      case 15:
+        cType = "Time";
+        break;
+
+      case 16:
+        cType = "Boolean";
+        break;
+
+      case 17:
+      case 18:
+      case 19:
+        cType = "Binary";  // byte[]
+        break;
+
+      case 20:
+        cType = "null";
+        break;
+
+      default:
+        cType = "unknown";
+        break;
+    }
+
+    return cType;
+  }
+
+
+
+
 }

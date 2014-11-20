@@ -3,10 +3,18 @@ package com.alvinalexander.cato;
 public class Field {
 
     String fieldName;
+    String camelCaseFieldName;
     String fieldType;
+    String databaseFieldType;
     boolean isRequired;
 
-    public Field (String fieldName, String fieldType, boolean isRequired) {
+    public Field (
+        String fieldName, 
+        String camelCaseFieldName, 
+        String fieldType, 
+        String databaseFieldType, 
+        boolean isRequired
+    ) {
         this.fieldName = fieldName;
         this.fieldType = fieldType;
         this.isRequired = isRequired;
@@ -36,4 +44,20 @@ public class Field {
         this.isRequired = isRequired;
     }
     
+    public String getCamelCaseFieldName() {
+        return camelCaseFieldName;
+    }
+
+    public void setCamelCaseFieldName(String camelCaseFieldName) {
+        this.camelCaseFieldName = camelCaseFieldName;
+    }
+
+    public String getDatabaseFieldType() {
+        return databaseFieldType;
+    }
+
+    public void setDatabaseFieldType(String databaseFieldType) {
+        this.databaseFieldType = databaseFieldType;
+    }
+
 }

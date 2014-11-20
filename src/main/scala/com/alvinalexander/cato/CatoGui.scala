@@ -70,12 +70,14 @@ class CatoGui extends MainGuiController {
         // TODO do this properly
         val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
         val fieldNames = TableUtils.getFieldNames(columnData)
+        val camelCasefieldNames = TableUtils.getCamelCaseFieldNames(columnData)
         val fieldTypes = TableUtils.getJavaFieldTypes(columnData)
+        val databaseFieldTypes = TableUtils.getDatabaseFieldTypes(columnData)
         val fieldRequiredValues = TableUtils.getFieldsRequiredStatus(columnData)
         val numFields = fieldNames.length
         val fields = new ArrayBuffer[Field]
         for (i <- 0 until numFields) {
-            fields += new Field(fieldNames(i), fieldTypes(i), fieldRequiredValues(i))
+            fields += new Field(fieldNames(i), camelCasefieldNames(i), fieldTypes(i), databaseFieldTypes(i), fieldRequiredValues(i))
         }
         fields.toSeq
     }
