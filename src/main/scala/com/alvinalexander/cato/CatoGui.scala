@@ -11,6 +11,7 @@ import java.sql.DatabaseMetaData
 import com.alvinalexander.cato.utils.GuiUtils
 import com.alvinalexander.cato.model.CatoUtils
 import scala.collection.mutable.ArrayBuffer
+import com.devdaily.dbgrinder.model.ColumnData
 
 trait MainGuiController {
     def tryConnectingToDatabase(db: Database): Try[String]
@@ -19,6 +20,11 @@ trait MainGuiController {
     def getFieldsForTableName(dbTableName: String): Seq[String]
     def getTemplateDir: String
     def getFieldDataForTableName(dbTableName: String): Seq[Field]
+    //def getFieldsForTableName(dbTableName: String): Seq[String]
+    def getPreparedStatementInsertString(dbTableName: String): String
+    def getPreparedStatementUpdateString(dbTableName: String): String
+    def getFieldNamesAsCsvString(dbTableName: String): String
+    def getFieldNamesCamelCasedAsCsvString(dbTableName: String): String
 }
 
 /**
@@ -61,10 +67,30 @@ class CatoGui extends MainGuiController {
     }
     
     def getFieldsForTableName(dbTableName: String): Seq[String] = {
-        // TODO do this properly
-        val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
-        TableUtils.getFieldNames(columnData)
+        TableUtils.getFieldNames(getColumnData(dbTableName))
     }
+    
+    def getPreparedStatementInsertString(dbTableName: String): String = {
+        TableUtils.createPreparedStatementInsertString(getColumnData(dbTableName))
+    }
+    
+    def getPreparedStatementUpdateString(dbTableName: String): String = {
+        TableUtils.createPreparedStatementUpdateString(getColumnData(dbTableName))
+    }
+    
+    def getFieldNamesAsCsvString(dbTableName: String): String = {
+        TableUtils.getFieldNamesAsCsvString(getColumnData(dbTableName))
+    }
+    
+    // getFieldNamesCamelCasedAsCsvString
+    def getFieldNamesCamelCasedAsCsvString(dbTableName: String): String = {
+        TableUtils.getFieldNamesCamelCasedAsCsvString(getColumnData(dbTableName))
+    }
+    
+    private def getColumnData(dbTableName: String): Seq[ColumnData] = {
+        TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
+    }
+    
     
     def getFieldDataForTableName(dbTableName: String): Seq[Field] = {
         // TODO do this properly

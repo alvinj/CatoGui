@@ -74,7 +74,7 @@ object DbTest3 extends App {
     
 
     printHeader("Prepared Statement Update String")
-    val fieldNamesPSUpdate = TableUtils. createPreparedStatementUpdateString(columns)
+    val fieldNamesPSUpdate = TableUtils.createPreparedStatementUpdateString(columns)
     println(fieldNamesPSUpdate)
     
 

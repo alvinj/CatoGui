@@ -31,7 +31,7 @@ object TableUtils {
      * "users" to "User",
      * "research_links" to "ResearchLink", etc.
      */
-    def convertTableNameToClassName(tableName: String) = {
+    def convertTableNameToClassName(tableName: String): String = {
         CatoUtils.singularize(StringUtils.convertUnderscoreNameToUpperCase(tableName).capitalize)
     }
 
@@ -40,7 +40,7 @@ object TableUtils {
      * "users" to "user",
      * "research_links" to "researchLink", etc.
      */
-    def convertTableNameToObjectName(tableName: String) = {
+    def convertTableNameToObjectName(tableName: String): String = {
         CatoUtils.singularize(StringUtils.convertUnderscoreNameToUpperCase(tableName))
     }
 

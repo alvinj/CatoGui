@@ -100,7 +100,12 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
         data += ("tablename" -> dbTablename)
         data += ("classname" -> TableUtils.convertTableNameToClassName(dbTablename))
         data += ("objectame" -> TableUtils.convertTableNameToObjectName(dbTablename))
-
+        
+        // TODO - NEED TO VERIFY THESE
+        data += ("fieldsAsInsertCsvString" -> mainController.getFieldNamesAsCsvString(dbTablename))
+        data += ("prepStmtAsInsertCsvString" -> mainController.getPreparedStatementInsertString(dbTablename))
+        data += ("prepStmtAsUpdateCsvString" -> mainController.getPreparedStatementUpdateString(dbTablename))
+    
         // create the array for "fields" for the template
         val fields = mainController.getFieldDataForTableName(dbTablename)
         val fieldsAsJavaList : java.util.List[Field] = fields
