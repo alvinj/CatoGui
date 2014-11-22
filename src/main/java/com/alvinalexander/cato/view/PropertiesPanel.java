@@ -61,7 +61,7 @@ public class PropertiesPanel extends JPanel {
         passwordTextField = new JTextField();
         connectButtonPanel = new JPanel();
         connectDisconnectButton = new JButton();
-        connectSuccessLabel = new JLabel();
+        connectSuccessLabel = new JLabel("    ");
         templatesPropertiesPanel = new JPanel();
         templatesDirectoryLabel = new JLabel();
         templatesDirectoryTextField = new JTextField();
@@ -173,7 +173,8 @@ public class PropertiesPanel extends JPanel {
 
             //======== connectButtonPanel ========
             {
-                connectButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                // AJA
+                connectButtonPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
                 //---- connectDisconnectButton ----
                 connectDisconnectButton.setText("Connect");

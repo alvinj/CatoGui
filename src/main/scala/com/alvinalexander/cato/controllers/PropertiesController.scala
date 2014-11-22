@@ -10,6 +10,7 @@ import com.alvinalexander.cato.model.CatoUtils
 import javax.swing.JFileChooser
 import com.alvinalexander.cato.utils.SwingUtils
 import com.alvinalexander.cato.CatoGui
+import java.awt.Dimension
 
 class PropertiesController (mainController: CatoGui) {
 
@@ -22,7 +23,10 @@ class PropertiesController (mainController: CatoGui) {
     val passwordField = propertiesPanel.getPasswordTextField
     val connectButton = propertiesPanel.getConnectDisconnectButton
     val successfullyConnectedImageLabel = propertiesPanel.getConnectSuccessLabel  // turn green when connected
+    
+    // TODO get rid of this label in the java code, it's messing up the 'Connect' button position
     successfullyConnectedImageLabel.setText("")
+    successfullyConnectedImageLabel.setPreferredSize(new Dimension(300, 15))
     
     // templates
     val templatesDirectoryField = propertiesPanel.getTemplatesDirectoryTextField

@@ -120,7 +120,7 @@ class CatoGui {
     }
     
     def getFieldDataForTableName(dbTableName: String, fieldsTheUserSelected: Seq[String]): Seq[Field] = {
-        // TODO do this properly
+        // TODO do this properly (not using `get`)
         val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
         val fieldNames = TableUtils.getFieldNames(columnData, fieldsTheUserSelected)
         val camelCasefieldNames = TableUtils.getCamelCaseFieldNames(columnData, fieldsTheUserSelected)
