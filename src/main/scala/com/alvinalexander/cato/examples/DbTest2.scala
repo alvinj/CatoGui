@@ -1,14 +1,7 @@
-package com.alvinalexander.cato
-
-import java.sql.Connection
-import com.devdaily.dbgrinder.model.Project
-import java.util.Properties
-import com.devdaily.dbgrinder.model.Table
-import java.sql.SQLException
-import com.devdaily.dbgrinder.model.ColumnData
-import scala.collection.mutable.ArrayBuffer
+package com.alvinalexander.cato.examples
 import com.devdaily.dbgrinder.model.Database
 import java.sql.DatabaseMetaData
+import scala.collection.JavaConversions.asScalaBuffer
 
 object DbTest2 extends App {
 

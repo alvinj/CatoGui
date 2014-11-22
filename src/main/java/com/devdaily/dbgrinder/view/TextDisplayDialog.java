@@ -9,8 +9,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 
-public class TextDisplayDialog extends DDDialog
-{
+public class TextDisplayDialog extends DDDialog {
   JPanel panel = new JPanel();
   BorderLayout borderLayout = new BorderLayout();
   JPanel buttonPanel = new JPanel();
@@ -19,46 +18,39 @@ public class TextDisplayDialog extends DDDialog
   FlowLayout flowLayout = new FlowLayout();
 
   JButton closeButton = new JButton();
-  JButton clipboardButton = new JButton("Clipboard");
+  JButton clipboardButton = new JButton("Copy to Clipboard");
 
-  public TextDisplayDialog(Frame frame, String title, boolean modal)
-  {
+  public TextDisplayDialog(Frame frame, String title, boolean modal) {
     super(frame, title, modal);
-    try
-    {
+    try {
       init();
       pack();
-    }
-    catch(Exception ex)
-    {
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
 
-  public TextDisplayDialog()
-  {
+  public TextDisplayDialog() {
     this(null, "", false);
   }
-  void init() throws Exception
-  {
+
+  void init() throws Exception {
     panel.setLayout(borderLayout);
     buttonPanel.setLayout(flowLayout);
     closeButton.setText("Close");
-    closeButton.addMouseListener(new java.awt.event.MouseAdapter()
-    {
-      public void mouseClicked(MouseEvent e)
-      {
+    closeButton.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
         closeButton_mouseClicked(e);
       }
     });
-    clipboardButton.addMouseListener(new java.awt.event.MouseAdapter()
-    {
-      public void mouseClicked(MouseEvent e)
-      {
+    clipboardButton.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
         clipboardButton_mouseClicked(e);
       }
     });
-    textArea.setFont(new java.awt.Font("Monospaced", 0, 12));
+    textArea.setFont(new Font("Monaco", Font.PLAIN, 12));
+    textArea.setCaretPosition(0);
+    textArea.setMargin(new Insets(12, 12, 12, 12));
     getContentPane().add(panel);
     panel.add(buttonPanel, BorderLayout.SOUTH);
     buttonPanel.add(clipboardButton, null);
@@ -66,38 +58,33 @@ public class TextDisplayDialog extends DDDialog
     panel.add(textScrollPane, BorderLayout.CENTER);
     textScrollPane.getViewport().add(textArea, null);
   }
-  
-  protected void clipboardButton_mouseClicked(MouseEvent e)
-  {
+
+  protected void clipboardButton_mouseClicked(MouseEvent e) {
     writeToClipboard(textArea.getText(), null);
   }
 
-  public void writeToClipboard(String s, ClipboardOwner owner)
-  {
+  public void writeToClipboard(String s, ClipboardOwner owner) {
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     Transferable transferable = new StringSelection(s);
-    clipboard.setContents(transferable, owner);  
+    clipboard.setContents(transferable, owner);
   }
 
-  void closeButton_mouseClicked(MouseEvent e)
-  {
+  void closeButton_mouseClicked(MouseEvent e) {
     this.dispose();
   }
 
-  public void setText(String text)
-  {
+  public void setText(String text) {
     textArea.setText(text);
+    textArea.setCaretPosition(0);
   }
 
   @Override
-  public void escapeCommandPerformed(KeyEvent e)
-  {
+  public void escapeCommandPerformed(KeyEvent e) {
     closeButton_mouseClicked(null);
   }
 
   @Override
-  public void okCommandPerformed(KeyEvent e)
-  {
+  public void okCommandPerformed(KeyEvent e) {
     closeButton_mouseClicked(null);
   }
 }

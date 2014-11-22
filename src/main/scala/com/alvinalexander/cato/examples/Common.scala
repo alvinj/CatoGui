@@ -1,4 +1,4 @@
-package com.alvinalexander.cato
+package com.alvinalexander.cato.examples
 
 object Common {
 

@@ -1,6 +1,4 @@
-package com.alvinalexander.cato
-
-import java.sql.Connection
+package com.alvinalexander.cato.examples
 import com.devdaily.dbgrinder.model.Project
 import java.util.Properties
 import com.devdaily.dbgrinder.model.Table

@@ -1,14 +1,8 @@
 package com.alvinalexander.cato
-
-import java.sql.Connection
-import java.util.Properties
-import java.sql.SQLException
-import scala.collection.mutable.ArrayBuffer
-import java.sql.DatabaseMetaData
 import com.alvinalexander.cato.model.Database
 import com.alvinalexander.cato.model.DatabaseUtils
 import com.alvinalexander.cato.model.TableUtils
-import com.devdaily.dbgrinder.utility.StringUtils
+import com.alvinalexander.cato.examples.Common
 
 /**
 
@@ -17,7 +11,8 @@ import com.devdaily.dbgrinder.utility.StringUtils
 +-------------------+
 | play_evolutions   |
 | research_links    |
-| stocks            |
+| stocks   import com.alvinalexander.cato.examples.Common
+         |
 | transactions      |
 | users             |
 +-------------------+

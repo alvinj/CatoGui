@@ -22,6 +22,9 @@ import com.alvinalexander.cato.utils.GuiUtils
 import scala.collection.mutable.ArrayBuffer
 import com.alvinalexander.cato.Field
 import com.alvinalexander.cato.model.TableUtils
+import com.devdaily.dbgrinder.view.TextDisplayDialog
+import java.awt.Toolkit
+import java.awt.Dimension
 
 class TablesFieldsTemplatesController (mainController: MainGuiController) {
   
@@ -129,23 +132,38 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
     }
 
     
-    private def createTextareaWidgetInsideScrollPane(text: String): JScrollPane = {
-        // TODO come up with a smarter way of setting the editor/dialog size
-        val textArea = new JTextArea(40, 130)
-        textArea.setFont(new Font("Monaco", Font.PLAIN, 12))
-        textArea.setText(text)
-        textArea.setCaretPosition(0)
-        textArea.setEditable(false)
-        new JScrollPane(textArea)
-    }
+//    private def createTextareaWidgetInsideScrollPane(text: String): JScrollPane = {
+//        // TODO come up with a smarter way of setting the editor/dialog size
+//        val textArea = new JTextArea(40, 130)
+//        textArea.setFont(new Font("Monaco", Font.PLAIN, 12))
+//        textArea.setText(text)
+//        textArea.setCaretPosition(0)
+//        textArea.setEditable(false)
+//        new JScrollPane(textArea)
+//    }
     
     private def showSourceCodeDialog(title: String, textToDisplay: String) {
-        JOptionPane.showMessageDialog(
-            null,
-            createTextareaWidgetInsideScrollPane(textToDisplay),
-            title,
-            JOptionPane.INFORMATION_MESSAGE)
+        val d = new TextDisplayDialog(null, title, true)
+        d.setText(textToDisplay)
+        d.setPreferredSize(getDialogSize)
+        d.pack
+        d.setLocationRelativeTo(null)
+        d.setVisible(true)
+//        JOptionPane.showMessageDialog(
+//            null,
+//            createTextareaWidgetInsideScrollPane(textToDisplay),
+//            title,
+//            JOptionPane.INFORMATION_MESSAGE)
     }
+
+    
+    private def getDialogSize: Dimension = {
+        val screenSize = Toolkit.getDefaultToolkit.getScreenSize
+        val desiredHeight = screenSize.height * 3/4
+        val desiredWidth = screenSize.width * 2/5
+        new Dimension(desiredWidth, desiredHeight)
+    }
+
 
     
     
