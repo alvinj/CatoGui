@@ -20,6 +20,15 @@ If that driver doesn't work for your version of MySQL, just follow these steps:
 * copy your new driver into the _lib_ folder
 * re-build the application
 
+I use MAMP on Mac OS X, and this is the MySQL information I use for testing:
+
+````
+URL:           jdbc:mysql://localhost:8889/finance
+DRIVER:        com.mysql.jdbc.Driver
+USERNAME:      root
+PASSWORD:      root
+TEMPLATES_DIR: /Users/Al/Projects/Scala/CatoGui/resources/templates
+````
 
 Postgres JDBC Driver
 --------------------

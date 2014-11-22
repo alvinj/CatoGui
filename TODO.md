@@ -2,7 +2,6 @@ To-Do List
 ==========
 
 * implement preferences to remember the user's last database and templates info
-* pick up the jdbc jar file dynamically
 * provide a way to map from Java field types to the types of the desired language
 * convert more templates
 * delete the old, dead code
@@ -17,4 +16,9 @@ To-Do List
 
 * run from the command line
 
+
+Long-term
+---------
+
+* pick up the user's jdbc jar file using reflection
 

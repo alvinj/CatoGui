@@ -12,7 +12,13 @@ import com.alvinalexander.cato.utils.SwingUtils
 import com.alvinalexander.cato.CatoGui
 import java.awt.Dimension
 
-class PropertiesController (mainController: CatoGui) {
+class PropertiesController (
+      mainController: CatoGui,
+      driver: String, 
+      url: String, 
+      username: String, 
+      password: String, 
+      templatesDir: String) {
 
     val propertiesPanel = new PropertiesPanel
     
@@ -33,12 +39,11 @@ class PropertiesController (mainController: CatoGui) {
     val templatesDirectoryButton = propertiesPanel.getSelectTemplatesDirectoryButton
     
     // temporary data
-    // TODO replace this stuff with preferences
-    urlField.setText("jdbc:mysql://localhost:8889/finance")
-    driverField.setText("com.mysql.jdbc.Driver")
-    usernameField.setText("root")
-    passwordField.setText("root")
-    templatesDirectoryField.setText("/Users/Al/Projects/Scala/CatoGui/resources/templates")
+    urlField.setText(url)
+    driverField.setText(driver)
+    usernameField.setText(username)
+    passwordField.setText(password)
+    templatesDirectoryField.setText(templatesDir)
     
     // state
     var connectTextIsShowing = true
@@ -62,8 +67,11 @@ class PropertiesController (mainController: CatoGui) {
             return
         }
         // fields validated; try to connect to the database
-        val db = new Database(url, driver, username, password)
+        val db = new Database(driver, url, username, password)
         val result = mainController.tryConnectingToDatabase(db)
+        // it's a little bit less of a pain (less typing) for the user to remember these before checking to see
+        // if the connection was successful.
+        saveDataToPreferences(url, driver, username, password, templatesDirectoryField.getText)
         result match {
             case Success(noop) => 
                 connectButton.setText("Disconnect")
@@ -73,14 +81,21 @@ class PropertiesController (mainController: CatoGui) {
         }
     }
     
-    // TODO implement this
+    private def saveDataToPreferences(url: String, driver: String, username: String, password: String, templatesDir: String) {
+        mainController.saveUrl(url)
+        mainController.saveDriver(driver)
+        mainController.saveUsername(username)
+        mainController.savePassword(password)
+        if (templatesDir != null) mainController.saveTemplatesDir(templatesDir)
+    }
+    
     private def handleDisconnectFromDatabaseProcess {
-        // do this stuff at the end
+        mainController.tryDisconnectingFromDatabase
         connectButton.setText("Connect")
         connectTextIsShowing = true
     }
     
-    private def getTextFromTextFields = (driverField.getText, urlField.getText, usernameField.getText, passwordField.getText)
+    private def getTextFromTextFields = (urlField.getText, driverField.getText, usernameField.getText, passwordField.getText)
     
     private def stringsAreNullOrBlank(strings: Seq[String]): Boolean = {
         for (s <- strings) {
@@ -93,6 +108,7 @@ class PropertiesController (mainController: CatoGui) {
         val tmpDirname = getUserSelectedDirectory
         if (tmpDirname==null || tmpDirname.trim.equals("")) return
         templatesDirectoryField.setText(tmpDirname)
+        mainController.saveTemplatesDir(tmpDirname)
     }
     
     // TODO using FileDialog is correct on Mac OS X and Java 7.

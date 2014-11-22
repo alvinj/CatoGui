@@ -13,6 +13,7 @@ import com.alvinalexander.cato.model.CatoUtils
 import scala.collection.mutable.ArrayBuffer
 import com.devdaily.dbgrinder.model.ColumnData
 import com.alvinalexander.cato.utils.ClassUtils
+import java.util.prefs._
 
 //trait MainGuiController {
 //    def tryConnectingToDatabase(db: Database): Try[String]
@@ -34,7 +35,28 @@ import com.alvinalexander.cato.utils.ClassUtils
  */
 class CatoGui {
   
-    val propertiesController = new PropertiesController(this)
+    // the user's last-used info is stored as preferences
+    val prefs = Preferences.userNodeForPackage(this.getClass)
+    
+    val DRIVER = "DRIVER"
+    val URL    = "URL"
+    val USERNAME = "USERNAME"
+    val PASSWORD = "PASSWORD"
+    val TEMPLATES_DIR = "TEMPLATES_DIR"
+    
+    val lastDbDriver     = prefs.get(DRIVER, "")
+    val lastDbUrl        = prefs.get(URL, "")
+    val lastDbUsername   = prefs.get(USERNAME, "")
+    val lastDbPassword   = prefs.get(PASSWORD, "")
+    val lastTemplatesDir = prefs.get(TEMPLATES_DIR, "")
+    
+    def saveDriver(driver: String)             { prefs.put(DRIVER, driver)} 
+    def saveUrl(url: String)                   { prefs.put(URL, url)} 
+    def saveUsername(username: String)         { prefs.put(USERNAME, username)} 
+    def savePassword(password: String)         { prefs.put(PASSWORD, password)} 
+    def saveTemplatesDir(templatesDir: String) { prefs.put(TEMPLATES_DIR, templatesDir)} 
+    
+    val propertiesController = new PropertiesController(this, lastDbDriver, lastDbUrl, lastDbUsername, lastDbPassword, lastTemplatesDir)
     val tablesFieldsTemplatesController = new TablesFieldsTemplatesController(this)
     val mainFrameController = new MainFrameController(this, propertiesController, tablesFieldsTemplatesController)
     
@@ -55,6 +77,19 @@ class CatoGui {
                  Success("")
             case Failure(throwable) =>
                  Failure(throwable)
+        }
+    }
+    
+    /**
+     * returns `true` if successful, `false` otherwise.
+     */
+    def tryDisconnectingFromDatabase: Boolean = {
+        try {
+            if (connection == null) return false
+            connection.close
+            true
+        } catch {
+            case t: Throwable => false
         }
     }
     
@@ -142,7 +177,7 @@ class CatoGui {
      * the user is trying to close the mainframe
      */
     def handleWindowClosingEvent {
-        // TODO implement this - ask if sure; close the connection; update prefs?
+        tryDisconnectingFromDatabase
         System.exit(0)
     }
 

@@ -151,15 +151,17 @@ public class PropertiesPanel extends JPanel {
                     FormFactory.PARAGRAPH_GAP_ROWSPEC
                 }));
 
+            // AJA - i reversed the Driver and URL fields
+
             //---- urlLabel ----
-            urlLabel.setText("URL");
-            databasePropertiesPanel.add(urlLabel, cc.xy(3, 1));
-            databasePropertiesPanel.add(urlTextField, cc.xy(5, 1));
+            driverLabel.setText("Driver");
+            databasePropertiesPanel.add(driverLabel, cc.xy(3, 1));
+            databasePropertiesPanel.add(driverTextField, cc.xy(5, 1));
 
             //---- driverLabel ----
-            driverLabel.setText("Driver");
-            databasePropertiesPanel.add(driverLabel, cc.xy(3, 3));
-            databasePropertiesPanel.add(driverTextField, cc.xy(5, 3));
+            urlLabel.setText("URL");
+            databasePropertiesPanel.add(urlLabel, cc.xy(3, 3));
+            databasePropertiesPanel.add(urlTextField, cc.xy(5, 3));
 
             //---- usernameLabel ----
             usernameLabel.setText("Username");
