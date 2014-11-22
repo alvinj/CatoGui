@@ -12,6 +12,7 @@ import com.alvinalexander.cato.utils.GuiUtils
 import com.alvinalexander.cato.model.CatoUtils
 import scala.collection.mutable.ArrayBuffer
 import com.devdaily.dbgrinder.model.ColumnData
+import com.alvinalexander.cato.utils.ClassUtils
 
 //trait MainGuiController {
 //    def tryConnectingToDatabase(db: Database): Try[String]
@@ -151,6 +152,14 @@ class CatoGui {
  * Just start the app.
  */
 object CatoGui extends App {
+
+    // TODO i couldn't get these to work easily, and this isn't very important to me.
+//    try {
+//        //ClassUtils.loadAllClasses("/Users/Al/Projects/Scala/CatoGui/resources/mysql-connector-java-5.1.34-bin.jar")
+//        //ClassUtils.loadOnlyMySql("/Users/Al/Projects/Scala/CatoGui/resources/mysql-connector-java-5.1.34-bin.jar")
+//    } catch {
+//        case t: Throwable => t.printStackTrace 
+//    }
     
     try {
         new CatoGui
@@ -160,6 +169,15 @@ object CatoGui extends App {
                                  CatoUtils.getStackTraceString(t))
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 

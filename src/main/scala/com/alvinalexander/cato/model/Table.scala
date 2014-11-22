@@ -187,6 +187,7 @@ object Table {
         index = rs.getString(9)
         if (indexType != DatabaseMetaData.tableIndexStatistic) {
           // ensure that it is not a duplicate value.
+            // TODO fix this
           if (checkIndexes(index) == null) {
             indexList += index
             checkIndexes += index
