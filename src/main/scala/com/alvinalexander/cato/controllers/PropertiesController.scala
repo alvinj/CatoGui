@@ -1,6 +1,5 @@
 package com.alvinalexander.cato.controllers
 
-import com.alvinalexander.cato.MainGuiController
 import com.alvinalexander.cato.view.PropertiesPanel
 import java.awt.event.ActionListener
 import java.awt.event.ActionEvent
@@ -10,8 +9,9 @@ import scala.util.{Try, Success, Failure}
 import com.alvinalexander.cato.model.CatoUtils
 import javax.swing.JFileChooser
 import com.alvinalexander.cato.utils.SwingUtils
+import com.alvinalexander.cato.CatoGui
 
-class PropertiesController (mainController: MainGuiController) {
+class PropertiesController (mainController: CatoGui) {
 
     val propertiesPanel = new PropertiesPanel
     

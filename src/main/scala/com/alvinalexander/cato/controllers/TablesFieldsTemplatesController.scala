@@ -1,6 +1,6 @@
 package com.alvinalexander.cato.controllers
 
-import com.alvinalexander.cato.MainGuiController
+import com.alvinalexander.cato.CatoGui
 import com.alvinalexander.cato.view.TablesFieldsTemplatesPanel
 import java.awt.event.ActionListener
 import java.awt.event.ActionEvent
@@ -26,7 +26,7 @@ import com.devdaily.dbgrinder.view.TextDisplayDialog
 import java.awt.Toolkit
 import java.awt.Dimension
 
-class TablesFieldsTemplatesController (mainController: MainGuiController) {
+class TablesFieldsTemplatesController (mainController: CatoGui) {
   
     val tablesFieldsTemplatesPanel = new TablesFieldsTemplatesPanel
     val databaseTablesJList = tablesFieldsTemplatesPanel.getTablesJList
@@ -74,7 +74,7 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
         for (field <- newFields) fieldsTablesModel.addElement(field)
     }
     
-    // TODO *** NEED TO DO A LOT OF VALIDATION HERE ***
+    // TODO *** NEED TO ADD A LOT OF VALIDATION HERE ***
     def handleGenerateCodeButtonClicked {
         val dbTable = databaseTablesJList.getSelectedValue
         val fields = tableFieldsJList.getSelectedValuesList
@@ -96,7 +96,7 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
     }
     
     // TODO get this data correctly
-    private def buildDataObjectForTemplate(dbTablename: String, fields: Seq[String]): Map[String, Object] = {
+    private def buildDataObjectForTemplate(dbTablename: String, userSelectedFields: Seq[String]): Map[String, Object] = {
         val data = scala.collection.mutable.Map[String, Object]()
         
         // create the single values that the templates need
@@ -105,12 +105,14 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
         data += ("objectame" -> TableUtils.convertTableNameToObjectName(dbTablename))
         
         // TODO - NEED TO VERIFY THESE
-        data += ("fieldsAsInsertCsvString" -> mainController.getFieldNamesAsCsvString(dbTablename))
-        data += ("prepStmtAsInsertCsvString" -> mainController.getPreparedStatementInsertString(dbTablename))
-        data += ("prepStmtAsUpdateCsvString" -> mainController.getPreparedStatementUpdateString(dbTablename))
+        data += ("fieldsAsInsertCsvString" -> mainController.getFieldNamesAsCsvString(dbTablename, userSelectedFields))
+        data += ("prepStmtAsInsertCsvString" -> mainController.getPreparedStatementInsertString(dbTablename, userSelectedFields))
+        data += ("prepStmtAsUpdateCsvString" -> mainController.getPreparedStatementUpdateString(dbTablename, userSelectedFields))
+        
+        // TODO need to add some more conversions here ...
     
         // create the array for "fields" for the template
-        val fields = mainController.getFieldDataForTableName(dbTablename)
+        val fields = mainController.getFieldDataForTableName(dbTablename, userSelectedFields)
         val fieldsAsJavaList : java.util.List[Field] = fields
         data.put("fields", fieldsAsJavaList)
         
@@ -131,17 +133,6 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
         else true
     }
 
-    
-//    private def createTextareaWidgetInsideScrollPane(text: String): JScrollPane = {
-//        // TODO come up with a smarter way of setting the editor/dialog size
-//        val textArea = new JTextArea(40, 130)
-//        textArea.setFont(new Font("Monaco", Font.PLAIN, 12))
-//        textArea.setText(text)
-//        textArea.setCaretPosition(0)
-//        textArea.setEditable(false)
-//        new JScrollPane(textArea)
-//    }
-    
     private def showSourceCodeDialog(title: String, textToDisplay: String) {
         val d = new TextDisplayDialog(null, title, true)
         d.setText(textToDisplay)
@@ -149,13 +140,7 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
         d.pack
         d.setLocationRelativeTo(null)
         d.setVisible(true)
-//        JOptionPane.showMessageDialog(
-//            null,
-//            createTextareaWidgetInsideScrollPane(textToDisplay),
-//            title,
-//            JOptionPane.INFORMATION_MESSAGE)
     }
-
     
     private def getDialogSize: Dimension = {
         val screenSize = Toolkit.getDefaultToolkit.getScreenSize
@@ -163,9 +148,6 @@ class TablesFieldsTemplatesController (mainController: MainGuiController) {
         val desiredWidth = screenSize.width * 2/5
         new Dimension(desiredWidth, desiredHeight)
     }
-
-
-    
     
 }
 

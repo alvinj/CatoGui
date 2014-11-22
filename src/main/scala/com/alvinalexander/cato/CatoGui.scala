@@ -13,25 +13,25 @@ import com.alvinalexander.cato.model.CatoUtils
 import scala.collection.mutable.ArrayBuffer
 import com.devdaily.dbgrinder.model.ColumnData
 
-trait MainGuiController {
-    def tryConnectingToDatabase(db: Database): Try[String]
-    def handleWindowClosingEvent
-    def getListOfTemplateFiles: Option[Seq[String]]
-    def getFieldsForTableName(dbTableName: String): Seq[String]
-    def getTemplateDir: String
-    def getFieldDataForTableName(dbTableName: String): Seq[Field]
-    //def getFieldsForTableName(dbTableName: String): Seq[String]
-    def getPreparedStatementInsertString(dbTableName: String): String
-    def getPreparedStatementUpdateString(dbTableName: String): String
-    def getFieldNamesAsCsvString(dbTableName: String): String
-    def getFieldNamesCamelCasedAsCsvString(dbTableName: String): String
-}
+//trait MainGuiController {
+//    def tryConnectingToDatabase(db: Database): Try[String]
+//    def handleWindowClosingEvent
+//    def getListOfTemplateFiles: Option[Seq[String]]
+//    def getFieldsForTableName(dbTableName: String): Seq[String]
+//    def getTemplateDir: String
+//    def getFieldDataForTableName(dbTableName: String): Seq[Field]
+//    //def getFieldsForTableName(dbTableName: String): Seq[String]
+//    def getPreparedStatementInsertString(dbTableName: String): String
+//    def getPreparedStatementUpdateString(dbTableName: String): String
+//    def getFieldNamesAsCsvString(dbTableName: String): String
+//    def getFieldNamesCamelCasedAsCsvString(dbTableName: String): String
+//}
 
 /**
  * right now this class is growing into the "main controller" for the gui app.
  * might want to off-load some of this.
  */
-class CatoGui extends MainGuiController {
+class CatoGui {
   
     val propertiesController = new PropertiesController(this)
     val tablesFieldsTemplatesController = new TablesFieldsTemplatesController(this)
@@ -70,36 +70,63 @@ class CatoGui extends MainGuiController {
         TableUtils.getFieldNames(getColumnData(dbTableName))
     }
     
-    def getPreparedStatementInsertString(dbTableName: String): String = {
-        TableUtils.createPreparedStatementInsertString(getColumnData(dbTableName))
+    /**
+     * the fields returned can be limited to the field names you supply in `desiredFields`.
+     */
+    def getPreparedStatementInsertString(dbTableName: String, desiredFields: Seq[String] = null): String = {
+        if (desiredFields == null) {
+            TableUtils.createPreparedStatementInsertString(getColumnData(dbTableName))
+        } else {
+            TableUtils.createPreparedStatementInsertString(getColumnData(dbTableName), desiredFields)
+        }
     }
     
-    def getPreparedStatementUpdateString(dbTableName: String): String = {
-        TableUtils.createPreparedStatementUpdateString(getColumnData(dbTableName))
+    /**
+     * the fields returned can be limited to the field names you supply in `desiredFields`.
+     */
+    def getPreparedStatementUpdateString(dbTableName: String, desiredFields: Seq[String] = null): String = {
+        if (desiredFields == null) {
+            TableUtils.createPreparedStatementUpdateString(getColumnData(dbTableName))
+        } else {
+            TableUtils.createPreparedStatementUpdateString(getColumnData(dbTableName), desiredFields)
+        }
     }
-    
-    def getFieldNamesAsCsvString(dbTableName: String): String = {
-        TableUtils.getFieldNamesAsCsvString(getColumnData(dbTableName))
+
+    /**
+     * the fields returned can be limited to the field names you supply in `desiredFields`.
+     * (this method returns the intersection of dbTable.getFields and 
+     * the Seq you supply, which should just be the fields you supply,
+     * in the order returned by the database.)
+     */
+    def getFieldNamesAsCsvString(dbTableName: String, desiredFields: Seq[String] = null): String = {
+        if (desiredFields == null) {
+            TableUtils.getFieldNamesAsCsvString(getColumnData(dbTableName))
+        } else {
+            TableUtils.getFieldNamesAsCsvString(getColumnData(dbTableName), desiredFields)
+        }
     }
     
     // getFieldNamesCamelCasedAsCsvString
-    def getFieldNamesCamelCasedAsCsvString(dbTableName: String): String = {
-        TableUtils.getFieldNamesCamelCasedAsCsvString(getColumnData(dbTableName))
+    def getFieldNamesCamelCasedAsCsvString(dbTableName: String, desiredFields: Seq[String] = null): String = {
+        if (desiredFields == null) {
+            TableUtils.getFieldNamesCamelCasedAsCsvString(getColumnData(dbTableName))
+        } else {
+            TableUtils.getFieldNamesCamelCasedAsCsvString(getColumnData(dbTableName), desiredFields)
+        }
     }
     
     private def getColumnData(dbTableName: String): Seq[ColumnData] = {
         TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
     }
     
-    
-    def getFieldDataForTableName(dbTableName: String): Seq[Field] = {
+    def getFieldDataForTableName(dbTableName: String, fieldsTheUserSelected: Seq[String]): Seq[Field] = {
         // TODO do this properly
         val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
-        val fieldNames = TableUtils.getFieldNames(columnData)
-        val camelCasefieldNames = TableUtils.getCamelCaseFieldNames(columnData)
-        val fieldTypes = TableUtils.getJavaFieldTypes(columnData)
-        val databaseFieldTypes = TableUtils.getDatabaseFieldTypes(columnData)
-        val fieldRequiredValues = TableUtils.getFieldsRequiredStatus(columnData)
+        val fieldNames = TableUtils.getFieldNames(columnData, fieldsTheUserSelected)
+        val camelCasefieldNames = TableUtils.getCamelCaseFieldNames(columnData, fieldsTheUserSelected)
+        val fieldTypes = TableUtils.getJavaFieldTypes(columnData, fieldsTheUserSelected)
+        val databaseFieldTypes = TableUtils.getDatabaseFieldTypes(columnData, fieldsTheUserSelected)
+        val fieldRequiredValues = TableUtils.getFieldsRequiredStatus(columnData, fieldsTheUserSelected)
         val numFields = fieldNames.length
         val fields = new ArrayBuffer[Field]
         for (i <- 0 until numFields) {

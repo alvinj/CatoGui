@@ -10,23 +10,6 @@ import com.devdaily.dbgrinder.utility.StringUtils
 object TableUtils {
 
     /**
-     * Creates a Java PreparedStatement string from the given table columns.
-     * The result looks like: "id=?, uid=?, symbol=?, quantity=?, price=?, date_time=?, notes=?"
-     */
-    def createPreparedStatementUpdateString(tableColumns: Seq[ColumnData]): String = {
-        def lambda(fieldName: String) = s"$fieldName=?"
-        loopOverTableFieldsAndReturnCsvString(tableColumns, lambda)
-    }
-  
-    /**
-     * Converts a list of field names to a series of `?` symbols.
-     */
-    def createPreparedStatementInsertString(tableColumns: Seq[ColumnData]) = {
-        def lambda(fieldName: String) = "?"
-        loopOverTableFieldsAndReturnCsvString(tableColumns, lambda)
-    }
-
-    /**
      * converts names like "stocks" to "Stock",
      * "users" to "User",
      * "research_links" to "ResearchLink", etc.
@@ -44,37 +27,139 @@ object TableUtils {
         CatoUtils.singularize(StringUtils.convertUnderscoreNameToUpperCase(tableName))
     }
 
+
+    /**
+     * Creates a Java PreparedStatement string from the given table columns.
+     * The result looks like: "id=?, uid=?, symbol=?, quantity=?, price=?, date_time=?, notes=?"
+     */
+    def createPreparedStatementUpdateString(tableColumns: Seq[ColumnData]): String = {
+        def lambda(fieldName: String) = s"$fieldName=?"
+        loopOverTableFieldsAndReturnCsvString(tableColumns, lambda)
+    }
+  
+    def createPreparedStatementUpdateString(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): String = {
+        def lambda(fieldName: String) = s"$fieldName=?"
+        val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
+        loopOverTableFieldsAndReturnCsvString(ltdTableColumns, lambda)
+    }
+  
+
+    /**
+     * Converts a list of field names to a series of `?` symbols.
+     */
+    def createPreparedStatementInsertString(tableColumns: Seq[ColumnData]) = {
+        def lambda(fieldName: String) = "?"
+        loopOverTableFieldsAndReturnCsvString(tableColumns, lambda)
+    }
+
+    def createPreparedStatementInsertString(tableColumns: Seq[ColumnData], desiredFields: Seq[String]) = {
+        def lambda(fieldName: String) = "?"
+        val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
+        loopOverTableFieldsAndReturnCsvString(ltdTableColumns, lambda)
+    }
+
+
+    /**
+     * get the field names from the Seq[ColumnData]
+     */
     def getFieldNames(tableColumns: Seq[ColumnData]): Seq[String] = {
         tableColumns.map((cd: ColumnData) => cd.getColumnName)
     }
   
+    def getFieldNames(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): Seq[String] = {
+        val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
+        ltdTableColumns.map((cd: ColumnData) => cd.getColumnName)
+    }
+  
+
+    /**
+     * converts field names from `email_address` to `emailAddress`
+     */
     def getCamelCaseFieldNames(tableColumns: Seq[ColumnData]): Seq[String] = {
         def lambda(cd: ColumnData) = CatoUtils.convertUnderscoreNameToCamelCase(cd.getColumnName)
         tableColumns.map(lambda)
     }
 
+    def getCamelCaseFieldNames(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): Seq[String] = {
+        def lambda(cd: ColumnData) = CatoUtils.convertUnderscoreNameToCamelCase(cd.getColumnName)
+        val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
+        ltdTableColumns.map(lambda)
+    }
+
+
+    /**
+     * returns a list of the database fields types, like (int, int, varchar, text, datetime ...)
+     */
     def getDatabaseFieldTypes(tableColumns: Seq[ColumnData]): Seq[String] = {
         tableColumns.map((cd: ColumnData) => cd.getDatabaseColumnType)
     }
   
+    def getDatabaseFieldTypes(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): Seq[String] = {
+        val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
+        ltdTableColumns.map((cd: ColumnData) => cd.getDatabaseColumnType)
+    }
+  
+
+    /**
+     * returns the field types as java field types, like (int, boolean, String, Timestamp ...)
+     */
     def getJavaFieldTypes(tableColumns: Seq[ColumnData]): Seq[String] = {
         tableColumns.map((cd: ColumnData) => cd.getJavaType)
     }
   
+    def getJavaFieldTypes(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): Seq[String] = {
+        val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
+        ltdTableColumns.map((cd: ColumnData) => cd.getJavaType)
+    }
+
+    /**
+     * returns a list of whether each field is required (or not)
+     */
     def getFieldsRequiredStatus(tableColumns: Seq[ColumnData]): Seq[Boolean] = {
         tableColumns.map((cd: ColumnData) => cd.isRequired)
     }
   
+    def getFieldsRequiredStatus(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): Seq[Boolean] = {
+        val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
+        ltdTableColumns.map((cd: ColumnData) => cd.isRequired)
+    }
+  
+    /**
+     * returns the table field names as a csv string.
+     */
     def getFieldNamesAsCsvString(tableColumns: Seq[ColumnData]): String = {
         def noOp(fieldName: String) = fieldName
         loopOverTableFieldsAndReturnCsvString(tableColumns, noOp)
     }
   
+    /**
+     * returns only the fields you supply, in the order given by the database.
+     */
+    def getFieldNamesAsCsvString(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): String = {
+        val ltdColumnData = getSubsetOfColumnData(tableColumns, desiredFields)
+        def noOp(fieldName: String) = fieldName
+        loopOverTableFieldsAndReturnCsvString(ltdColumnData, noOp)
+    }
+    
     def getFieldNamesCamelCasedAsCsvString(tableColumns: Seq[ColumnData]): String = {
         def camelCaseField(fieldName: String) = StringUtils.convertUnderscoreNameToUpperCase(fieldName)
         loopOverTableFieldsAndReturnCsvString(tableColumns, camelCaseField)
     }
 
+    def getFieldNamesCamelCasedAsCsvString(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): String = {
+        val ltdColumnData = getSubsetOfColumnData(tableColumns, desiredFields)
+        def camelCaseField(fieldName: String) = StringUtils.convertUnderscoreNameToUpperCase(fieldName)
+        loopOverTableFieldsAndReturnCsvString(ltdColumnData, camelCaseField)
+    }
+
+    /**
+     * returns a `Seq[ColumnData]` that contain only the `desiredFields`, that is,
+     * where `tableColumn.getColumnName` is in `desiredFields`.
+     */
+    private def getSubsetOfColumnData(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): Seq[ColumnData] = {
+        tableColumns.filter(col => desiredFields.contains(col.getColumnName))
+    }
+  
     private def loopOverTableFieldsAndReturnCsvString(tableColumns: Seq[ColumnData], f:(String) => String): String = {
         val sb = new StringBuilder
         var count = 0

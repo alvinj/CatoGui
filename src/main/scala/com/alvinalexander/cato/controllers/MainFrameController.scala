@@ -1,6 +1,6 @@
 package com.alvinalexander.cato.controllers
 
-import com.alvinalexander.cato.MainGuiController
+import com.alvinalexander.cato.CatoGui
 import com.alvinalexander.cato.view.MainFrame
 import javax.swing.JTabbedPane
 import com.alvinalexander.cato.utils.SwingUtils
@@ -9,7 +9,7 @@ import java.awt.event.WindowAdapter
 import javax.swing.event.ChangeListener
 import javax.swing.event.ChangeEvent
 
-class MainFrameController (mainController: MainGuiController,
+class MainFrameController (mainController: CatoGui,
                            propertiesController: PropertiesController, 
                            tablesFieldsTemplatesController: TablesFieldsTemplatesController) {
 
