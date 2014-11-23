@@ -67,7 +67,8 @@ public class DataTypeMappingsPanel extends JPanel {
 		dbDataTypeLabel = new JLabel();
 		outputTypeLabel = new JLabel();
 		blobLabel = new JLabel();
-		blobTextField = new JTextField();
+		// AJA give one field an initial size; makes all textfields wider
+		blobTextField = new JTextField(20);
 		booleanLabel = new JLabel();
 		booleanTextField = new JTextField();
 		dateLabel = new JLabel();

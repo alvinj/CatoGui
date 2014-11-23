@@ -2,6 +2,12 @@ package com.alvinalexander.cato.model
 
 object DataTypeMappings {
   
+    val JAVA  = "Java"
+    val JSON  = "JSON"
+    val PHP   = "PHP"
+    val PLAY  = "Play"
+    val SCALA = "Scala"
+  
     val BLOB      = "blob"
     val BOOLEAN   = "boolean"
     val DATE      = "date"
@@ -84,9 +90,15 @@ object DataTypeMappings {
         TIMESTAMP -> "optional(sqlDate)"
     )
 
+    val dataTypesMap = Map(
+        JAVA  -> javaTypesMap, 
+        JSON  -> jsonTypesMap,
+        PHP   -> phpTypesMap, 
+        PLAY  -> playTypesMap, 
+        SCALA -> scalaTypesMap
+    )
     
 }
-
 
 
 
