@@ -174,17 +174,6 @@ class CatoGui {
         fields.toSeq
     }
     
-    def updateUi {
-        val templatesDirText = propertiesController.getTemplatesDir
-        if (connection != null && !templatesDirText.trim.equals("")) {
-            println("enable")
-            mainFrameController.setTftTabEnabled(true)
-        } else {
-            println("disable")
-            mainFrameController.setTftTabEnabled(false)
-        }
-    }
-    
     def getTemplateDir = propertiesController.getTemplatesDir
     
     /**

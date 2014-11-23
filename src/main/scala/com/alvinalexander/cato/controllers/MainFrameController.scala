@@ -9,6 +9,9 @@ import java.awt.event.WindowAdapter
 import javax.swing.event.ChangeListener
 import javax.swing.event.ChangeEvent
 import java.awt.Color
+import javax.swing.JPanel
+import java.awt.Dimension
+import java.awt.BorderLayout
 
 class MainFrameController (mainController: CatoGui,
                            propertiesController: PropertiesController, 
@@ -22,12 +25,16 @@ class MainFrameController (mainController: CatoGui,
     // get the panels
     val propertiesPanel = propertiesController.propertiesPanel
     val tablesFieldsTemplatesPanel = tablesFieldsTemplatesController.tablesFieldsTemplatesPanel
+    
+    // TODO there's probably a better way to do this (give the tabbedpane some breathing room on the top)
+    val fillerPanel = new JPanel
+    fillerPanel.setPreferredSize(new Dimension(16, 16))
+    mainFrame.getContentPane.add(fillerPanel, BorderLayout.NORTH)
 
     // set up the tabs
-    val tabbedPane = new CustomTabbedPane
+    val tabbedPane = new JTabbedPane
     tabbedPane.addTab("Properties", propertiesPanel)
     tabbedPane.addTab("Generate Code", tablesFieldsTemplatesPanel)
-    setTftTabEnabled(false)
     mainFrame.getContentPane.add(tabbedPane)
     mainFrame.addWindowListener(new MainFrameListener(this))
     
@@ -43,13 +50,6 @@ class MainFrameController (mainController: CatoGui,
             }
         }
     });
-    
-    def setTftTabEnabled(b: Boolean) {
-        tabbedPane.tftTabIsEnabled = b
-        tabbedPane.setEnabledAt(1, b)
-        tabbedPane.invalidate
-        tabbedPane.updateUI
-    }
     
     def displayTheGui {
         SwingUtils.invokeLater({
@@ -70,30 +70,6 @@ class MainFrameListener(controller: MainFrameController) extends WindowAdapter {
     override def windowClosing(e: WindowEvent) {
         controller.handleWindowClosingEvent
     }
-}
-
-/**
- * With Java 7 and OS X 10.9 (and maybe 10.10), there is no visual distinction between
- * a tab that's enabled and one that is disabled, so this is an effort to fix that.
- */
-class CustomTabbedPane extends JTabbedPane {
-
-    var tftTabIsEnabled = false
-
-    override def getForegroundAt(index: Int): Color = {
-        if (index == 1) {
-            if (tftTabIsEnabled) {
-                setToolTipTextAt(1, "")
-                super.getForegroundAt(index)
-            } else {
-                setToolTipTextAt(1, "Tab is disabled until you connect to a database and select a template directory")
-                Color.GRAY
-            }
-        } else {
-            super.getForegroundAt(index)
-        }
-    }
-
 }
 
 
