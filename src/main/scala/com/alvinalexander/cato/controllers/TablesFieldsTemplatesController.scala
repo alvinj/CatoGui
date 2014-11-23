@@ -148,17 +148,24 @@ class TablesFieldsTemplatesController (mainController: CatoGui) {
     private def showSourceCodeDialog(title: String, textToDisplay: String) {
         val d = new TextDisplayDialog(null, title, true)
         d.setText(textToDisplay)
-        d.setPreferredSize(getDialogSize)
+        val prefSize = d.getPreferredSize
+        d.setPreferredSize(getBestDialogSize(prefSize))
         d.pack
         d.setLocationRelativeTo(null)
         d.setVisible(true)
     }
     
-    private def getDialogSize: Dimension = {
+    private def getBestDialogSize(prefSize: Dimension): Dimension = {
+        val prefHeight = prefSize.height
+        val prefWidth = prefSize.width
         val screenSize = Toolkit.getDefaultToolkit.getScreenSize
-        val desiredHeight = screenSize.height * 3/4
-        val desiredWidth = screenSize.width * 2/5
-        new Dimension(desiredWidth, desiredHeight)
+        val maxHeight = screenSize.height * 3/4
+        val maxWidth = screenSize.width * 3/5
+        if (prefHeight < maxHeight && prefWidth < maxWidth) {
+            prefSize
+        } else {
+            new Dimension(maxWidth, maxHeight)
+        }
     }
     
 }
