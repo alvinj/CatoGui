@@ -23,8 +23,8 @@ If that driver doesn't work for your version of MySQL, just follow these steps:
 I use MAMP on Mac OS X, and this is the MySQL information I use for testing:
 
 ````
-URL:           jdbc:mysql://localhost:8889/finance
 DRIVER:        com.mysql.jdbc.Driver
+URL:           jdbc:mysql://localhost:8889/finance
 USERNAME:      root
 PASSWORD:      root
 TEMPLATES_DIR: /Users/Al/Projects/Scala/CatoGui/resources/templates

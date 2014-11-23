@@ -38,6 +38,7 @@ class CatoGui {
     // the user's last-used info is stored as preferences
     val prefs = Preferences.userNodeForPackage(this.getClass)
     
+    // TODO clean up this "properties" code
     val DRIVER = "DRIVER"
     val URL    = "URL"
     val USERNAME = "USERNAME"
@@ -57,8 +58,9 @@ class CatoGui {
     def saveTemplatesDir(templatesDir: String) { prefs.put(TEMPLATES_DIR, templatesDir)} 
     
     val propertiesController = new PropertiesController(this, lastDbDriver, lastDbUrl, lastDbUsername, lastDbPassword, lastTemplatesDir)
+    val dataTypeMappingsController = new DataTypeMappingsController(this)
     val tablesFieldsTemplatesController = new TablesFieldsTemplatesController(this)
-    val mainFrameController = new MainFrameController(this, propertiesController, tablesFieldsTemplatesController)
+    val mainFrameController = new MainFrameController(this, propertiesController, dataTypeMappingsController, tablesFieldsTemplatesController)
     
     var connection: Connection = null
     var metaData: DatabaseMetaData = null

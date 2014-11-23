@@ -15,15 +15,18 @@ import java.awt.BorderLayout
 
 class MainFrameController (mainController: CatoGui,
                            propertiesController: PropertiesController, 
+                           dataTypeMappingsController: DataTypeMappingsController,
                            tablesFieldsTemplatesController: TablesFieldsTemplatesController) {
 
     val mainFrame = new MainFrame
     
     val PROPERTIES_PANEL_NUM    = 0
-    val GENERATE_CODE_PANEL_NUM = 1
+    val DATA_MAPPINGS_PANEL_NUM = 1
+    val GENERATE_CODE_PANEL_NUM = 2
     
     // get the panels
     val propertiesPanel = propertiesController.propertiesPanel
+    val dataTypeMappingsPanel = dataTypeMappingsController.dataTypeMappingsPanel
     val tablesFieldsTemplatesPanel = tablesFieldsTemplatesController.tablesFieldsTemplatesPanel
     
     // TODO there's probably a better way to do this (give the tabbedpane some breathing room on the top)
@@ -34,8 +37,10 @@ class MainFrameController (mainController: CatoGui,
     // set up the tabs
     val tabbedPane = new JTabbedPane
     tabbedPane.addTab("Properties", propertiesPanel)
+    tabbedPane.addTab("Data Type Mappings", dataTypeMappingsPanel)
     tabbedPane.addTab("Generate Code", tablesFieldsTemplatesPanel)
     mainFrame.getContentPane.add(tabbedPane)
+
     mainFrame.addWindowListener(new MainFrameListener(this))
     
     tabbedPane.addChangeListener(new ChangeListener {
