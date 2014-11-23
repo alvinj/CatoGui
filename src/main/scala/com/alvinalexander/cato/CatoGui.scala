@@ -73,6 +73,7 @@ class CatoGui {
                  // TODO get the list of db tables and update the gui
                  metaData = DatabaseUtils.getTableMetaData(connection).get //TODO do this right
                  val dbTableNames = DatabaseUtils.getTableNames(connection, metaData)
+                 tablesFieldsTemplatesController.handleDatabaseConnectEvent
                  tablesFieldsTemplatesController.setTableNames(dbTableNames)
                  Success("")
             case Failure(throwable) =>
@@ -86,7 +87,10 @@ class CatoGui {
     def tryDisconnectingFromDatabase: Boolean = {
         try {
             if (connection == null) return false
+            // TODO this isn't working 100% as desired after a connect/disconnect/connect series
+            tablesFieldsTemplatesController.handleDatabaseDisconnectEvent
             connection.close
+            connection = null
             true
         } catch {
             case t: Throwable => false
@@ -142,7 +146,6 @@ class CatoGui {
         }
     }
     
-    // getFieldNamesCamelCasedAsCsvString
     def getFieldNamesCamelCasedAsCsvString(dbTableName: String, desiredFields: Seq[String] = null): String = {
         if (desiredFields == null) {
             TableUtils.getFieldNamesCamelCasedAsCsvString(getColumnData(dbTableName))
@@ -171,6 +174,17 @@ class CatoGui {
         fields.toSeq
     }
     
+    def updateUi {
+        val templatesDirText = propertiesController.getTemplatesDir
+        if (connection != null && !templatesDirText.trim.equals("")) {
+            println("enable")
+            mainFrameController.setTftTabEnabled(true)
+        } else {
+            println("disable")
+            mainFrameController.setTftTabEnabled(false)
+        }
+    }
+    
     def getTemplateDir = propertiesController.getTemplatesDir
     
     /**
@@ -184,7 +198,7 @@ class CatoGui {
 }
 
 /**
- * Just start the app.
+ * this is where the action begins.
  */
 object CatoGui extends App {
 

@@ -95,6 +95,18 @@ class TablesFieldsTemplatesController (mainController: CatoGui) {
         showSourceCodeDialog("Generated Source Code", generatedCode)
     }
     
+    def handleDatabaseConnectEvent {
+        templateFilesTablesModel.clear
+        databaseTablesModel.clear
+        fieldsTablesModel.clear
+    }
+
+    def handleDatabaseDisconnectEvent {
+        templateFilesTablesModel.clear
+        databaseTablesModel.clear
+        fieldsTablesModel.clear
+    }
+    
     // TODO get this data correctly
     private def buildDataObjectForTemplate(dbTablename: String, userSelectedFields: Seq[String]): Map[String, Object] = {
         val data = scala.collection.mutable.Map[String, Object]()

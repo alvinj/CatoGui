@@ -1,13 +1,11 @@
 To-Do List
 ==========
 
-* implement preferences to remember the user's last database and templates info
 * provide a way to map from Java field types to the types of the desired language
 * convert more templates
 * delete the old, dead code
 * improve the gui. for instance, things are too tight on the properties panel
 * still need to add a few more generated values to the `data` map?
-* disable second tab until you connect to the database
 * modify the 'generated code' dialog so its size varies depending on the size of the code generated
 
 * does Freemarker support methods like 'capitalize'?
@@ -21,4 +19,5 @@ Long-term
 ---------
 
 * pick up the user's jdbc jar file using reflection
+* i should have written some of the tab enabled/disabled code using listeners
 

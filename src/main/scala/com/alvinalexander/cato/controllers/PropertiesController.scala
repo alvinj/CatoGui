@@ -76,6 +76,7 @@ class PropertiesController (
             case Success(noop) => 
                 connectButton.setText("Disconnect")
                 connectTextIsShowing = false
+                mainController.updateUi
             case Failure(throwable) => 
                 GuiUtils.showErrorDialogWithLongText("Connection Failed", CatoUtils.getStackTraceString(throwable))
         }
@@ -93,6 +94,7 @@ class PropertiesController (
         mainController.tryDisconnectingFromDatabase
         connectButton.setText("Connect")
         connectTextIsShowing = true
+        mainController.updateUi
     }
     
     private def getTextFromTextFields = (urlField.getText, driverField.getText, usernameField.getText, passwordField.getText)
