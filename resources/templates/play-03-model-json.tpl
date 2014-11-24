@@ -20,13 +20,13 @@
           // TODO delete trailing comma
           // DATE example: "datetime" -> JsString(sdf.format(researchLink.datetime)),
           // SEE http://www.playframework.com/documentation/2.2.x/ScalaJson
-    <<section name=id loop=$camelcase_fields>>
-    <<if ($field_is_reqd[id] == true) >>
-    "<<$camelcase_fields[id]>>" -> <<$play_json_field_types[id]|capitalize>>(${objectname}.<<$camelcase_fields[id]>>),
-    <<else>>
-    "<<$camelcase_fields[id]>>" -> <<$play_json_field_types[id]|capitalize>>(${objectname}.<<$camelcase_fields[id]>>.getOrElse("")),
-    <</if>>
-    <</section>>
+<#list fields as field>
+<#if field.isRequired() >
+             "${field.camelCaseFieldName}" -> ${field.fieldType}(${objectname}.${field.fieldName}),
+<#else>
+             "${field.camelCaseFieldName}" -> ${field.fieldType}(${objectname}.${field.fieldName}.getOrElse("")),
+</#if>
+</#list>
           )
           JsObject(${objectname}Seq)
       }
@@ -37,14 +37,16 @@
       // @see http://www.playframework.com/documentation/2.2.x/ScalaJson regarding Option
       // DATE fields should be like: val datetime = (json \ "datetime").as[java.util.Date]
       def reads(json: JsValue): JsResult[${classname}] = {
-   <<section name=id loop=$camelcase_fields>>
-   <<if ($field_is_reqd[id] == true) >>
-   val <<$camelcase_fields[id]>> = (json \ "<<$camelcase_fields[id]>>").as[<<$scala_field_types[id]|capitalize>>]
-   <<else>>
-   val <<$camelcase_fields[id]>> = (json \ "<<$camelcase_fields[id]>>").asOpt[<<$scala_field_types[id]|capitalize>>]
-   <</if>>
-   <</section>>
-   JsSuccess(${classname}(<<$fields_as_insert_csv_string>>))
+<#list fields as field>
+<#if field.isRequired() >
+          // TODO this is wrong; need a Scala field type in the `as` clause
+          val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").as[${field.fieldType}] 
+<#else>
+          // TODO this is wrong; need a Scala field type in the `as` clause
+          val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").asOpt[${field.fieldType}] 
+</#if>
+</#list>
+          JsSuccess(${classname}(${fieldsAsInsertCsvString}))
       }
   }
 

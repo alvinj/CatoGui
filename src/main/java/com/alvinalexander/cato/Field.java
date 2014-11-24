@@ -16,7 +16,9 @@ public class Field {
         boolean isRequired
     ) {
         this.fieldName = fieldName;
+        this.camelCaseFieldName = camelCaseFieldName;
         this.fieldType = fieldType;
+        this.databaseFieldType = databaseFieldType;
         this.isRequired = isRequired;
     }
     

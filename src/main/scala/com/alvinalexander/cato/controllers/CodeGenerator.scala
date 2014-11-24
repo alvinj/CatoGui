@@ -18,7 +18,7 @@ object CodeGenerator {
     }
     
     def generateCode(templateAsString: String, data: Map[String, Object]): String = {
-        val jmap = new java.util.HashMap[String, Object](data)        
+        val jmap = new java.util.HashMap[String, Object](data)
         val result = TemplateEngine.applyDataToTemplate(templateAsString, jmap)
         result
     }

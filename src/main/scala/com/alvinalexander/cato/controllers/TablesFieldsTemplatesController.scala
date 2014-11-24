@@ -114,7 +114,7 @@ class TablesFieldsTemplatesController (mainController: CatoGui) {
         // create the single values that the templates need
         data += ("tablename" -> dbTablename)
         data += ("classname" -> TableUtils.convertTableNameToClassName(dbTablename))
-        data += ("objectame" -> TableUtils.convertTableNameToObjectName(dbTablename))
+        data += ("objectname" -> TableUtils.convertTableNameToObjectName(dbTablename))
         
         // TODO - NEED TO VERIFY THESE
         data += ("fieldsAsInsertCsvString" -> mainController.getFieldNamesAsCsvString(dbTablename, userSelectedFields))
