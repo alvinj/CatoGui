@@ -1,8 +1,12 @@
 To-Do List
 ==========
 
-* provide a way to map from Java field types to the types of the desired language
+* use the new data type mappings
+* remember the last data type mapping the user used as a preference
 * convert more templates
+* ColumnData has more database types than i map; get them all in sync
+
+
 * delete the old, dead code
 * improve the gui. for instance, things are too tight on the properties panel
 * still need to add a few more generated values to the `data` map?

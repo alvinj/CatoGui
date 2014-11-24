@@ -23,8 +23,10 @@ class DataTypeMappingsController(mainController: CatoGui) {
     val builtInMappingsComboBox = dataTypeMappingsPanel.getBuiltInMappingsComboBox    
     val dataTypesModel = new DefaultComboBoxModel(Array(JAVA, JSON, PHP, PLAY, SCALA))
     builtInMappingsComboBox.setModel(dataTypesModel)
-    
-    initializeTextFields
+
+    // default the data map to "java"
+    var currentDataTypeMap: Map[String, String] = DataTypeMappings.dataTypesMap("Java")
+    updateTextFieldsWithMap(currentDataTypeMap)
     
     // update the fields when the combobox is changed
     val itemListener = new ItemListener {
@@ -33,15 +35,10 @@ class DataTypeMappingsController(mainController: CatoGui) {
             if (state == ItemEvent.SELECTED) {
                 val item = itemEvent.getItem.toString
                 // get the right map, then update the textfields
-                val dataTypesMap = DataTypeMappings.dataTypesMap(item)
-                updateTextFieldsWithMap(dataTypesMap)
+                currentDataTypeMap = DataTypeMappings.dataTypesMap(item)
+                updateTextFieldsWithMap(currentDataTypeMap)
             }
         }
-    }
-    
-    def initializeTextFields {
-        val initialDataTypesMap = DataTypeMappings.dataTypesMap("Java")
-        updateTextFieldsWithMap(initialDataTypesMap)
     }
     
     private def updateTextFieldsWithMap(dataTypesMap: Map[String, String]) {

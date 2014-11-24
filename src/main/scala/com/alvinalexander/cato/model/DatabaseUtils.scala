@@ -59,8 +59,6 @@ object DatabaseUtils {
         while (tables.next) {
             tableName = tables.getString(3)
             val tableType = tables.getString(2)
-            //System.err.println( " tableName: " + tableName );
-            //System.err.println( " tableType: " + tableType + " \n" );
             
             // If we are using a table list then check against that first.
             // If no list then use everything.

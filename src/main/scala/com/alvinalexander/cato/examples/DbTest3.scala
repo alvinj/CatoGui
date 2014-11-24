@@ -97,10 +97,10 @@ object DbTest3 extends App {
     val dbFieldTypes = TableUtils.getDatabaseFieldTypes(columns)
     println(dbFieldTypes)
     
-
-    printHeader("Field Types (as Java types)")
-    val fieldTypes = TableUtils.getJavaFieldTypes(columns)
-    println(fieldTypes)
+    // this doesn't work after i got rid of the `TableUtils.getJavaFieldTypes` method 
+//    printHeader("Field Types (as Java types)")
+//    val fieldTypes = TableUtils.getJavaFieldTypes(columns)
+//    println(fieldTypes)
     
 
 //    printHeader("Field Names as CSV Capitalized")

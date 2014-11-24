@@ -54,18 +54,6 @@ object DataTypeMappings {
         TIMESTAMP -> "JsString"
     )
     
-    val scalaTypesMap = Map(
-        BLOB      -> "Object" ,
-        BOOLEAN   -> "Boolean",
-        DATE      -> "java.util.Date",
-        DOUBLE    -> "Double",
-        FLOAT     -> "Float",
-        INTEGER   -> "Integer",
-        LONG      -> "Long",
-        TEXT      -> "String",
-        TIMESTAMP -> "java.util.Date"
-    )
-
     val playTypesMap = Map(
         BLOB      -> "nonEmptyText",  //TODO
         BOOLEAN   -> "TODO",
@@ -88,6 +76,18 @@ object DataTypeMappings {
         LONG      -> "optional(longNumber)",
         TEXT      -> "optional(text)",
         TIMESTAMP -> "optional(sqlDate)"
+    )
+
+    val scalaTypesMap = Map(
+        BLOB      -> "Object" ,
+        BOOLEAN   -> "Boolean",
+        DATE      -> "java.util.Date",
+        DOUBLE    -> "Double",
+        FLOAT     -> "Float",
+        INTEGER   -> "Int",
+        LONG      -> "Long",
+        TEXT      -> "String",
+        TIMESTAMP -> "java.util.Date"
     )
 
     val dataTypesMap = Map(

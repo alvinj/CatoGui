@@ -165,7 +165,10 @@ class CatoGui {
         val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
         val fieldNames = TableUtils.getFieldNames(columnData, fieldsTheUserSelected)
         val camelCasefieldNames = TableUtils.getCamelCaseFieldNames(columnData, fieldsTheUserSelected)
-        val fieldTypes = TableUtils.getJavaFieldTypes(columnData, fieldsTheUserSelected)
+        
+        // get the currently-selected field types map
+        val dataTypesMap = dataTypeMappingsController.currentDataTypeMap
+        val fieldTypes = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, dataTypesMap)
         val databaseFieldTypes = TableUtils.getDatabaseFieldTypes(columnData, fieldsTheUserSelected)
         val fieldRequiredValues = TableUtils.getFieldsRequiredStatus(columnData, fieldsTheUserSelected)
         val numFields = fieldNames.length

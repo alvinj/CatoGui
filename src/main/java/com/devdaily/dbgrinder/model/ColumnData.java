@@ -316,41 +316,41 @@ public class ColumnData
       case 12:
       case 13:
       case 22:
-        cType = "Text";
+        cType = "text";
         break;
 
       case 2:
-        cType = "Byte";
+        cType = "byte";
         break;
 
       case 3:
-        cType = "Long";
+        cType = "long";
         break;
 
       case 4:
-        cType = "Integer";
+        cType = "integer";
         break;
 
       case 5:
-        cType = "Integer";  // short
+        cType = "integer";  // short
         break;
 
       case 6:
       case 8:
-        cType = "Double";
+        cType = "double";
         break;
 
       case 9:
       case 10:
-        cType = "Double";  // java.math.BigDecimal
+        cType = "double";  // java.math.BigDecimal
         break;
 
       case 7:
-        cType = "Double"; // float
+        cType = "double"; // float
         break;
 
       case 11:
-        cType = "Date";
+        cType = "date";
         // always return Timestamp as it's more accurate
         // and is a superset of Date
         // NOPE - lets follow Suns recommendations, so...
@@ -358,21 +358,21 @@ public class ColumnData
         break;
 
       case 14:
-        cType = "Timestamp";
+        cType = "timestamp";
         break;
 
       case 15:
-        cType = "Time";
+        cType = "time";
         break;
 
       case 16:
-        cType = "Boolean";
+        cType = "boolean";
         break;
 
       case 17:
       case 18:
       case 19:
-        cType = "Binary";  // byte[]
+        cType = "binary";  // byte[]
         break;
 
       case 20:

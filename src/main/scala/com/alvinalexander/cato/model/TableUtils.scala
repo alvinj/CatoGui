@@ -103,14 +103,33 @@ object TableUtils {
     /**
      * returns the field types as java field types, like (int, boolean, String, Timestamp ...)
      */
-    def getJavaFieldTypes(tableColumns: Seq[ColumnData]): Seq[String] = {
-        tableColumns.map((cd: ColumnData) => cd.getJavaType)
-    }
+//    def getFieldTypes(tableColumns: Seq[ColumnData]): Seq[String] = {
+//        tableColumns.map((cd: ColumnData) => cd.getJavaType)
+//    }
   
-    def getJavaFieldTypes(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): Seq[String] = {
+    /**
+     * use this method to get the field types based on the user-defined data type mappings
+     * we are given. 
+     */
+    def getFieldTypes(
+            tableColumns: Seq[ColumnData], 
+            desiredFields: Seq[String],
+            dataTypesMap: Map[String, String]): Seq[String] = {
         val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
-        ltdTableColumns.map((cd: ColumnData) => cd.getJavaType)
+        ltdTableColumns.map((cd: ColumnData) => dataTypesMap(cd.getDatabaseColumnType))
     }
+
+//    /**
+//     * returns the field types as java field types, like (int, boolean, String, Timestamp ...)
+//     */
+//    def getJavaFieldTypes(tableColumns: Seq[ColumnData]): Seq[String] = {
+//        tableColumns.map((cd: ColumnData) => cd.getJavaType)
+//    }
+//  
+//    def getJavaFieldTypes(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): Seq[String] = {
+//        val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
+//        ltdTableColumns.map((cd: ColumnData) => cd.getJavaType)
+//    }
 
     /**
      * returns a list of whether each field is required (or not)
