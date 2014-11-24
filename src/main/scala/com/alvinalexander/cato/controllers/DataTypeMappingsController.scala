@@ -11,14 +11,14 @@ import com.alvinalexander.cato.model.DataTypeMappings._
 class DataTypeMappingsController(mainController: CatoGui) {
   
     val dataTypeMappingsPanel = new DataTypeMappingsPanel
-    val blobTextField = dataTypeMappingsPanel.getBlobTextField
-    val booleanTextField = dataTypeMappingsPanel.getBooleanTextField
-    val dateTextField = dataTypeMappingsPanel.getDateTextField
-    val integerTextField = dataTypeMappingsPanel.getIntegerTextField
-    val longTextField = dataTypeMappingsPanel.getLongTextField
-    val floatTextField = dataTypeMappingsPanel.getFloatTextField
-    val textVarcharTextField = dataTypeMappingsPanel.getTextVarcharTextField
-    val timestampTextField = dataTypeMappingsPanel.getTimestampTextField
+    val blobTextField         = dataTypeMappingsPanel.getBlobTextField
+    val booleanTextField      = dataTypeMappingsPanel.getBooleanTextField
+    val dateTextField         = dataTypeMappingsPanel.getDateTextField
+    val integerTextField      = dataTypeMappingsPanel.getIntegerTextField
+    val longTextField         = dataTypeMappingsPanel.getLongTextField
+    val floatTextField        = dataTypeMappingsPanel.getFloatTextField
+    val textVarcharTextField  = dataTypeMappingsPanel.getTextVarcharTextField
+    val timestampTextField    = dataTypeMappingsPanel.getTimestampTextField
     
     val builtInMappingsComboBox = dataTypeMappingsPanel.getBuiltInMappingsComboBox    
     val dataTypesModel = new DefaultComboBoxModel(Array(JAVA, JSON, PHP, PLAY, SCALA))
@@ -33,7 +33,7 @@ class DataTypeMappingsController(mainController: CatoGui) {
         def itemStateChanged(itemEvent: ItemEvent) {
             val state = itemEvent.getStateChange
             if (state == ItemEvent.SELECTED) {
-                val item = itemEvent.getItem.toString
+                val item = itemEvent.getItem.toString  // Java, JSON, etc.
                 // get the right map, then update the textfields
                 currentDataTypeMap = DataTypeMappings.dataTypesMap(item)
                 updateTextFieldsWithMap(currentDataTypeMap)
