@@ -19,13 +19,15 @@ class DataTypeMappingsController(mainController: CatoGui) {
     val floatTextField        = dataTypeMappingsPanel.getFloatTextField
     val textVarcharTextField  = dataTypeMappingsPanel.getTextVarcharTextField
     val timestampTextField    = dataTypeMappingsPanel.getTimestampTextField
-    
+
+    // combobox
     val builtInMappingsComboBox = dataTypeMappingsPanel.getBuiltInMappingsComboBox    
     val dataTypesModel = new DefaultComboBoxModel(Array(JAVA, JSON, PHP, PLAY, SCALA))
     builtInMappingsComboBox.setModel(dataTypesModel)
 
-    // default the data map to "java"
-    var currentDataTypeMap: Map[String, String] = DataTypeMappings.dataTypesMap("Java")
+    // initialize data
+    var currentDataTypeMap: Map[String, String] = DataTypeMappings.dataTypesMap(DataTypeMappings.JAVA)
+    builtInMappingsComboBox.setSelectedItem(DataTypeMappings.JAVA)
     updateTextFieldsWithMap(currentDataTypeMap)
     
     // update the fields when the combobox is changed
@@ -37,8 +39,24 @@ class DataTypeMappingsController(mainController: CatoGui) {
                 // get the right map, then update the textfields
                 currentDataTypeMap = DataTypeMappings.dataTypesMap(item)
                 updateTextFieldsWithMap(currentDataTypeMap)
+                rememberSelectedMapName(item)
             }
         }
+    }
+    
+    def setDataTypeMap(dataTypeMapName: String) {
+        builtInMappingsComboBox.setSelectedItem(dataTypeMapName)
+        currentDataTypeMap = DataTypeMappings.dataTypesMap(dataTypeMapName)
+        updateTextFieldsWithMap(currentDataTypeMap)
+        rememberSelectedMapName(dataTypeMapName)
+    }
+    
+    /**
+     * remember the map name in the user's preferences so we can restore it when
+     * the app is started again.
+     */
+    private def rememberSelectedMapName(dataTypeMapName: String) {
+        mainController.saveDataTypeMapName(dataTypeMapName)
     }
     
     private def updateTextFieldsWithMap(dataTypesMap: Map[String, String]) {

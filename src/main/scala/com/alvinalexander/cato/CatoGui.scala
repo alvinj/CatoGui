@@ -14,20 +14,7 @@ import scala.collection.mutable.ArrayBuffer
 import com.devdaily.dbgrinder.model.ColumnData
 import com.alvinalexander.cato.utils.ClassUtils
 import java.util.prefs._
-
-//trait MainGuiController {
-//    def tryConnectingToDatabase(db: Database): Try[String]
-//    def handleWindowClosingEvent
-//    def getListOfTemplateFiles: Option[Seq[String]]
-//    def getFieldsForTableName(dbTableName: String): Seq[String]
-//    def getTemplateDir: String
-//    def getFieldDataForTableName(dbTableName: String): Seq[Field]
-//    //def getFieldsForTableName(dbTableName: String): Seq[String]
-//    def getPreparedStatementInsertString(dbTableName: String): String
-//    def getPreparedStatementUpdateString(dbTableName: String): String
-//    def getFieldNamesAsCsvString(dbTableName: String): String
-//    def getFieldNamesCamelCasedAsCsvString(dbTableName: String): String
-//}
+import com.alvinalexander.cato.model.DataTypeMappings
 
 /**
  * right now this class is growing into the "main controller" for the gui app.
@@ -44,23 +31,30 @@ class CatoGui {
     val USERNAME = "USERNAME"
     val PASSWORD = "PASSWORD"
     val TEMPLATES_DIR = "TEMPLATES_DIR"
+    val DATA_TYPE_MAP_NAME = "DATA_TYPE_MAP_NAME"
     
     val lastDbDriver     = prefs.get(DRIVER, "")
     val lastDbUrl        = prefs.get(URL, "")
     val lastDbUsername   = prefs.get(USERNAME, "")
     val lastDbPassword   = prefs.get(PASSWORD, "")
     val lastTemplatesDir = prefs.get(TEMPLATES_DIR, "")
+    val lastDataTypeMapName = prefs.get(DATA_TYPE_MAP_NAME, DataTypeMappings.JAVA)
     
     def saveDriver(driver: String)             { prefs.put(DRIVER, driver)} 
     def saveUrl(url: String)                   { prefs.put(URL, url)} 
     def saveUsername(username: String)         { prefs.put(USERNAME, username)} 
     def savePassword(password: String)         { prefs.put(PASSWORD, password)} 
     def saveTemplatesDir(templatesDir: String) { prefs.put(TEMPLATES_DIR, templatesDir)} 
-    
+    def saveDataTypeMapName(dataTypeMapName: String) { prefs.put(DATA_TYPE_MAP_NAME, dataTypeMapName) }
+
+    // controllers
     val propertiesController = new PropertiesController(this, lastDbDriver, lastDbUrl, lastDbUsername, lastDbPassword, lastTemplatesDir)
     val dataTypeMappingsController = new DataTypeMappingsController(this)
     val tablesFieldsTemplatesController = new TablesFieldsTemplatesController(this)
     val mainFrameController = new MainFrameController(this, propertiesController, dataTypeMappingsController, tablesFieldsTemplatesController)
+    
+    // initialize data
+    dataTypeMappingsController.setDataTypeMap(lastDataTypeMapName)
     
     var connection: Connection = null
     var metaData: DatabaseMetaData = null

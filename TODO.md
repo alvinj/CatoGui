@@ -1,8 +1,6 @@
 To-Do List
 ==========
 
-* use the new data type mappings
-* remember the last data type mapping the user used as a preference
 * convert more templates
 * ColumnData has more database types than i map; get them all in sync
 
