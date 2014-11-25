@@ -16,6 +16,7 @@ import com.alvinalexander.cato.utils.ClassUtils
 import java.util.prefs._
 import com.alvinalexander.cato.model.DataTypeMappings
 import com.alvinalexander.cato.utils.JavaFileUtils
+import com.alvinalexander.annotations.impure
 
 /**
  * right now this class is growing into the "main controller" for the gui app.
@@ -157,7 +158,8 @@ class CatoGui {
         TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
     }
     
-    def getFieldDataForTableName(dbTableName: String, fieldsTheUserSelected: Seq[String]): Seq[Field] = {
+    // TODO this code is needed by CommandLineCato as well; should not be in CatoGui
+    @impure def getFieldDataForTableName(dbTableName: String, fieldsTheUserSelected: Seq[String]): Seq[Field] = {
         // TODO do this properly (not using `get`)
         val columnData = TableUtils.getColumnData(dbTableName, metaData, catalog=null, schema=null, typesAreStrings=true).get
         val fieldNames = TableUtils.getFieldNames(columnData, fieldsTheUserSelected)

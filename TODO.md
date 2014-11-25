@@ -1,6 +1,8 @@
 To-Do List
 ==========
 
+* use a json cfg file instead of the gui for data types (because a template can need multiple data types, as the Play Framework templates do)
+* clean up CatoGui, which has grown unwieldly
 * convert more templates
 * ColumnData has more database types than i map; get them all in sync
 
