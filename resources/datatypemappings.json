@@ -1,0 +1,77 @@
+{
+    "datatypes": [
+        { "datatype": {
+            "language"  : "java",
+            "blob"      : "Object",
+            "boolean"   : "boolean",
+            "date"      : "Date",
+            "double"    : "double",
+            "float"     : "float",
+            "integer"   : "int",
+            "long"      : "long",
+            "text"      : "String",
+            "timestamp" : "Timestamp"
+        }},
+        { "datatype": {
+            "language"  : "json",
+            "blob"      : "JsString",
+            "boolean"   : "JsBoolean",
+            "date"      : "JsString",
+            "double"    : "JsNumber",
+            "float"     : "JsNumber",
+            "integer"   : "JsNumber",
+            "long"      : "JsNumber",
+            "text"      : "JsString",
+            "timestamp" : "JsString"
+        }},
+        { "datatype": {
+            "language"  : "php",
+            "blob"      : "Object",
+            "boolean"   : "Boolean",
+            "date"      : "String",
+            "double"    : "Float",
+            "float"     : "Float",
+            "integer"   : "Integer",
+            "long"      : "Integer",
+            "text"      : "String",
+            "timestamp" : "String"
+        }},
+        { "datatype": {
+            "language"  : "play",
+            "blob"      : "nonEmptyText",
+            "boolean"   : "boolean",
+            "date"      : "sqlDate",
+            "double"    : "number",
+            "float"     : "number",
+            "integer"   : "number",
+            "long"      : "longNumber",
+            "text"      : "nonEmptyText",
+            "timestamp" : "sqlDate"
+        }},
+        { "datatype": {
+            "language"  : "playOptional",
+            "blob"      : "optional(text)",
+            "boolean"   : "optional(boolean)",
+            "date"      : "optional(sqlDate)",
+            "double"    : "optional(number)",
+            "float"     : "optional(number)",
+            "integer"   : "optional(number)",
+            "long"      : "optional(longNumber)",
+            "text"      : "optional(text)",
+            "timestamp" : "optional(sqlDate)"
+        }},
+        { "datatype": {
+            "language"  : "scala",
+            "blob"      : "Object",
+            "boolean"   : "Boolean",
+            "date"      : "java.util.Date",
+            "double"    : "Double",
+            "float"     : "Float",
+            "integer"   : "Int",
+            "long"      : "Long",
+            "text"      : "String",
+            "timestamp" : "java.util.Date"
+        }}
+    ]
+}
+
