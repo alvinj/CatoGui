@@ -22,9 +22,9 @@
           // SEE http://www.playframework.com/documentation/2.2.x/ScalaJson
 <#list fields as field>
 <#if field.isRequired() >
-             "${field.camelCaseFieldName}" -> ${field.fieldType}(${objectname}.${field.fieldName}),
+             "${field.camelCaseFieldName}" -> ${field.playFieldType}(${objectname}.${field.fieldName}),
 <#else>
-             "${field.camelCaseFieldName}" -> ${field.fieldType}(${objectname}.${field.fieldName}.getOrElse("")),
+             "${field.camelCaseFieldName}" -> ${field.playFieldType}(${objectname}.${field.fieldName}.getOrElse("")),
 </#if>
 </#list>
           )
@@ -39,11 +39,10 @@
       def reads(json: JsValue): JsResult[${classname}] = {
 <#list fields as field>
 <#if field.isRequired() >
-          // TODO this is wrong; need a Scala field type in the `as` clause
-          val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").as[${field.fieldType}] 
+          val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").as[${field.scalaFieldType}] 
 <#else>
           // TODO this is wrong; need a Scala field type in the `as` clause
-          val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").asOpt[${field.fieldType}] 
+          val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").asOpt[${field.scalaFieldType}] 
 </#if>
 </#list>
           JsSuccess(${classname}(${fieldsAsInsertCsvString}))

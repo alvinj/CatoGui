@@ -6,7 +6,6 @@ public class Field {
 
     String fieldName;
     String camelCaseFieldName;
-    @Deprecated String fieldType;
     String javaFieldType;
     String jsonFieldType;
     String phpFieldType;
@@ -19,7 +18,6 @@ public class Field {
     public Field (
         String fieldName, 
         String camelCaseFieldName, 
-        String fieldType,
         String javaFieldType,
         String jsonFieldType,
         String phpFieldType,
@@ -31,7 +29,6 @@ public class Field {
     ) {
         this.fieldName = fieldName;
         this.camelCaseFieldName = camelCaseFieldName;
-        this.fieldType = fieldType;
         this.javaFieldType = javaFieldType;
         this.jsonFieldType = jsonFieldType;
         this.phpFieldType = phpFieldType;
@@ -46,40 +43,40 @@ public class Field {
         return fieldName;
     }
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
-    }
-
-    public String getFieldType() {
-        return fieldType;
-    }
-
-    public void setFieldType(String fieldType) {
-        this.fieldType = fieldType;
-    }
-
     public boolean isRequired() {
         return isRequired;
     }
 
-    public void setRequired(boolean isRequired) {
-        this.isRequired = isRequired;
-    }
-    
     public String getCamelCaseFieldName() {
         return camelCaseFieldName;
-    }
-
-    public void setCamelCaseFieldName(String camelCaseFieldName) {
-        this.camelCaseFieldName = camelCaseFieldName;
     }
 
     public String getDatabaseFieldType() {
         return databaseFieldType;
     }
 
-    public void setDatabaseFieldType(String databaseFieldType) {
-        this.databaseFieldType = databaseFieldType;
+    public String getJavaFieldType() {
+        return javaFieldType;
+    }
+
+    public String getJsonFieldType() {
+        return jsonFieldType;
+    }
+
+    public String getPhpFieldType() {
+        return phpFieldType;
+    }
+
+    public String getPlayFieldType() {
+        return playFieldType;
+    }
+
+    public String getPlayOptionalFieldType() {
+        return playOptionalFieldType;
+    }
+
+    public String getScalaFieldType() {
+        return scalaFieldType;
     }
 
 }

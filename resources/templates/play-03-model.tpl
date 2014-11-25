@@ -19,9 +19,9 @@ import anorm.SqlQuery
 case class ${classname} (
 <#list fields as field>
 <#if field.isRequired() >
-    var ${field.fieldName}: ${field.fieldType},
+    var ${field.fieldName}: ${field.playFieldType},
 <#else>
-    var ${field.fieldName}: Option[${field.fieldType}],
+    var ${field.fieldName}: Option[${field.playFieldType}],
 </#if>
 </#list>
 
@@ -43,9 +43,9 @@ object ${classname} {
             ${classname}(
 <#list fields as field>
 <#if field.isRequired() >
-                row[${field.fieldType}]("${field.fieldName}"),
+                row[${field.playFieldType}]("${field.fieldName}"),
 <#else>
-                row[Option[${field.fieldType}]]("${field.fieldName}"),
+                row[Option[${field.playFieldType}]]("${field.fieldName}"),
 </#if>
 </#list>
             )

@@ -1,78 +1,102 @@
 package com.alvinalexander.cato.controllers
 
+import net.liftweb.json.DefaultFormats
+import net.liftweb.json._
+import com.alvinalexander.cato.utils.FileUtils
+import com.alvinalexander.cato.utils.JavaFileUtils
 import com.alvinalexander.cato.CatoGui
-import com.alvinalexander.cato.view.DataTypeMappingsPanel
-import javax.swing.DefaultComboBoxModel
-import java.awt.event.ItemListener
-import java.awt.event.ItemEvent
-import com.alvinalexander.cato.model.DataTypeMappings
-import com.alvinalexander.cato.model.DataTypeMappings._
 
-class DataTypeMappingsController(mainController: CatoGui) {
-  
-    val dataTypeMappingsPanel = new DataTypeMappingsPanel
-    val blobTextField         = dataTypeMappingsPanel.getBlobTextField
-    val booleanTextField      = dataTypeMappingsPanel.getBooleanTextField
-    val dateTextField         = dataTypeMappingsPanel.getDateTextField
-    val integerTextField      = dataTypeMappingsPanel.getIntegerTextField
-    val longTextField         = dataTypeMappingsPanel.getLongTextField
-    val floatTextField        = dataTypeMappingsPanel.getFloatTextField
-    val textVarcharTextField  = dataTypeMappingsPanel.getTextVarcharTextField
-    val timestampTextField    = dataTypeMappingsPanel.getTimestampTextField
+// TODO move this object code to a test class
+object DataTypeMappingTest extends App {
+    import DataTypeMappingsController._
+    val jsonString = JavaFileUtils.readFileAsString("/Users/Al/Projects/Scala/CatoGui/resources/datatypemappings.json")
+    val allDataTypesAsMap = DataTypeMappingsController.getAllDataTypesAsMap(jsonString)
+    val javaMap = DataTypeMappingsController.getDataTypeMap(JAVA, allDataTypesAsMap)
+    println(javaMap)
+}
 
-    // combobox
-    val builtInMappingsComboBox = dataTypeMappingsPanel.getBuiltInMappingsComboBox    
-    val dataTypesModel = new DefaultComboBoxModel(Array(JAVA, JSON, PHP, PLAY, SCALA))
-    builtInMappingsComboBox.setModel(dataTypesModel)
-
-    // initialize data
-    var currentDataTypeMap: Map[String, String] = DataTypeMappings.dataTypesMap(DataTypeMappings.JAVA)
-    builtInMappingsComboBox.setSelectedItem(DataTypeMappings.JAVA)
-    updateTextFieldsWithMap(currentDataTypeMap)
+/**
+ * This is the "controller" that handles things related to mapping data types,
+ * including reading the data type mapping config file and making those mappings
+ * available to others.
+ */
+object DataTypeMappingsController {
     
-    // update the fields when the combobox is changed
-    val itemListener = new ItemListener {
-        def itemStateChanged(itemEvent: ItemEvent) {
-            val state = itemEvent.getStateChange
-            if (state == ItemEvent.SELECTED) {
-                val item = itemEvent.getItem.toString  // Java, JSON, etc.
-                // get the right map, then update the textfields
-                currentDataTypeMap = DataTypeMappings.dataTypesMap(item)
-                updateTextFieldsWithMap(currentDataTypeMap)
-                rememberSelectedMapName(item)
-            }
+    type DataTypeMap = Map[String, DataTypeAsJson]
+
+    // these strings must match the keys in the 'datatypemappings.json' file
+    val JAVA           = "java"
+    val JSON           = "json"
+    val PHP            = "php"
+    val PLAY           = "play"
+    val PLAY_OPTIONAL  = "playOptional"
+    val SCALA          = "scala"
+
+    val BLOB      = "blob"
+    val BOOLEAN   = "boolean"
+    val DATE      = "date"
+    val DOUBLE    = "double"
+    val FLOAT     = "float"
+    val INTEGER   = "integer"
+    val LONG      = "long"
+    val TEXT      = "text"
+    val TIMESTAMP = "timestamp"
+
+    /**
+     * Returns a `DataTypeMap`, which is a type of `Map[String, DataTypeRepresentation]`.
+     * Use this map when calling `getDataTypeMap`, like this:
+     * 
+     * val allDataTypes = getAllDataTypesAsMap(jsonString)
+     * val javaMap = getDataTypeMap(JAVA, allDataTypes)
+     * 
+     */
+    def getAllDataTypesAsMap(jsonString: String): DataTypeMap = {
+        // "java" -> its map, "scala" -> its map, etc.
+        val dataTypeMappings = scala.collection.mutable.Map[String, DataTypeAsJson]()
+        implicit val formats = DefaultFormats
+        val jsonAsJValue = parse(jsonString)
+        val mappings = (jsonAsJValue \\ "datatype").children
+        for (mapping <- mappings) {
+            val m = mapping.extract[DataTypeAsJson]
+            dataTypeMappings += (m.language -> m)
         }
-    }
-    
-    def setDataTypeMap(dataTypeMapName: String) {
-        builtInMappingsComboBox.setSelectedItem(dataTypeMapName)
-        currentDataTypeMap = DataTypeMappings.dataTypesMap(dataTypeMapName)
-        updateTextFieldsWithMap(currentDataTypeMap)
-        rememberSelectedMapName(dataTypeMapName)
+        dataTypeMappings.toMap
     }
     
     /**
-     * remember the map name in the user's preferences so we can restore it when
-     * the app is started again.
+     * Usage: getMap(JAVA)  // returns the java data mapping as read from the json cfg file
      */
-    private def rememberSelectedMapName(dataTypeMapName: String) {
-        mainController.saveDataTypeMapName(dataTypeMapName)
-    }
-    
-    private def updateTextFieldsWithMap(dataTypesMap: Map[String, String]) {
-        blobTextField.setText(dataTypesMap(BLOB))
-        booleanTextField.setText(dataTypesMap(BOOLEAN))
-        dateTextField.setText(dataTypesMap(DATE))
-        integerTextField.setText(dataTypesMap(INTEGER))
-        longTextField.setText(dataTypesMap(LONG))
-        floatTextField.setText(dataTypesMap(FLOAT))
-        textVarcharTextField.setText(dataTypesMap(TEXT))
-        timestampTextField.setText(dataTypesMap(TIMESTAMP))
-    }
-    
-    builtInMappingsComboBox.addItemListener(itemListener)
-    
+    def getDataTypeMap(mapKey: String, dataTypeMappings: DataTypeMap) = {
+        val map = dataTypeMappings(mapKey)
+        Map(
+            BLOB      -> map.blob,
+            BOOLEAN   -> map.boolean,
+            DATE      -> map.date,
+            DOUBLE    -> map.double,
+            FLOAT     -> map.float,
+            INTEGER   -> map.integer,
+            LONG      -> map.long,
+            TEXT      -> map.text,
+            TIMESTAMP -> map.timestamp
+        )
+    } 
+
 }
+
+// TODO need a better name here
+// a case class to match the JSON data
+case class DataTypeAsJson (
+    language: String,  // java, scala, play, etc.
+    blob: String,
+    boolean: String,
+    date: String,
+    double: String,
+    float: String,
+    integer: String,
+    long: String,
+    text: String,
+    timestamp: String
+)
 
 
 

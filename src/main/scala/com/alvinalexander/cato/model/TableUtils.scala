@@ -111,6 +111,7 @@ object TableUtils {
      * use this method to get the field types based on the user-defined data type mappings
      * we are given. 
      */
+    @Deprecated
     def getFieldTypes(
             tableColumns: Seq[ColumnData], 
             desiredFields: Seq[String],

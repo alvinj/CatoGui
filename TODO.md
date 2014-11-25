@@ -1,7 +1,8 @@
 To-Do List
 ==========
 
-* use a json cfg file instead of the gui for data types (because a template can need multiple data types, as the Play Framework templates do)
+* the path to the json "mappings" config file is hard-coded; get it from the command line.
+
 * clean up CatoGui, which has grown unwieldly
 * convert more templates
 * ColumnData has more database types than i map; get them all in sync

@@ -6,7 +6,7 @@ import com.alvinalexander.cato.model.DatabaseUtils
 import java.sql.Connection
 import scala.util.{Try, Success, Failure}
 import com.alvinalexander.cato.utils.FileUtils
-import com.alvinalexander.cato.Field
+//import com.alvinalexander.cato.Field
 import com.alvinalexander.cato.model.TableUtils
 import java.sql.DatabaseMetaData
 import com.alvinalexander.cato.utils.GuiUtils
@@ -15,7 +15,6 @@ import scala.collection.mutable.ArrayBuffer
 import com.devdaily.dbgrinder.model.ColumnData
 import com.alvinalexander.cato.utils.ClassUtils
 import java.util.prefs._
-import com.alvinalexander.cato.model.DataTypeMappings
 import com.alvinalexander.cato.utils.JavaFileUtils
 import com.alvinalexander.annotations.impure
 
@@ -34,32 +33,23 @@ class CatoGui {
     val USERNAME = "USERNAME"
     val PASSWORD = "PASSWORD"
     val TEMPLATES_DIR = "TEMPLATES_DIR"
-    val DATA_TYPE_MAP_NAME = "DATA_TYPE_MAP_NAME"
     
     val lastDbDriver     = prefs.get(DRIVER, "")
     val lastDbUrl        = prefs.get(URL, "")
     val lastDbUsername   = prefs.get(USERNAME, "")
     val lastDbPassword   = prefs.get(PASSWORD, "")
     val lastTemplatesDir = prefs.get(TEMPLATES_DIR, "")
-    val lastDataTypeMapName = prefs.get(DATA_TYPE_MAP_NAME, DataTypeMappings.JAVA)
     
     def saveDriver(driver: String)             { prefs.put(DRIVER, driver)} 
     def saveUrl(url: String)                   { prefs.put(URL, url)} 
     def saveUsername(username: String)         { prefs.put(USERNAME, username)} 
     def savePassword(password: String)         { prefs.put(PASSWORD, password)} 
     def saveTemplatesDir(templatesDir: String) { prefs.put(TEMPLATES_DIR, templatesDir)} 
-    def saveDataTypeMapName(dataTypeMapName: String) { prefs.put(DATA_TYPE_MAP_NAME, dataTypeMapName) }
 
     // controllers
     val propertiesController = new PropertiesController(this, lastDbDriver, lastDbUrl, lastDbUsername, lastDbPassword, lastTemplatesDir)
-    
-    // TODO get rid of this old controller
-    val dataTypeMappingsController = new DataTypeMappingsController(this)
     val tablesFieldsTemplatesController = new TablesFieldsTemplatesController(this)
-    val mainFrameController = new MainFrameController(this, propertiesController, dataTypeMappingsController, tablesFieldsTemplatesController)
-    
-    // initialize data
-    dataTypeMappingsController.setDataTypeMap(lastDataTypeMapName)
+    val mainFrameController = new MainFrameController(this, propertiesController, tablesFieldsTemplatesController)
     
     var connection: Connection = null
     var metaData: DatabaseMetaData = null
@@ -166,21 +156,17 @@ class CatoGui {
         val fieldNames = TableUtils.getFieldNames(columnData, fieldsTheUserSelected)
         val camelCasefieldNames = TableUtils.getCamelCaseFieldNames(columnData, fieldsTheUserSelected)
         
-        // get the currently-selected field types map
-        val dataTypesMap = dataTypeMappingsController.currentDataTypeMap
-
         // get the data type maps from the json config file and use them
         val allDataTypeMappingsAsJsonString = JavaFileUtils.readFileAsString("/Users/Al/Projects/Scala/CatoGui/resources/datatypemappings.json")
-        val allDataTypesAsMap = DataTypeMappingsController2.getAllDataTypesAsMap(allDataTypeMappingsAsJsonString)
+        val allDataTypesAsMap = DataTypeMappingsController.getAllDataTypesAsMap(allDataTypeMappingsAsJsonString)
 
-        val javaTypesMap         = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.JAVA, allDataTypesAsMap)
-        val jsonTypesMap         = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.JSON, allDataTypesAsMap)
-        val phpTypesMap          = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.PHP, allDataTypesAsMap)
-        val playTypesMap         = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.PLAY, allDataTypesAsMap)
-        val playOptionalTypesMap = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.PLAY_OPTIONAL, allDataTypesAsMap)
-        val scalaTypesMap        = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.SCALA, allDataTypesAsMap)
+        val javaTypesMap         = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.JAVA, allDataTypesAsMap)
+        val jsonTypesMap         = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.JSON, allDataTypesAsMap)
+        val phpTypesMap          = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.PHP, allDataTypesAsMap)
+        val playTypesMap         = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.PLAY, allDataTypesAsMap)
+        val playOptionalTypesMap = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.PLAY_OPTIONAL, allDataTypesAsMap)
+        val scalaTypesMap        = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.SCALA, allDataTypesAsMap)
         
-        // TODO working here ...
         val javaFieldTypes         = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, javaTypesMap)
         val jsonFieldTypes         = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, jsonTypesMap)
         val phpFieldTypes          = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, phpTypesMap)
@@ -188,18 +174,15 @@ class CatoGui {
         val playOptionalFieldTypes = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, playOptionalTypesMap)
         val scalaFieldTypes        = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, scalaTypesMap)
         
-        // TODO fieldTypes is old, delete
-        val fieldTypes = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, dataTypesMap)
-
         val databaseFieldTypes = TableUtils.getDatabaseFieldTypes(columnData, fieldsTheUserSelected)
         val fieldRequiredValues = TableUtils.getFieldsRequiredStatus(columnData, fieldsTheUserSelected)
+
         val numFields = fieldNames.length
         val fields = new ArrayBuffer[Field]
         for (i <- 0 until numFields) {
             fields += new Field(
                               fieldNames(i), 
                               camelCasefieldNames(i), 
-                              fieldTypes(i), 
                               javaFieldTypes(i),
                               jsonFieldTypes(i),
                               phpFieldTypes(i),
