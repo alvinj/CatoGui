@@ -72,6 +72,11 @@ object DatabaseUtils {
     }
   
   
+    /**
+     * This lets you specify different "database types".
+     * Usually you want the databaseType to be "NORMAL", but I had to have a different algorithm
+     * for the old "SOLID" database (when I was forced to use that).
+     */
     def getTablesForDbType(
             connection: Connection,
             metaData: DatabaseMetaData,

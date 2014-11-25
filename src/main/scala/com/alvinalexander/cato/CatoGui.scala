@@ -15,6 +15,7 @@ import com.devdaily.dbgrinder.model.ColumnData
 import com.alvinalexander.cato.utils.ClassUtils
 import java.util.prefs._
 import com.alvinalexander.cato.model.DataTypeMappings
+import com.alvinalexander.cato.utils.JavaFileUtils
 
 /**
  * right now this class is growing into the "main controller" for the gui app.
@@ -49,6 +50,8 @@ class CatoGui {
 
     // controllers
     val propertiesController = new PropertiesController(this, lastDbDriver, lastDbUrl, lastDbUsername, lastDbPassword, lastTemplatesDir)
+    
+    // TODO get rid of this old controller
     val dataTypeMappingsController = new DataTypeMappingsController(this)
     val tablesFieldsTemplatesController = new TablesFieldsTemplatesController(this)
     val mainFrameController = new MainFrameController(this, propertiesController, dataTypeMappingsController, tablesFieldsTemplatesController)
@@ -162,13 +165,42 @@ class CatoGui {
         
         // get the currently-selected field types map
         val dataTypesMap = dataTypeMappingsController.currentDataTypeMap
+
+        // get the data type maps from the json config file and use them
+        val allDataTypeMappingsAsJsonString = JavaFileUtils.readFileAsString("/Users/Al/Projects/Scala/CatoGui/resources/datatypemappings.json")
+        val allDataTypesAsMap = DataTypeMappingsController2.getAllDataTypesAsMap(allDataTypeMappingsAsJsonString)
+
+        val javaTypesMap         = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.JAVA, allDataTypesAsMap)
+        val jsonTypesMap         = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.JSON, allDataTypesAsMap)
+        val phpTypesMap          = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.PHP, allDataTypesAsMap)
+        val playTypesMap         = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.PLAY, allDataTypesAsMap)
+        val playOptionalTypesMap = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.PLAY_OPTIONAL, allDataTypesAsMap)
+        val scalaTypesMap        = DataTypeMappingsController2.getDataTypeMap(DataTypeMappingsController2.SCALA, allDataTypesAsMap)
+        
+        // TODO working here ...
+        val javaFieldTypes         = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, javaTypesMap)
+        val jsonFieldTypes         = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, jsonTypesMap)
+        val phpFieldTypes          = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, phpTypesMap)
+        val playFieldTypes         = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, playTypesMap)
+        val playOptionalFieldTypes = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, playOptionalTypesMap)
+        val scalaFieldTypes        = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, scalaTypesMap)
+        
+        // TODO this is old, delete
         val fieldTypes = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, dataTypesMap)
+        
+        
         val databaseFieldTypes = TableUtils.getDatabaseFieldTypes(columnData, fieldsTheUserSelected)
         val fieldRequiredValues = TableUtils.getFieldsRequiredStatus(columnData, fieldsTheUserSelected)
         val numFields = fieldNames.length
         val fields = new ArrayBuffer[Field]
         for (i <- 0 until numFields) {
-            fields += new Field(fieldNames(i), camelCasefieldNames(i), fieldTypes(i), databaseFieldTypes(i), fieldRequiredValues(i))
+            fields += new Field(
+                              fieldNames(i), 
+                              camelCasefieldNames(i), 
+                              fieldTypes(i), 
+                              databaseFieldTypes(i), 
+                              fieldRequiredValues(i)
+                              )
         }
         fields.toSeq
     }

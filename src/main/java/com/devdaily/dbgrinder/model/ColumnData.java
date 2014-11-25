@@ -27,7 +27,7 @@ public class ColumnData
   String name;
   String columnType;
   boolean isRequired;
-
+  
 /**
   * Standard constructor.
   * Requires name, XOPEN type, number of columns.

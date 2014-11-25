@@ -1,5 +1,6 @@
 package com.alvinalexander.cato.model
 
+// TODO delete this code
 object DataTypeMappings {
   
     val JAVA  = "Java"
