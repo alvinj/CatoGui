@@ -7,6 +7,9 @@ import com.devdaily.dbgrinder.utility.StringUtils;
 import com.devdaily.utils.Debug;
 
 
+// TODO delete this class
+
+
 /* The only files that need to be compiled for this project are:
 
    FILES TO COMPILE:
@@ -662,8 +665,8 @@ public class Db2Wapp
 
     // use the current variable info to create a Field; then add the Field to the
     // current domain object that we're building
-    Field f = new Field(varScope, varType, varName);
-    _currentDomainObject.addField(f);
+//    Field f = new Field(varScope, varType, varName);
+//    _currentDomainObject.addField(f);
   }
 
   /**

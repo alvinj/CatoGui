@@ -25,6 +25,7 @@ import com.alvinalexander.cato.model.TableUtils
 import com.devdaily.dbgrinder.view.TextDisplayDialog
 import java.awt.Toolkit
 import java.awt.Dimension
+import com.alvinalexander.annotations.impure
 
 class TablesFieldsTemplatesController (mainController: CatoGui) {
   
@@ -63,7 +64,7 @@ class TablesFieldsTemplatesController (mainController: CatoGui) {
     
     def clearListOfTemplateFiles { templateFilesTablesModel.clear }
     
-    def handleDatabaseTableSelectedEvent {
+    @impure def handleDatabaseTableSelectedEvent {
         val dbTableName = databaseTablesJList.getSelectedValue
         val fields = mainController.getFieldsForTableName(dbTableName)
         setListOfTableFields(fields)

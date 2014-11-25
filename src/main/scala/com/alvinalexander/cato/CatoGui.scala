@@ -6,6 +6,7 @@ import com.alvinalexander.cato.model.DatabaseUtils
 import java.sql.Connection
 import scala.util.{Try, Success, Failure}
 import com.alvinalexander.cato.utils.FileUtils
+import com.alvinalexander.cato.Field
 import com.alvinalexander.cato.model.TableUtils
 import java.sql.DatabaseMetaData
 import com.alvinalexander.cato.utils.GuiUtils
@@ -187,10 +188,9 @@ class CatoGui {
         val playOptionalFieldTypes = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, playOptionalTypesMap)
         val scalaFieldTypes        = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, scalaTypesMap)
         
-        // TODO this is old, delete
+        // TODO fieldTypes is old, delete
         val fieldTypes = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, dataTypesMap)
-        
-        
+
         val databaseFieldTypes = TableUtils.getDatabaseFieldTypes(columnData, fieldsTheUserSelected)
         val fieldRequiredValues = TableUtils.getFieldsRequiredStatus(columnData, fieldsTheUserSelected)
         val numFields = fieldNames.length
@@ -200,9 +200,15 @@ class CatoGui {
                               fieldNames(i), 
                               camelCasefieldNames(i), 
                               fieldTypes(i), 
+                              javaFieldTypes(i),
+                              jsonFieldTypes(i),
+                              phpFieldTypes(i),
+                              playFieldTypes(i),
+                              playOptionalFieldTypes(i),
+                              scalaFieldTypes(i),
                               databaseFieldTypes(i), 
                               fieldRequiredValues(i)
-                              )
+                          )
         }
         fields.toSeq
     }

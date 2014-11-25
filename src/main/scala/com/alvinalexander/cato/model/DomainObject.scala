@@ -1,12 +1,14 @@
 package com.alvinalexander.cato.model
 
 import scala.collection.mutable.ArrayBuffer
+import com.alvinalexander.cato.Field
 
 /**
  * The DomainObject class will represent the DomainObject being built
  * as TableGen reads the database table(s). Examples are Product,
  * Menu, Topping, etc.
  */
+
 case class DomainObject(packageName: String, className: String) 
 {
     var fields = new ArrayBuffer[Field]()

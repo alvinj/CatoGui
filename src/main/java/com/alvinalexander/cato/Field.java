@@ -1,23 +1,43 @@
 package com.alvinalexander.cato;
 
+// TODO delete this class
+@Deprecated
 public class Field {
 
     String fieldName;
     String camelCaseFieldName;
-    String fieldType;
+    @Deprecated String fieldType;
+    String javaFieldType;
+    String jsonFieldType;
+    String phpFieldType;
+    String playFieldType;
+    String playOptionalFieldType;
+    String scalaFieldType;
     String databaseFieldType;
     boolean isRequired;
 
     public Field (
         String fieldName, 
         String camelCaseFieldName, 
-        String fieldType, 
+        String fieldType,
+        String javaFieldType,
+        String jsonFieldType,
+        String phpFieldType,
+        String playFieldType,
+        String playOptionalFieldType,
+        String scalaFieldType,
         String databaseFieldType, 
         boolean isRequired
     ) {
         this.fieldName = fieldName;
         this.camelCaseFieldName = camelCaseFieldName;
         this.fieldType = fieldType;
+        this.javaFieldType = javaFieldType;
+        this.jsonFieldType = jsonFieldType;
+        this.phpFieldType = phpFieldType;
+        this.playFieldType = playFieldType;
+        this.playOptionalFieldType = playOptionalFieldType; 
+        this.scalaFieldType = scalaFieldType;
         this.databaseFieldType = databaseFieldType;
         this.isRequired = isRequired;
     }

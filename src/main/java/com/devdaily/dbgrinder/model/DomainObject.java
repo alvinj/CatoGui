@@ -1,5 +1,8 @@
 package com.devdaily.dbgrinder.model;
 
+
+// TODO delete this class
+
 import java.util.*;
 
 /**
@@ -22,11 +25,11 @@ public class DomainObject
     this.className = className;
   }
 
-  public void addField (Field f)
-  {
-    fields.add(f);
-    f.print();
-  }
+//  public void addField (Field f)
+//  {
+//    fields.add(f);
+//    f.print();
+//  }
 
   private void addMethod (Method m)
   {

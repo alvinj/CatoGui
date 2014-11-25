@@ -1,5 +1,8 @@
 package com.devdaily.kickstart.controller;
 
+
+// TODO delete this class
+
 import java.util.*;
 import java.io.*;
 import com.devdaily.dbgrinder.utility.StringUtils;
@@ -153,17 +156,17 @@ public class KSTemplateGenerator
             while ( e.hasMoreElements() )
             {
               String tempString = new String(foreachBlock);
-              Field f = (Field)e.nextElement();
-              // expect to find these tags
-              //tempString = StringUtils.replaceAll( tempString, "**FIELD_LABEL**", StringUtils.firstCharacterUpperCase(f.fieldName) );
-              tempString = StringUtils.replaceAll( tempString, "**FIELD_LABEL**", StringUtils.firstCharacterUpperCase(f.fieldName) );
-              tempString = StringUtils.replaceAll( tempString, "**FIELD_NAME**", f.fieldName );
-              tempString = StringUtils.replaceAll( tempString, "**FIELD_DATA_TYPE**", f.type );
-              tempString = StringUtils.replaceAll( tempString, "**DB_COLUMN_NAME**", StringUtils.convertCamelCaseToUnderscore(f.fieldName) );
-              // this next line just used when creating a Controller (good to know for refactoring!)
-              tempString = StringUtils.replaceAll( tempString, "**FIELD_TYPE_FIRST_CHAR_UPPER**", StringUtils.firstCharacterUpperCase(f.type) );
-              // these may also occur in this area
-              tempString = searchAndReplaceTokens( tempString, domainObject );
+//              Field f = (Field)e.nextElement();
+//              // expect to find these tags
+//              //tempString = StringUtils.replaceAll( tempString, "**FIELD_LABEL**", StringUtils.firstCharacterUpperCase(f.fieldName) );
+//              tempString = StringUtils.replaceAll( tempString, "**FIELD_LABEL**", StringUtils.firstCharacterUpperCase(f.fieldName) );
+//              tempString = StringUtils.replaceAll( tempString, "**FIELD_NAME**", f.fieldName );
+//              tempString = StringUtils.replaceAll( tempString, "**FIELD_DATA_TYPE**", f.type );
+//              tempString = StringUtils.replaceAll( tempString, "**DB_COLUMN_NAME**", StringUtils.convertCamelCaseToUnderscore(f.fieldName) );
+//              // this next line just used when creating a Controller (good to know for refactoring!)
+//              tempString = StringUtils.replaceAll( tempString, "**FIELD_TYPE_FIRST_CHAR_UPPER**", StringUtils.firstCharacterUpperCase(f.type) );
+//              // these may also occur in this area
+//              tempString = searchAndReplaceTokens( tempString, domainObject );
               parsedBlock += tempString;
             }
             return parsedBlock;
