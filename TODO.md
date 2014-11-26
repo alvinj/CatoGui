@@ -1,9 +1,9 @@
 To-Do List
 ==========
 
-* get the MySQL driver out of the 'lib' folder?
 * clean up CatoGui, which has grown unwieldly
 * convert more templates
+* templates: i should be able to get rid of trailing commas now
 * ColumnData has more database types than i map; get them all in sync
 
 

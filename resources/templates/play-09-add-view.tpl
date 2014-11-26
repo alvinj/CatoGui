@@ -35,12 +35,13 @@
        <input type="hidden" id="id" name="id" value='@${objectname}Form.get.id'>
      }
 
-<<section name=id loop=$camelcase_fields>>
+<#list fields as field>
+          val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").as[${field.scalaFieldType}] 
      @inputText(
-       ${objectname}Form("<<$camelcase_fields[id]>>"), 
-       '_label -> "<<$fields[id]|replace:'_':' '|capitalize>>"
+       ${objectname}Form("${field.camelCaseFieldName}"), 
+       '_label -> "${field.fieldName?capitalize}"
      )
-<</section>>
+</#list>
      
     <div class="actions">
       <input type="submit" class="btn primary" value="Insert">

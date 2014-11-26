@@ -3,27 +3,27 @@
   def insert(${objectname}: ${classname}): Option[Long] = {
     val id: Option[Long] = DB.withConnection { implicit c =>
       SQL("""
-          insert into <<$tablename>> (<<$fields_as_insert_csv_string>>)
+          insert into ${tablename} (${fieldsAsInsertCsvString})
           values (
-<<section name=id loop=$camelcase_fields>>
-<<if ($camelcase_fields[id] != 'id') >>
-            {<<$camelcase_fields[id]>>},
-<</if>>
-<</section>>
+<#list fields as field>
+<#if field.camelCaseFieldName != "id" >
+            {${field.camelCaseFieldName}},
+</#if>
+</#list>
           )
           """
       )
       .on(
-<<section name=id loop=$camelcase_fields>>
-<<if ($camelcase_fields[id] != 'id') >>
-        '<<$camelcase_fields[id]>> -> ${objectname}.<<$camelcase_fields[id]>>,
-<</if>>
-<</section>>
+<#list fields as field>
+<#if field.camelCaseFieldName != "id" >
+            {${field.camelCaseFieldName}},
+        '${field.camelCaseFieldName} -> ${objectname}.${field.camelCaseFieldName},
+</#if>
+</#list>
       ).executeInsert()
     }
     id
   }
-
 
   // THIS IS A PLACEHOLDER; NEEDED FOR CONTROLLER 'submit' METHOD
   def update(${objectname}: ${classname}): Boolean = true

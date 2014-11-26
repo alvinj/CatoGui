@@ -1,22 +1,25 @@
+
   // TODO - may need to adjust these field types; see the documentation below.
+  // TODO - i should be able to handle "optional" fields here now 
+  
   val ${objectname}Form: Form[${classname}] = Form(
     mapping(
-<<section name=id loop=$camelcase_fields>>
-      "<<$camelcase_fields[id]>>" -> <<$play_field_types[id]>>,
-<</section>>
+<#list fields as field>
+      "${field.camelCaseFieldName}" -> ${field.playFieldType},
+</#list>
     )
     // (1) ${objectname}Form -> ${classname}
     // TODO probably won't need all these fields, such as 'id'
     // DATE might want to use `Calendar.getInstance.getTime` to create a Date in your constructor
     // ID might want to use 0 for your `id` field in constructor
-    ((<<$fields_as_insert_csv_string>>) => ${classname}(<<$fields_as_insert_csv_string>>))
+    ((${fieldsAsInsertCsvString}) => ${classname}(${fieldsAsInsertCsvString}))
     //
     // (2) ${classname} -> ${objectname}Form (form fields must match above)
     // TODO delete trailing comma
     ((${objectname}: ${classname}) => Some(
-<<section name=id loop=$camelcase_fields>>
-      ${objectname}.<<$camelcase_fields[id]>>,
-<</section>>
+<#list fields as field>
+      ${objectname}.${field.camelCaseFieldName},
+</#list>
     ))
   )
 

@@ -3,7 +3,7 @@
 // NAME THIS FILE views/${objectname}/list.scala.html
 //-----------------------------------------------------
 
-@(${objectname}s: List[${classname}], <<$classname|lower>>Form: Form[${classname}])
+@(${objectname}s: List[${classname}], ${objectname}Form: Form[${classname}])
 
 @import helper._
 
@@ -19,35 +19,35 @@
   <h1>There are @${objectname}s.size ${classname}(s)</h1>
   
   @* emit the <table> *@
-  @Option(${objectname}s).filterNot(_.isEmpty).map { <<$classname|lower>> =>
+  @Option(${objectname}s).filterNot(_.isEmpty).map { ${objectname} =>
     
     <table class="computers zebra-striped" cellpadding="2">
 
       <thead>
         <tr>
-<<counter start=0 print=false>>
-<<section name=id loop=$scala_field_types>>
-          @header(<<counter>>, "<<$camelcase_fields[id]|replace:'_':' '|capitalize>>")
-<</section>>
+<#list fields as field>
+          <!-- TODO this may not be right -->
+          @header(${field_index + 1}, "${field.camelCaseFieldName}")
+</#list>
         </tr>
       </thead>
 
       <tbody>
 
-        @${objectname}s.map { <<$classname|lower>> =>
+        @${objectname}s.map { ${objectname} =>
            <tr>
               @* TODO - DELETE EXTRA "ID" COLUMN *@
-             <td><a href="@routes.${classname}s.edit(<<$classname|lower>>.id)">@<<$classname|lower>>.id</a></td>
-<<section name=id loop=$scala_field_types>>
-<<if ($field_is_reqd[id] == true) >>
-             <td>@<<$classname|lower>>.<<$camelcase_fields[id]>></td>
-<<else>>
-             <td>@<<$classname|lower>>.<<$camelcase_fields[id]>>.getOrElse { <em>-</em> }</td>
-<</if>>
-<</section>>
+             <td><a href="@routes.${classname}s.edit(${objectname}.id)">@${objectname}.id</a></td>
 
+<#list fields as field>
+<#if field.isRequired() >
+             <td>@${objectname}.${field.camelCaseFieldName}</td>
+<#else>
+             <td>@${objectname}.${field.camelCaseFieldName}.getOrElse { <em>-</em> }</td>
+</#if>
+</#list>
              <td>
-               <a href="@routes.${classname}s.delete(<<$classname|lower>>.id)" onclick="return confirm('Really delete?');">Delete</a>
+               <a href="@routes.${classname}s.delete(${objectname}.id)" onclick="return confirm('Really delete?');">Delete</a>
              </td>
            </tr>
         }
@@ -64,7 +64,7 @@
   }
 
   <p>
-  <a href="@routes.${classname}s.add">add a new <<$classname|lower>></a>
+  <a href="@routes.${classname}s.add">add a new ${classname}</a>
   </p>
   
   

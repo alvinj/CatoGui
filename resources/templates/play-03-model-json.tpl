@@ -41,12 +41,14 @@
 <#if field.isRequired() >
           val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").as[${field.scalaFieldType}] 
 <#else>
-          // TODO this is wrong; need a Scala field type in the `as` clause
           val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").asOpt[${field.scalaFieldType}] 
 </#if>
 </#list>
           JsSuccess(${classname}(${fieldsAsInsertCsvString}))
       }
   }
+
+
+
 
 

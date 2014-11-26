@@ -1,54 +1,57 @@
-  // (1) FIND
-  // TODO - delete trailing comma
-  def findById(id: Long): ${classname} = {
-    DB.withConnection { implicit c =>
-      val row = SQL("SELECT * FROM <<$tablename>> WHERE id = {id}")
-        .on('id -> id)
-        .apply
-        .head
-      val ${objectname} = ${classname}(
-<<section name=id loop=$camelcase_fields>>
-<<if ($field_is_reqd[id] == true) >>
-row[<<$scala_field_types[id]|capitalize>>]("<<$fields[id]>>"),
-<<else>>
-row[Option[<<$scala_field_types[id]|capitalize>>]]("<<$fields[id]>>"),
-<</if>>
-<</section>>
-      )
-      contact
+
+    // (1) FIND
+    // TODO - delete trailing comma
+    def findById(id: Long): ${classname} = {
+        DB.withConnection { implicit c =>
+            val row = SQL("SELECT * FROM ${tablename} WHERE id = {id}")
+                         .on('id -> id)
+                         .apply
+                         .head
+            // TODO `fieldName` in these lines may need to be `camelCaseFieldName`
+            val ${objectname} = ${classname}(
+<#list fields as field>
+<#if field.isRequired() >
+                row[${field.scalaFieldType}]("${field.fieldName}"),
+<#else>
+                row[Option[${field.scalaFieldType}]]("${field.fieldName}"),
+</#if>
+</#list>
+            )
+            ${objectname}
+        }
     }
-  }
 
-  // (2) UPDATE
-  // TODO - fix commas
-  def update(${objectname}: ${classname}) {
-    DB.withConnection { implicit c =>
-      SQL("""
-        update <<$tablename>> set 
-<<section name=id loop=$camelcase_fields>>
-<<if ($camelcase_fields[id] != 'id') >>
-        <<$fields[id]>> = {<<$camelcase_fields[id]>>},
-<</if>>
-<</section>>
-        where id={id}
-        """
-      )
-      .on(
-<<section name=id loop=$camelcase_fields>>
-<<if ($camelcase_fields[id] != 'id') >>
-        '<<$camelcase_fields[id]>> -> ${objectname}.<<$camelcase_fields[id]>>,
-<</if>>
-<</section>>
-        'id -> ${objectname}.id
-      ).executeUpdate()
+    // (2) UPDATE
+    // TODO - fix commas
+    def update(${objectname}: ${classname}) {
+        DB.withConnection { implicit c =>
+            SQL("""
+                update ${tablename} set
+<#list fields as field>
+<#if field.camelCaseFieldName != "id" >
+                ${field.fieldName} = {${field.camelCaseFieldName}},
+</#if>
+</#list>
+                where id={id}"""
+            ).on(
+<#list fields as field>
+<#if field.camelCaseFieldName != "id" >
+                '${field.camelCaseFieldName} -> ${objectname}.${field.camelCaseFieldName},
+</#if>
+</#list>
+                'id -> ${objectname}.id
+            ).executeUpdate()
+        }
     }
-  }
 
-REQUIREMENTS:
 
-- must use the same form for 'add' and 'edit'  
+Requirements for Using This Template
+------------------------------------
 
-COMPUTER DATABASE EDIT FORM:
+* must use the same form for 'add' and 'edit'  
+
+Notes on the 'Edit' Form
+------------------------
 
 // the id is passed into the form, then there is this form statement
 @form(routes.Application.update(id)) {
@@ -58,7 +61,8 @@ COMPUTER DATABASE EDIT FORM:
   if/then statement
 - @form(routes.Application.save()) {  // THE 'ADD' FORM STATEMENT
 
-MARTINEZ APPROACH IN FORM:
+Martinez' Approach in His Form
+------------------------------
 
 a) "id" -> optional(of[Long]),
 b) save method tests id to see if it should do an insert or update

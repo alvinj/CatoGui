@@ -5,23 +5,23 @@
 
   // (1A) non-async controller method with a Play view
   def add = Action {
-    Ok(html.${objectname}.form(${objectname}Form))
+      Ok(html.${objectname}.form(${objectname}Form))
   }
 
   // (1B) - handle the submit process of a Play view
   // TODO update won't be implemented yet
   def submit = Action { implicit request =>
-    ${objectname}Form.bindFromRequest.fold(
-      errors => BadRequest(html.${objectname}.form(errors)),
-      ${objectname} => {
-        if (${objectname}.id == 0) {
-          val res = ${classname}.insert(${objectname})
-        } else {
-          val res = ${classname}.update(${objectname})
+      ${objectname}Form.bindFromRequest.fold(
+          errors => BadRequest(html.${objectname}.form(errors)),
+          ${objectname} => {
+              if (${objectname}.id == 0) {
+                  val res = ${classname}.insert(${objectname})
+              } else {
+                  val res = ${classname}.update(${objectname})
+              }
+              Redirect(routes.${classname}s.list)
         }
-        Redirect(routes.${classname}s.list)
-      }
-    )
+      )
   }
 
 
@@ -31,7 +31,7 @@
   import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
   /**
-   * The Sencha client will send me `symbol`, `url`, and `notes` in a POST request.
+   * When using Sencha, the client sends me `symbol`, `url`, and `notes` in a POST request.
    * I need to return something like this on success:
    *     { "success" : true, "msg" : "", "id" : 100 }
    * Note: May want to return an HTTP 200 status on error.
