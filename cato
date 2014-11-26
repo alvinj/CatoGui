@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# Use this script to run Cato on Mac and Linux/Unix systems.
+#
+# If this script fails with an error like this:
+#    Error: Could not find or load main class com.alvinalexander.cato.CatoGui
+# 
+# run this command:
+#
+#    sbt assembly
+#
+# Assuming that you don't get that error, two  things must be done for Cato to start properly:
+#
+#    1) you must add your jdbc driver to the classpath
+#    2) the 'data types mapping' file must be specified as a command-line argument,
+#           using the -m flag
+#
+# Both of those requirements are shown in the command here:
+
+java -classpath "resources/mysql-connector-java-5.1.34-bin.jar:target/scala-2.10/CatoGui-assembly-1.0.jar" \
+     com.alvinalexander.cato.CatoGui \
+     -m resources/datatypemappings.json
+
+if [ $? != 0 ]
+then
+    echo ""
+    echo "If you got this error message:"
+    echo ""
+    echo "    Error: Could not find or load main class com.alvinalexander.cato.CatoGui"
+    echo ""
+    echo "you need to run this command to build Cato's jar file:"
+    echo ""
+    echo "    sbt assembly"
+    echo ""
+    echo "Then run this script again."
+    echo ""
+    exit 1
+fi
+

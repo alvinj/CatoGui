@@ -10,6 +10,7 @@ version := "1.0"
 
 scalaVersion := "2.10.3"
 
-libraryDependencies += "net.liftweb" %% "lift-json" % "2.5+"
+libraryDependencies ++= Seq("net.liftweb" %% "lift-json" % "2.5+",
+                            "org.clapper" %% "argot" % "1.0.3")
 
 

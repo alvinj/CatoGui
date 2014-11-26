@@ -6,7 +6,6 @@ import com.alvinalexander.cato.model.DatabaseUtils
 import java.sql.Connection
 import scala.util.{Try, Success, Failure}
 import com.alvinalexander.cato.utils.FileUtils
-//import com.alvinalexander.cato.Field
 import com.alvinalexander.cato.model.TableUtils
 import java.sql.DatabaseMetaData
 import com.alvinalexander.cato.utils.GuiUtils
@@ -17,13 +16,20 @@ import com.alvinalexander.cato.utils.ClassUtils
 import java.util.prefs._
 import com.alvinalexander.cato.utils.JavaFileUtils
 import com.alvinalexander.annotations.impure
+import org.clapper.argot._
+import ArgotConverters._
 
 /**
  * right now this class is growing into the "main controller" for the gui app.
  * might want to off-load some of this.
  */
-class CatoGui {
+class CatoGui(dataTypesMappingFilename: String) {
   
+    // this isn't needed until the user wants to generate some code, but i put it first so
+    // the program will die if the Data Types Mapping file isn't found at startup.
+    val allDataTypeMappingsAsJsonString = JavaFileUtils.readFileAsString(dataTypesMappingFilename)
+    val allDataTypesAsMap = DataTypeMappingsController.getAllDataTypesAsMap(allDataTypeMappingsAsJsonString)
+
     // the user's last-used info is stored as preferences
     val prefs = Preferences.userNodeForPackage(this.getClass)
     
@@ -156,9 +162,9 @@ class CatoGui {
         val fieldNames = TableUtils.getFieldNames(columnData, fieldsTheUserSelected)
         val camelCasefieldNames = TableUtils.getCamelCaseFieldNames(columnData, fieldsTheUserSelected)
         
-        // get the data type maps from the json config file and use them
-        val allDataTypeMappingsAsJsonString = JavaFileUtils.readFileAsString("/Users/Al/Projects/Scala/CatoGui/resources/datatypemappings.json")
-        val allDataTypesAsMap = DataTypeMappingsController.getAllDataTypesAsMap(allDataTypeMappingsAsJsonString)
+//        // get the data type maps from the json config file and use them
+//        val allDataTypeMappingsAsJsonString = JavaFileUtils.readFileAsString(dataTypesMappingFilename)
+//        val allDataTypesAsMap = DataTypeMappingsController.getAllDataTypesAsMap(allDataTypeMappingsAsJsonString)
 
         val javaTypesMap         = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.JAVA, allDataTypesAsMap)
         val jsonTypesMap         = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.JSON, allDataTypesAsMap)
@@ -213,20 +219,60 @@ class CatoGui {
  */
 object CatoGui extends App {
 
-    // TODO i couldn't get these to work easily, and this isn't very important to me.
-//    try {
-//        //ClassUtils.loadAllClasses("/Users/Al/Projects/Scala/CatoGui/resources/mysql-connector-java-5.1.34-bin.jar")
-//        //ClassUtils.loadOnlyMySql("/Users/Al/Projects/Scala/CatoGui/resources/mysql-connector-java-5.1.34-bin.jar")
-//    } catch {
-//        case t: Throwable => t.printStackTrace 
-//    }
+    /**
+     * Use Argot to read command-line arguments.
+     * At this time the need for the "Data Types Mapping" file isn't really optional,
+     * so halt the program if it can't be found. 
+     */
+    val parser = new ArgotParser("Cato", preUsage=Some("Cato, Version 0.1. Copyright (c) 2014, Alvin J. Alexander (alvinalexander.com)."))
     
+    /**
+     * This line is Argot's way of saying that we support the `-m filename` and `--mappingfile filename`
+     * command line options.
+     */
+    val mappingFileOption = parser.option[String](List("m", "mappingfile"), 
+                                            "filename", 
+                                            "The canonical name of the data types mapping file.")
+
+    /**
+     * Get the mappings file at the command line, or die.
+     * If the flag and filename are there, attempt to start the application.
+     * My mappings file is at /Users/Al/Projects/Scala/CatoGui/resources/datatypemappings.json
+     */
+    var mappingFilename = ""
     try {
-        new CatoGui
+        parser.parse(args)
+        mappingFileOption.value match {
+            case Some(filename) => {
+                mappingFilename = filename
+                startCatoGui
+            }
+            case None => {
+                System.err.println("The 'Data Types Mapping' file was not specified; can't run without it.")
+                printUsageStatementAndDie
+            } 
+        }
     } catch {
-        case t: Throwable => GuiUtils.showErrorDialogWithLongText(
-                                 "Boom!", 
-                                 CatoUtils.getStackTraceString(t))
+        case e: ArgotUsageException => 
+            e.printStackTrace
+            printUsageStatementAndDie
+    }
+    
+    private def startCatoGui {
+        try {
+            new CatoGui(mappingFilename)
+        } catch {
+            case t: Throwable => {
+                GuiUtils.showErrorDialogWithLongText("Boom!", CatoUtils.getStackTraceString(t))
+            }
+        }
+    }
+    
+    private def printUsageStatementAndDie {
+        System.err.println("")
+        System.err.println("Usage: java -jar cato-0.1.jar -m dataTypesMapping.conf")
+        System.err.println("")
+        System.exit(1)
     }
 }
 

@@ -13,6 +13,16 @@ import java.util.jar.JarFile;
  */
 public class ClassUtils {
   
+    // TODO i couldn't get these to work easily to dynamically load the MySQL jar file
+    // , and this isn't very important to me.
+//  try {
+//      //ClassUtils.loadAllClasses("/Users/Al/Projects/Scala/CatoGui/resources/mysql-connector-java-5.1.34-bin.jar")
+//      //ClassUtils.loadOnlyMySql("/Users/Al/Projects/Scala/CatoGui/resources/mysql-connector-java-5.1.34-bin.jar")
+//  } catch {
+//      case t: Throwable => t.printStackTrace 
+//  }
+
+
     public static void loadOnlyMySql(String pathToJar)
     throws Exception
     {
