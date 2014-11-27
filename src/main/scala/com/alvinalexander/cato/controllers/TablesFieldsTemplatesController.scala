@@ -91,7 +91,7 @@ class TablesFieldsTemplatesController (mainController: CatoGui) {
         val data = buildDataObjectForTemplate(dbTable: String, fields: Seq[String])
 
         // apply the data to the template to get the desired code
-        val generatedCode = CodeGenerator.generateCode(templateText, data)
+        val generatedCode = CodeGenerator.generateCode(mainController.getTemplateDir, templateText, data)
         // show output
         showSourceCodeDialog("Generated Source Code", generatedCode)
     }

@@ -1,7 +1,9 @@
 // this is a Sencha ExtJS 'Controller' class
 
+<#import "/lib/includes.fm" as my>
+
 //VERIFY - should be plural, like 'Stocks'
-Ext.define('<<$APPLICATION_NAME>>.controller.${classname}', {
+Ext.define('${my.applicationName}.controller.${classname}', {
     extend: 'Ext.app.Controller',
 
     //VERIFY - should be singular and uc, like 'StockList'
@@ -46,7 +48,7 @@ Ext.define('<<$APPLICATION_NAME>>.controller.${classname}', {
 
         // VERIFY - these should both be uc and plural
         if (!Ext.getStore('${classname}s')) {
-            Ext.create('<<$APPLICATION_NAME>>.store.${classname}s');
+            Ext.create('${my.applicationName}.store.${classname}s');
         }    
     },
 
@@ -56,7 +58,7 @@ Ext.define('<<$APPLICATION_NAME>>.controller.${classname}', {
 
     // the 'add' button click event
     onAdd${classname}ButtonClicked: function(button, event, options) {
-        var win = Ext.create('<<$APPLICATION_NAME>>.view.${classname}Form');
+        var win = Ext.create('${my.applicationName}.view.${classname}Form');
         win.setTitle('Add ${classname}');
         win.show();
     },

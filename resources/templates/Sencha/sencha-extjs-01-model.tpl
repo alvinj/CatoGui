@@ -1,20 +1,13 @@
+<#import "/lib/includes.fm" as my>
+
 // this is a Sencha ExtJS 'Model' class
 
 // save this file as 'app/model/${classname}.js'
 // (name should be singular, like 'Stock' or 'Transaction')
 
-// --------------------------------------------------------------
-// some of these types will not be right.
-// valid sencha types are: 
-//     'auto', 'string', 'int', 'integer', 
-//     'float', 'number', 'boolean', 'date'
-// int and integer are interchangeable; so are float and number.
-// --------------------------------------------------------------
-
-
 // (A) USE THIS BLOCK IF YOU WANT TYPES
 // ------------------------------------
-Ext.define('<<$APPLICATION_NAME>>.model.${classname}', {
+Ext.define('${my.applicationName}.model.${classname}', {
     extend: 'Ext.data.Model',
 
     idProperty: 'id',

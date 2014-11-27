@@ -21,6 +21,15 @@ FreeMarker
 Cato uses the FreeMarker template engine. I think FreeMarker is the most
 popular Java template engine around. If you know how to use FreeMarker,
 you can use any legal FreeMarker expression in a Cato template.
+
+To help you take advantage of FreeMarker in your templates, here are some good
+FreeMarker links:
+
+* [Expressions](http://freemarker.org/docs/dgui_template_exp.html)
+* [FreeMarker string functions](http://freemarker.org/docs/ref_builtins_string.html)
+* [Strings, numbers, dates, booleans ...](http://freemarker.org/docs/ref_builtins.html)
+* [Macros](http://freemarker.org/docs/dgui_misc_userdefdir.html)
+* [Define your own variables](http://freemarker.org/docs/dgui_misc_var.html)
     
 
 Scalar Variables

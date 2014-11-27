@@ -1,11 +1,12 @@
-// FOO
+
+<#import "/lib/includes.fm" as my>
 
 // this is a Sencha ExtJS 'form'
 // this is a form to let the user add and edit a ${classname}
 
 // save this file as 'app/view/${classname}Form.js'
 // VERIFY - should be capitalized and singular, like 'StockForm'
-Ext.define('<<$APPLICATION_NAME>>.view.${classname}Form', {
+Ext.define('${my.applicationName}.view.${classname}Form', {
     extend: 'Ext.window.Window',
 
     // VERIFY - should be lc and singular, like 'stockForm'

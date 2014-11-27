@@ -17,9 +17,9 @@ object CodeGenerator {
         template
     }
     
-    def generateCode(templateAsString: String, data: Map[String, Object]): String = {
+    def generateCode(rootTemplateDir: String, templateAsString: String, data: Map[String, Object]): String = {
         val jmap = new java.util.HashMap[String, Object](data)
-        val result = TemplateEngine.applyDataToTemplate(templateAsString, jmap)
+        val result = TemplateEngine.applyDataToTemplate(rootTemplateDir, templateAsString, jmap)
         result
     }
     
@@ -44,7 +44,7 @@ object CodeGenerator {
         data.put("countries", jlist)    
         val jmap = new java.util.HashMap[String, Object](data)
         
-        val result = TemplateEngine.applyDataToTemplate(templateAsString, jmap)
+        val result = TemplateEngine.applyDataToTemplate(null, templateAsString, jmap)
         result
     }
   

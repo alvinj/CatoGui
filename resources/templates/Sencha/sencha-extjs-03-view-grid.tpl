@@ -3,12 +3,14 @@
 // save this file as 'app/view/${classname}List.js'
 // VERIFY: name should be singular, like 'StockList' or 'TransactionList'
 
-Ext.define('<<$APPLICATION_NAME>>.view.${classname}List', {
+<#import "/lib/includes.fm" as my>
+
+Ext.define('${my.applicationName}.view.${classname}List', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.${classname?lower_case}List',                    //VERIFY should be singular
 
     frame: true,
-    store: Ext.create('<<$APPLICATION_NAME>>.store.${classname}s'),  //VERIFY - should be plural
+    store: Ext.create('${my.applicationName}.store.${classname}s'),  //VERIFY - should be plural
 
     // valid column xtypes are:
     // none, 'numbercolumn', 'datecolumn'
