@@ -71,7 +71,20 @@
             "long"      : "Long",
             "text"      : "String",
             "timestamp" : "java.util.Date"
+        }},
+        { "datatype": {
+            "language"  : "sencha",
+            "blob"      : "auto",
+            "boolean"   : "boolean",
+            "date"      : "date",
+            "double"    : "float",
+            "float"     : "float",
+            "integer"   : "int",
+            "long"      : "number",
+            "text"      : "string",
+            "timestamp" : "date"
         }}
     ]
 }
+
 

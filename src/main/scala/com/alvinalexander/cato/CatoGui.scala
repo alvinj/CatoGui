@@ -172,6 +172,7 @@ class CatoGui(dataTypesMappingFilename: String) {
         val playTypesMap         = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.PLAY, allDataTypesAsMap)
         val playOptionalTypesMap = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.PLAY_OPTIONAL, allDataTypesAsMap)
         val scalaTypesMap        = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.SCALA, allDataTypesAsMap)
+        val senchaTypesMap        = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.SENCHA, allDataTypesAsMap)
         
         val javaFieldTypes         = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, javaTypesMap)
         val jsonFieldTypes         = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, jsonTypesMap)
@@ -179,6 +180,7 @@ class CatoGui(dataTypesMappingFilename: String) {
         val playFieldTypes         = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, playTypesMap)
         val playOptionalFieldTypes = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, playOptionalTypesMap)
         val scalaFieldTypes        = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, scalaTypesMap)
+        val senchaFieldTypes       = TableUtils.getFieldTypes(columnData, fieldsTheUserSelected, senchaTypesMap)
         
         val databaseFieldTypes = TableUtils.getDatabaseFieldTypes(columnData, fieldsTheUserSelected)
         val fieldRequiredValues = TableUtils.getFieldsRequiredStatus(columnData, fieldsTheUserSelected)
@@ -195,9 +197,9 @@ class CatoGui(dataTypesMappingFilename: String) {
                               playFieldTypes(i),
                               playOptionalFieldTypes(i),
                               scalaFieldTypes(i),
+                              senchaFieldTypes(i),
                               databaseFieldTypes(i), 
-                              fieldRequiredValues(i)
-                          )
+                              fieldRequiredValues(i))
         }
         fields.toSeq
     }

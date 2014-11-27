@@ -62,15 +62,20 @@ As you can see, a `Field` instance has properties like `fieldName`,
 can use in a `Field` loop in your templates:
 
 ````
-fieldName            // String
-camelCaseFieldName   // String
-fieldType            // String
-databaseFieldType    // String
-isRequired           // boolean
+fieldName              // String,   ex: first_name  (the field name in the db table)
+camelCaseFieldName     // String,   ex: firstName
+javaFieldType          // String,   ex: String
+jsonFieldType          // String,   ex: JsString
+phpFieldType           // String,   ex: String
+playFieldType          // String,   ex: nonEmptyText
+playOptionalFieldType  // String,   ex: optional(nonEmptyText)
+scalaFieldType         // String,   ex: String
+databaseFieldType      // String,   ex: varchar or text
+isRequired             // Boolean,  ex: true
 ````
 
-The proper way to access the `isRequired` field was shown in the previous
-example, and is repeated here for your convenience:
+The proper way to access the `isRequired` field in a template was shown 
+in the previous example, and is repeated here for your convenience:
 
 ````
 <#if field.isRequired() >

@@ -31,6 +31,7 @@ object DataTypeMappingsController {
     val PLAY           = "play"
     val PLAY_OPTIONAL  = "playOptional"
     val SCALA          = "scala"
+    val SENCHA         = "sencha"
 
     val BLOB      = "blob"
     val BOOLEAN   = "boolean"

@@ -12,6 +12,7 @@ public class Field {
     String playFieldType;
     String playOptionalFieldType;
     String scalaFieldType;
+    String senchaFieldType;
     String databaseFieldType;
     boolean isRequired;
 
@@ -24,6 +25,7 @@ public class Field {
         String playFieldType,
         String playOptionalFieldType,
         String scalaFieldType,
+        String senchaFieldType,
         String databaseFieldType, 
         boolean isRequired
     ) {
@@ -35,6 +37,7 @@ public class Field {
         this.playFieldType = playFieldType;
         this.playOptionalFieldType = playOptionalFieldType; 
         this.scalaFieldType = scalaFieldType;
+        this.senchaFieldType = senchaFieldType;
         this.databaseFieldType = databaseFieldType;
         this.isRequired = isRequired;
     }
@@ -77,6 +80,10 @@ public class Field {
 
     public String getScalaFieldType() {
         return scalaFieldType;
+    }
+
+    public String getSenchaFieldType() {
+      return senchaFieldType;
     }
 
 }
