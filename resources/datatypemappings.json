@@ -14,7 +14,7 @@
         }},
         { "datatype": {
             "language"  : "json",
-            "blob"      : "JsString",
+            "blob"      : "JsObject",
             "boolean"   : "JsBoolean",
             "date"      : "JsString",
             "double"    : "JsNumber",

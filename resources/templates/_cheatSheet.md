@@ -26,6 +26,8 @@ To help you take advantage of FreeMarker in your templates, here are some good
 FreeMarker links:
 
 * [Expressions](http://freemarker.org/docs/dgui_template_exp.html)
+* [List](http://freemarker.org/docs/ref_directive_list.html)
+* [List methods](http://freemarker.org/docs/ref_builtins_sequence.html)
 * [FreeMarker string functions](http://freemarker.org/docs/ref_builtins_string.html)
 * [Strings, numbers, dates, booleans ...](http://freemarker.org/docs/ref_builtins.html)
 * [Macros](http://freemarker.org/docs/dgui_misc_userdefdir.html)
@@ -107,6 +109,25 @@ is repeated here for your convenience:
 </#if>
 </#list>
 ````
+
+Regarding lists, it can help to know that you can manage "commas" at the end
+of expressions with this code:
+
+    <#if field_has_next>,</#if>
+
+For instance, when writing a constructor method for a JavaBean class, you can use that
+if/else construct to control commas as shown at the end of the third line in this
+code snippet:
+
+      public ${classname} (
+      <#list fields as field>
+        ${field.javaFieldType} ${field.camelCaseFieldName}<#if field_has_next>,</#if>
+      </#list>
+      ) {
+      <#list fields as field>
+          this.${field.camelCaseFieldName} = ${field.camelCaseFieldName};
+      </#list>
+      }
 
 
 Creating Your Own Template Variables

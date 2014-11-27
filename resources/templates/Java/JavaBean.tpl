@@ -5,15 +5,14 @@ public class ${classname} {
   ${field.javaFieldType} ${field.camelCaseFieldName};
 </#list>
 
-  // TODO delete trailing comma
   public ${classname} (
-<#list fields as field>
-    ${field.javaFieldType} ${field.camelCaseFieldName},
-</#list>
+  <#list fields as field>
+    ${field.javaFieldType} ${field.camelCaseFieldName}<#if field_has_next>,</#if>
+  </#list>
   ) {
-<#list fields as field>
+  <#list fields as field>
       this.${field.camelCaseFieldName} = ${field.camelCaseFieldName};
-</#list>
+  </#list>
   }
 
 <#list fields as field>

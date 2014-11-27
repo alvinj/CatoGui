@@ -1,27 +1,26 @@
 
-  // TODO - may need to adjust these field types; see the documentation below.
-  // TODO - i should be able to handle "optional" fields here now 
-  
-  val ${objectname}Form: Form[${classname}] = Form(
-    mapping(
-<#list fields as field>
-      "${field.camelCaseFieldName}" -> ${field.playFieldType},
-</#list>
+    // TODO - may need to adjust these field types; see the documentation below.
+    // TODO - i should be able to handle "optional" fields here now 
+    
+    val ${objectname}Form: Form[${classname}] = Form(
+        mapping(
+        <#list fields as field>
+            "${field.camelCaseFieldName}" -> ${field.playFieldType}<#if field_has_next>,</#if>
+        </#list>
+        )
+        // (1) ${objectname}Form -> ${classname}
+        // TODO probably won't need all these fields, such as 'id'
+        // DATE might want to use `Calendar.getInstance.getTime` to create a Date in your constructor
+        // ID might want to use 0 for your `id` field in constructor
+        ((${fieldsAsInsertCsvString}) => ${classname}(${fieldsAsInsertCsvString}))
+        //
+        // (2) ${classname} -> ${objectname}Form (form fields must match above)
+        ((${objectname}: ${classname}) => Some(
+        <#list fields as field>
+            ${objectname}.${field.camelCaseFieldName}<#if field_has_next>,</#if>
+        </#list>
+        ))
     )
-    // (1) ${objectname}Form -> ${classname}
-    // TODO probably won't need all these fields, such as 'id'
-    // DATE might want to use `Calendar.getInstance.getTime` to create a Date in your constructor
-    // ID might want to use 0 for your `id` field in constructor
-    ((${fieldsAsInsertCsvString}) => ${classname}(${fieldsAsInsertCsvString}))
-    //
-    // (2) ${classname} -> ${objectname}Form (form fields must match above)
-    // TODO delete trailing comma
-    ((${objectname}: ${classname}) => Some(
-<#list fields as field>
-      ${objectname}.${field.camelCaseFieldName},
-</#list>
-    ))
-  )
 
 //
 // see this url for play framework form field mapping examples:

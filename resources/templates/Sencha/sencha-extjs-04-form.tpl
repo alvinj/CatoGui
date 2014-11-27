@@ -44,16 +44,15 @@ Ext.define('${my.applicationName}.view.${classname}Form', {
                     fieldLabel: 'Label',
                     name: 'id'
                 },
-                // TODO delete the trailing comma below these fields
-<#list fields as field>
+                <#list fields as field>
                 {
                     fieldLabel: '${field.camelCaseFieldName?capitalize}',
                     name: '${field.camelCaseFieldName}',
                     itemId: '${field.camelCaseFieldName}',
                     allowBlank: false,
                     maxLength: 10
-                },
-</#list>
+                }<#if field_has_next>,</#if>
+                </#list>
             ]
         }
     ],

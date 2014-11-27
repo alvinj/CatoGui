@@ -1,6 +1,5 @@
 
     // (1) FIND
-    // TODO - delete trailing comma
     def findById(id: Long): ${classname} = {
         DB.withConnection { implicit c =>
             val row = SQL("SELECT * FROM ${tablename} WHERE id = {id}")
@@ -9,36 +8,35 @@
                          .head
             // TODO `fieldName` in these lines may need to be `camelCaseFieldName`
             val ${objectname} = ${classname}(
-<#list fields as field>
-<#if field.isRequired() >
-                row[${field.scalaFieldType}]("${field.fieldName}"),
-<#else>
-                row[Option[${field.scalaFieldType}]]("${field.fieldName}"),
-</#if>
-</#list>
+            <#list fields as field>
+            <#if field.isRequired() >
+                row[${field.scalaFieldType}]("${field.fieldName}")<#if field_has_next>,</#if>
+            <#else>
+                row[Option[${field.scalaFieldType}]]("${field.fieldName}")<#if field_has_next>,</#if>
+            </#if>
+            </#list>
             )
             ${objectname}
         }
     }
 
     // (2) UPDATE
-    // TODO - fix commas
     def update(${objectname}: ${classname}) {
         DB.withConnection { implicit c =>
             SQL("""
                 update ${tablename} set
-<#list fields as field>
-<#if field.camelCaseFieldName != "id" >
-                ${field.fieldName} = {${field.camelCaseFieldName}},
-</#if>
-</#list>
+                <#list fields as field>
+                <#if field.camelCaseFieldName != "id" >
+                    ${field.fieldName} = {${field.camelCaseFieldName}}<#if field_has_next>,</#if>
+                </#if>
+                </#list>
                 where id={id}"""
             ).on(
-<#list fields as field>
-<#if field.camelCaseFieldName != "id" >
-                '${field.camelCaseFieldName} -> ${objectname}.${field.camelCaseFieldName},
-</#if>
-</#list>
+            <#list fields as field>
+            <#if field.camelCaseFieldName != "id" >
+                '${field.camelCaseFieldName} -> ${objectname}.${field.camelCaseFieldName}<#if field_has_next>,</#if>
+            </#if>
+            </#list>
                 'id -> ${objectname}.id
             ).executeUpdate()
         }

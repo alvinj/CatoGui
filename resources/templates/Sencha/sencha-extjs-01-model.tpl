@@ -13,9 +13,9 @@ Ext.define('${my.applicationName}.model.${classname}', {
     idProperty: 'id',
 
     fields: [
-<#list fields as field>
+    <#list fields as field>
         { name: '${field.camelCaseFieldName}', type: '${field.senchaFieldType}' },
-</#list>
+    </#list>
     ]
 
 });
@@ -29,9 +29,9 @@ Ext.define('<<$APPLICATION_NAME>>.model.${classname}', {
     idProperty: 'id',
 
     fields: [
-<#list fields as field>
+    <#list fields as field>
         { name: '${field.camelCaseFieldName}'},
-</#list>
+    </#list>
     ]
 
 });

@@ -15,15 +15,14 @@ Ext.define('${my.applicationName}.view.${classname}List', {
     // valid column xtypes are:
     // none, 'numbercolumn', 'datecolumn'
     columns: [
-<#list fields as field>
+    <#list fields as field>
         { 
             text: '${field.camelCaseFieldName?capitalize}', 
             width: 50,
             dataIndex: '${field.camelCaseFieldName}'
-        },
-</#list>
+        }<#if field_has_next>,</#if>
+    </#list>
 ],
-// TODO delete extra comma(s) after column fields
 
     dockedItems: [
         {
