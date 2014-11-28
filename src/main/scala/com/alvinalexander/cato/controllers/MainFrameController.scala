@@ -12,6 +12,8 @@ import java.awt.Color
 import javax.swing.JPanel
 import java.awt.Dimension
 import java.awt.BorderLayout
+import com.alvinalexander.cato.utils.FileUtils
+import com.alvinalexander.annotations.impure
 
 class MainFrameController (mainController: CatoGui,
                            propertiesController: PropertiesController, 
@@ -40,10 +42,11 @@ class MainFrameController (mainController: CatoGui,
     mainFrame.addWindowListener(new MainFrameListener(this))
     
     tabbedPane.addChangeListener(new ChangeListener {
-        def stateChanged(e: ChangeEvent) {
+        @impure def stateChanged(e: ChangeEvent) {
             // if the "generate code" tab is selected, update the list of template files
             if (tabbedPane.getSelectedIndex == GENERATE_CODE_PANEL_NUM) {
-                val listOfTemplateFiles = mainController.getListOfTemplateFiles
+                val templatesDir = propertiesController.getTemplatesDir
+                val listOfTemplateFiles = FileUtils.getListOfFilesInDirectoryAsOption(templatesDir)
                 listOfTemplateFiles match {
                     case Some(files) => tablesFieldsTemplatesController.setListOfTemplateFiles(files)
                     case None => tablesFieldsTemplatesController.clearListOfTemplateFiles
@@ -52,7 +55,7 @@ class MainFrameController (mainController: CatoGui,
         }
     });
     
-    def displayTheGui {
+    @impure def displayTheGui {
         SwingUtils.invokeLater({
             mainFrame.setTitle("Cato")
             mainFrame.pack
@@ -61,7 +64,7 @@ class MainFrameController (mainController: CatoGui,
         })
     }
     
-    def handleWindowClosingEvent {
+    @impure def handleWindowClosingEvent {
         mainController.handleWindowClosingEvent
     }
 

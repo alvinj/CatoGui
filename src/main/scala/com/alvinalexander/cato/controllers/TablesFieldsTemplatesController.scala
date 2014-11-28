@@ -52,31 +52,36 @@ class TablesFieldsTemplatesController (mainController: CatoGui) {
     databaseTablesJList.addListSelectionListener(new TablesListSelectionListener(this))
     generateCodeButton.addActionListener(new GenerateCodeButtonListener(this))
     
-    def setTableNames(dbTableNames: Seq[String]) {
+    @impure def setTableNames(dbTableNames: Seq[String]) {
         databaseTablesModel.clear
         for (table <- dbTableNames) databaseTablesModel.addElement(table)
     }
     
-    def setListOfTemplateFiles(listOfTemplateFiles: Seq[String]) {
+    @impure def setListOfTemplateFiles(listOfTemplateFiles: Seq[String]) {
         templateFilesTablesModel.clear
         for (file <- listOfTemplateFiles) templateFilesTablesModel.addElement(file)
     }
     
-    def clearListOfTemplateFiles { templateFilesTablesModel.clear }
+    @impure def clearListOfTemplateFiles { templateFilesTablesModel.clear }
     
     @impure def handleDatabaseTableSelectedEvent {
         val dbTableName = databaseTablesJList.getSelectedValue
-        val fields = mainController.getFieldsForTableName(dbTableName)
+        val fields = CodeGenerator.getFieldsForTableName(mainController.metaData, dbTableName)
         setListOfTableFields(fields)
     }
 
-    def setListOfTableFields(newFields: Seq[String]) {
+    @impure def setListOfTableFields(newFields: Seq[String]) {
         fieldsTablesModel.clear
         for (field <- newFields) fieldsTablesModel.addElement(field)
     }
     
-    // TODO *** NEED TO ADD A LOT OF VALIDATION HERE ***
-    def handleGenerateCodeButtonClicked {
+    /**
+     * TODO need to validate the data in here
+     * this method should get everything it needs from the gui, then
+     * hand all of that data to the CodeGenerator to do the code-generating work,
+     * and then show the result of that work. nothing else should be done here.
+     */
+    @impure def handleGenerateCodeButtonClicked {
         val dbTable = databaseTablesJList.getSelectedValue
         val fields = tableFieldsJList.getSelectedValuesList
         val localTemplateFilename = templatesJList.getSelectedValue
@@ -85,54 +90,29 @@ class TablesFieldsTemplatesController (mainController: CatoGui) {
             return
         }
         val canonTemplateFilename = createCanonicalTemplateFilename(localTemplateFilename)
-        val templateText = JavaFileUtils.readFileAsString(canonTemplateFilename)
+        val templateFileAsString = JavaFileUtils.readFileAsString(canonTemplateFilename)
 
         // build up the `data` object from the selected Table and Fields
-        val data = buildDataObjectForTemplate(dbTable: String, fields: Seq[String])
+        val data = CodeGenerator.buildDataObjectForTemplate(mainController.metaData, mainController.allDataTypesAsMap, dbTable, fields)
 
         // apply the data to the template to get the desired code
-        val generatedCode = CodeGenerator.generateCode(mainController.getTemplateDir, templateText, data)
+        val generatedCode = CodeGenerator.generateCode(mainController.getTemplateDir, templateFileAsString, data)
         // show output
         showSourceCodeDialog("Generated Source Code", generatedCode)
     }
     
-    def handleDatabaseConnectEvent {
+    @impure def handleDatabaseConnectEvent {
         templateFilesTablesModel.clear
         databaseTablesModel.clear
         fieldsTablesModel.clear
     }
 
-    def handleDatabaseDisconnectEvent {
+    @impure def handleDatabaseDisconnectEvent {
         templateFilesTablesModel.clear
         databaseTablesModel.clear
         fieldsTablesModel.clear
     }
     
-    // TODO get this data correctly
-    private def buildDataObjectForTemplate(dbTablename: String, userSelectedFields: Seq[String]): Map[String, Object] = {
-        val data = scala.collection.mutable.Map[String, Object]()
-        
-        // create the single values that the templates need
-        data += ("tablename" -> dbTablename)
-        data += ("classname" -> TableUtils.convertTableNameToClassName(dbTablename))
-        data += ("objectname" -> TableUtils.convertTableNameToObjectName(dbTablename))
-        
-        // TODO - NEED TO VERIFY THESE
-        data += ("fieldsAsInsertCsvString" -> mainController.getFieldNamesAsCsvString(dbTablename, userSelectedFields))
-        data += ("prepStmtAsInsertCsvString" -> mainController.getPreparedStatementInsertString(dbTablename, userSelectedFields))
-        data += ("prepStmtAsUpdateCsvString" -> mainController.getPreparedStatementUpdateString(dbTablename, userSelectedFields))
-        
-        // TODO need to add some more conversions here ...
-    
-        // create the array for "fields" for the template
-        val fields = mainController.getFieldDataForTableName(dbTablename, userSelectedFields)
-        val fieldsAsJavaList : java.util.List[Field] = fields
-        data.put("fields", fieldsAsJavaList)
-        
-        // return the Map the code generator will use
-        data.toMap
-    }
-
     // TODO probably need some validation here
     private def createCanonicalTemplateFilename(localTemplateFilename: String) = {
         val templateDir = mainController.getTemplateDir

@@ -1,6 +1,7 @@
 package com.alvinalexander.cato.utils
 
 import java.io.File
+import com.alvinalexander.annotations.impure
 
 object FileUtils {
 
@@ -10,14 +11,22 @@ object FileUtils {
      * Get a recursive listing of all files underneath the given directory.
      * from stackoverflow.com/questions/2637643/how-do-i-list-all-files-in-a-subdirectory-in-scala
      */
-    def getRecursiveListOfFiles(dir: File): Seq[File] = {
+    @impure def getRecursiveListOfFiles(dir: File): Seq[File] = {
         val fileArray = dir.listFiles
         fileArray ++ fileArray.filter(_.isDirectory).flatMap(getRecursiveListOfFiles)
     }
     
-    def getListOfFilesInDirectory(directoryName: String): Seq[String] = {
-        val dir = new File(directoryName)
+    @impure def getListOfFilesInDirectory(dirName: String): Seq[String] = {
+        val dir = new File(dirName)
         dir.list
     }
 
+    @impure def getListOfFilesInDirectoryAsOption (dirName: String): Option[Seq[String]] = {
+        if (dirName==null || dirName.trim=="") {
+            None
+        } else {
+            Some(getListOfFilesInDirectory(dirName))
+        }
+    }
+    
 }
