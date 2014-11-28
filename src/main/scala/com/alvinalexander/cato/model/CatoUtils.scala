@@ -2,6 +2,7 @@ package com.alvinalexander.cato.model
 
 import java.io.StringWriter
 import java.io.PrintWriter
+import com.alvinalexander.inflector.Inflections
 
 object CatoUtils {
 
@@ -9,9 +10,7 @@ object CatoUtils {
      * Converts strings like "users" to "user".
      * TODO convert "persons" to "people".
      */
-    def singularize(s: String) = {
-        if (s.endsWith("s")) s.init else s
-    }
+    def singularize(s: String) = Inflections.singularize(s)
 
     def convertUnderscoreNameToCamelCase(s: String): String = {
         val sb = new StringBuilder

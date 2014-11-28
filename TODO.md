@@ -7,8 +7,8 @@ To-Do List
 * create About dialog
 * test the Play code that's being generated
 * add "singularize" method, similar to the way RoR works
-* 	see https://github.com/backchatio/scala-inflector
 * 	see https://github.com/philliphaines/inflector
+* 	also https://github.com/backchatio/scala-inflector (didn't like this one)
 
 * improve the gui. for instance, things are too tight on the properties panel
 * still need to add a few more generated values to the `data` map?

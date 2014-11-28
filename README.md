@@ -38,3 +38,16 @@ Get the correct Posgtres driver from http://jdbc.postgresql.org/download.html
 (They haven't different drivers for Java 6, 7, and 8.)
 
 
+Libraries
+---------
+
+Cato uses quite a few libraries, including:
+
+* [inflector (to singularize plural database table names)](https://github.com/philliphaines/inflector)
+
+
+
+
+
+
+
