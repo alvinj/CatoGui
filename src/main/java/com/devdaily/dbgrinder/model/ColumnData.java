@@ -1,7 +1,5 @@
 package com.devdaily.dbgrinder.model;
 
-import com.devdaily.utils.Debug;
-
 /**
   * Container for details about a table column.
   *
@@ -146,12 +144,6 @@ public class ColumnData
     this.name = name;
     this.columns = columns;
     this.columnType = coltype;
-
-    Debug.println( "\nColumnData contructor 2 called:" );
-    Debug.println( "  name: " + name );
-    Debug.println( "  coltype: " + coltype );
-    Debug.println( "  columns: " + columns );
-    Debug.println( "  " );
 
     int i=0;
     boolean quit = false;
