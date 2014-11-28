@@ -7,28 +7,26 @@ source code for any programming language or tool based on the tables in your dat
 This version of Cato runs as a Java Swing application. There is another version
 of Cato which works as a web application.
 
+I've tested this code with MySQL. I haven't tested it recently with Postgres, but
+the old version of this project used to work well with Postgres, and I haven't 
+changed those old functions (yet).
+
 
 MySQL JDBC Driver
 -----------------
 
-When this project was created, the MySQL JDBC driver was included in the _lib_
-folder of this project.
+You can get the latest MySQL JDBC driver from this URL:
 
-If that driver doesn't work for your version of MySQL, just follow these steps:
-
-* remove that driver from the _lib_ folder
-* copy your new driver into the _lib_ folder
-* re-build the application
+* http://dev.mysql.com/downloads/connector/j/
 
 I use MAMP on Mac OS X, and this is the MySQL information I use for testing:
 
-````
-DRIVER:        com.mysql.jdbc.Driver
-URL:           jdbc:mysql://localhost:8889/finance
-USERNAME:      root
-PASSWORD:      root
-TEMPLATES_DIR: /Users/Al/Projects/Scala/CatoGui/resources/templates
-````
+    DRIVER:        com.mysql.jdbc.Driver
+    URL:           jdbc:mysql://localhost:8889/finance
+    USERNAME:      root
+    PASSWORD:      root
+    TEMPLATES_DIR: /Users/Al/Projects/Scala/CatoGui/resources/templates
+
 
 Postgres JDBC Driver
 --------------------
