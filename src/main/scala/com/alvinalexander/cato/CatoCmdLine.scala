@@ -6,48 +6,45 @@ import com.alvinalexander.cato.model.TableUtils
 import com.alvinalexander.cato.examples.Common
 import org.clapper.argot._
 import ArgotConverters._
+import com.alvinalexander.cato.utils.JavaFileUtils
+import com.alvinalexander.cato.controllers.CodeGenerator
+import com.alvinalexander.cato.controllers.DataTypeMappingsController
+import java.io.File
 
 class CatoCmdLine (
-    templatesDir: String,
+    templateFilenameAsString: String,
     dataTypesMappingFile: String,
     driver: String,
     url: String,
     username: String,
     password: String,
-    dbTable: String
+    dbTableName: String
 ) {
 
     import Common._
-    val database = new Database(driver, url, username, password)
-    val connection = DatabaseUtils.makeConnection(database).get
-    val metaData = DatabaseUtils.getTableMetaData(connection).get
-    val tableNames = DatabaseUtils.getTableNames(connection, metaData)
     
-    // Vector v = Table.getColumnData(currentlySelectedDatabaseTableName,Project.getDatabaseMetaData(),null,null,true);
-    val columns = TableUtils.getColumnData("transactions", metaData, null, null, true).get
-    for (cd <- columns) {
-        println(s"ColumnName:  ${cd.getColumnName}")
-        println(s"ColumnType:  ${cd.getJavaType}")
-        println(s"ColumnWidth: ${cd.getNumColumns}")
-        println("")
-    }
+    def generateCode: String = {
+        val database = new Database(driver, url, username, password)
+        val connection = DatabaseUtils.makeConnection(database).get
+        val metaData = DatabaseUtils.getTableMetaData(connection).get
+        val columnData = TableUtils.getColumnData(dbTableName, metaData, null, null, true).get
+        
+        val templateFileAsString = JavaFileUtils.readFileAsString(templateFilenameAsString)
     
+        // build up the `data` object from the selected Table and Fields
+        val allDataTypeMappingsAsJsonString = JavaFileUtils.readFileAsString(dataTypesMappingFile)
+        val allDataTypesAsMap = DataTypeMappingsController.getAllDataTypesAsMap(allDataTypeMappingsAsJsonString)
+        
+        // TODO create a Seq[String] to represent the desired fields, which is "all fields" in this case
+        val fields = CodeGenerator.getFieldsForTableName(metaData, dbTableName)
+        val data = CodeGenerator.buildDataObjectForTemplate(metaData, allDataTypesAsMap, dbTableName, fields)
     
-    def run: String = {
-        "Here's the output!"
+        // apply the data to the template to get the desired code
+        // templateFile
+        val templateFile = new File(templateFilenameAsString)
+        val generatedCode = CodeGenerator.generateCode(templateFile.getParent, templateFileAsString, data)
+        generatedCode
     }
-
-    printHeader("Class Names")
-    for (t <- tableNames) {
-        println(TableUtils.convertTableNameToClassName(t))
-    }
-
-    private def printHeader(s: String) {
-        println(s"\n$s")
-        println(genUnderlines(s))
-    }
-
-    private def genUnderlines(s: String) = s.map(_ => "-").mkString
     
 }
 
@@ -89,41 +86,42 @@ object CatoCmdLine extends App {
      * so halt the program if it can't be found. 
      */
     val parser = new ArgotParser("Cato", preUsage=Some("Cato, Version 0.1. Copyright (c) 2014, Alvin J. Alexander (alvinalexander.com)."))
+
+    // define the command-line args we need
+    val templateFileSVOption = (parser.option[String](List("x", "templatefile"), "filename", "The canonical name of the template file to use as input."))
+    val mappingFileSVOption = (parser.option[String](List("m", "mappingfile"), "filename", "The canonical name of the data types mapping file."))
+    val usernameSVOption = (parser.option[String](List("u", "user"), "username", "The username needed to connect to the database."))
+    val passwordSVOption = (parser.option[String](List("p", "password"), "password", "The password needed to connect to the database."))
+    val driverSVOption = (parser.option[String](List("d", "driver"), "driver", "The database driver (string)."))
+    val urlSVOption = (parser.option[String](List("r", "url"), "url", "The database url (string)."))
+    val tableSVOption = (parser.option[String](List("l", "table"), "dbTable", "The database table you want to generate code from."))
     
-    /**
-     * This line is Argot's way of saying that we support the `-m filename` and `--mappingfile filename`
-     * command line options.
-     */
-    val templatesDirOption = (parser.option[String](List("-x", "templatesdir"), "dir", "The canonical name of the data types mapping file.")).value
-    val mappingFileOption = (parser.option[String](List("m", "mappingfile"), "filename", "The canonical name of the data types mapping file.")).value
-    val usernameOption = (parser.option[String](List("-u", "user"), "username", "The username needed to connect to the database.")).value
-    val passwordOption = (parser.option[String](List("-p", "password"), "password", "The password needed to connect to the database.")).value
-    val driverOption = (parser.option[String](List("-d", "driver"), "driver", "The database driver (string).")).value
-    val urlOption = (parser.option[String](List("-r", "url"), "url", "The database url (string).")).value
-    val tableOption = (parser.option[String](List("-l", "table"), "dbTable", "The database table you want to generate code from.")).value
+    parser.parse(args)
     
     for {
-        templatesDir <- templatesDirOption
-        mappingFile <- mappingFileOption
-        username <- usernameOption
-        password <- passwordOption
-        driver <- driverOption
-        url <- urlOption
-        table <- tableOption
+        templateFile <- templateFileSVOption.value
+        mappingFile <- mappingFileSVOption.value
+        username <- usernameSVOption.value
+        password <- passwordSVOption.value
+        driver <- driverSVOption.value
+        url <- urlSVOption.value
+        table <- tableSVOption.value
     } {
         val cato = new CatoCmdLine(
-            templatesDir,
+            templateFile,
             mappingFile,
             driver,
             url,
             username,
             password,
             table)
-        
-        // 3 - get the output and print it
-        val output = cato.run
+
+        // this is where the work is done
+        val output = cato.generateCode
         println(output)
     }
+    
+    // TODO handle the situation where 1+ options were improperly defined
 
     private def printUsageStatementAndDie {
         System.err.println("")

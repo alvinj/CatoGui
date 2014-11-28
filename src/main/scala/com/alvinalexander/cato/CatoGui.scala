@@ -78,13 +78,12 @@ class CatoGui(dataTypesMappingFilename: String) {
      */
     @impure def tryDisconnectingFromDatabase: Boolean = {
         try {
-            if (connection == null) return false
-            // TODO this isn't working 100% as desired after a connect/disconnect/connect series
             tablesFieldsTemplatesController.handleDatabaseDisconnectEvent
             connection.close
             connection = null
             true
         } catch {
+            // TODO do something if this fails?
             case t: Throwable => false
         }
     }
@@ -102,7 +101,7 @@ class CatoGui(dataTypesMappingFilename: String) {
     @impure def getTemplateDir = propertiesController.getTemplatesDir
     
     /**
-     * the user is trying to close the mainframe
+     * called when the user is closing the application.
      */
     @impure def handleWindowClosingEvent {
         tryDisconnectingFromDatabase
@@ -136,13 +135,11 @@ object CatoGui extends App {
      * If the flag and filename are there, attempt to start the application.
      * My mappings file is at /Users/Al/Projects/Scala/CatoGui/resources/datatypemappings.json
      */
-    var mappingFilename = ""
     try {
         parser.parse(args)
         mappingFileOption.value match {
             case Some(filename) => {
-                mappingFilename = filename
-                startCatoGui
+                startCatoGui(filename)
             }
             case None => {
                 System.err.println("The 'Data Types Mapping' file was not specified; can't run without it.")
@@ -155,7 +152,7 @@ object CatoGui extends App {
             printUsageStatementAndDie
     }
     
-    private def startCatoGui {
+    private def startCatoGui(mappingFilename: String) {
         try {
             new CatoGui(mappingFilename)
         } catch {
@@ -167,7 +164,7 @@ object CatoGui extends App {
     
     private def printUsageStatementAndDie {
         System.err.println("")
-        System.err.println("Usage: java -jar cato-0.1.jar -m dataTypesMapping.conf")
+        System.err.println("Usage: java -classpath YOUR_CLASSPATH com.alvinalexander.cato.CatoGui -m dataTypesMapping.conf")
         System.err.println("")
         System.exit(1)
     }
