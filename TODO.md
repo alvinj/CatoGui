@@ -5,6 +5,8 @@ To-Do List
 * video:
   * make 'models' dir ahead of time
   * make catogui taller
+* generate a DatePicker for date fields in play-09?
+* play-09: 'add' not working when i just submit the form without data
 
 * rename 1.0 to 0.1
 * delete old, dead code

@@ -1,8 +1,6 @@
-
-#---------------------------------------------------------------
-# TODO: Name your file app/views/${objectname}/form.scala.html
-#---------------------------------------------------------------
-
+@*
+ * TODO: Name your file app/views/user/form.scala.html
+ *@
 @(${objectname}Form: Form[${classname}])
 
 @import helper._
@@ -21,26 +19,26 @@
     </div>
   }
 
-  //
-  // TODO - DELETE THE 'ID' FORM ELEMENT
-  //
   @helper.form(routes.${classname}s.submit) {
     
      <h1>${classname} information</h1>
 
+     @* DATE NOTE: probably don't want date fields visible here, esp. "date created/updated" *@
      @* id = 0 for 'create', otherwise it has the real value *@
-     @if( ${objectname}Form.data.isEmpty ) {
+     @if(${objectname}Form.data.isEmpty) {
        <input type="hidden" id="id" name="id" value='0'>
      } else {
        <input type="hidden" id="id" name="id" value='@${objectname}Form.get.id'>
      }
 
-<#list fields as field>
+     <#list fields as field>
+     <#if field.camelCaseFieldName != "id" >
      @inputText(
        ${objectname}Form("${field.camelCaseFieldName}"), 
        '_label -> "${field.fieldName?capitalize}"
      )
-</#list>
+     </#if>
+     </#list>
      
     <div class="actions">
       <input type="submit" class="btn primary" value="Insert">
@@ -51,10 +49,11 @@
   
 }
 
-
-#--------
-# HELPERS
-#--------
+@*
+ * -------
+ * HELPERS
+ * -------
+ *@
 
 DATE:
      @inputDate(

@@ -6,7 +6,6 @@
                          .on('id -> id)
                          .apply
                          .head
-            // TODO `fieldName` in these lines may need to be `camelCaseFieldName`
             val ${objectname} = ${classname}(
             <#list fields as field>
             <#if field.isRequired() >
@@ -34,7 +33,7 @@
             ).on(
             <#list fields as field>
             <#if field.camelCaseFieldName != "id" >
-                '${field.camelCaseFieldName} -> ${objectname}.${field.camelCaseFieldName}<#if field_has_next>,</#if>
+                '${field.camelCaseFieldName} -> ${objectname}.${field.camelCaseFieldName},
             </#if>
             </#list>
                 'id -> ${objectname}.id
