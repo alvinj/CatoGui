@@ -46,8 +46,6 @@
         }
     
         // convert from a JSON string to a ${classname} object (de-serializing from JSON)
-        // TODO the CSV string inside the JsSuccess() is wrong; this is a known problem. copy/paste
-        // the correct variable names inside the JsSuccess() method.
         // @see http://www.playframework.com/documentation/2.2.x/ScalaJson regarding Option
         // DATE fields should be like: val datetime = (json \ "datetime").as[java.util.Date]
         def reads(json: JsValue): JsResult[${classname}] = {

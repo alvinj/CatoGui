@@ -1,6 +1,8 @@
 To-Do List
 ==========
 
+* merge Play templates 3a and 3b?
+
 * rename 1.0 to 0.1
 * delete old, dead code
 * ColumnData has more database types than i map; get them all in sync

@@ -8,9 +8,13 @@ object CatoUtils {
 
     /**
      * Converts strings like "users" to "user".
-     * TODO convert "persons" to "people".
      */
     def singularize(s: String) = Inflections.singularize(s)
+
+    /**
+     * Converts strings like "user" to "users".
+     */
+    def pluralize(s: String) = Inflections.pluralize(s)
 
     def convertUnderscoreNameToCamelCase(s: String): String = {
         val sb = new StringBuilder
