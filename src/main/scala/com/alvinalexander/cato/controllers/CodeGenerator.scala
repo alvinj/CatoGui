@@ -41,6 +41,7 @@ object CodeGenerator {
         
         // TODO - NEED TO VERIFY THESE
         data += ("fieldsAsInsertCsvString" -> getFieldNamesAsCsvString(metaData, dbTablename, userSelectedFields))
+        data += ("fieldsAsCamelCaseCsvString" -> getFieldNamesCamelCasedAsCsvString(metaData, dbTablename, userSelectedFields))
         data += ("prepStmtAsInsertCsvString" -> getPreparedStatementInsertString(metaData, dbTablename, userSelectedFields))
         data += ("prepStmtAsUpdateCsvString" -> getPreparedStatementUpdateString(metaData, dbTablename, userSelectedFields))
         
