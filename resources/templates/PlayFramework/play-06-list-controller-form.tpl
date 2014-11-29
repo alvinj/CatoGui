@@ -1,4 +1,14 @@
 
+<#macro getFieldsForConstructor the_fields>
+    <#list the_fields as f>
+        <#if f.isRequired()>
+            ${f.camelCaseFieldName}<#if f_has_next>,</#if>
+        <#else>
+            Some(${f.camelCaseFieldName})<#if f_has_next>,</#if>
+        </#if>
+    </#list>
+</#macro>
+
     // TODO - may need to adjust these field types; see the documentation below.
     // TODO - i should be able to handle "optional" fields here now 
     
@@ -12,14 +22,18 @@
         // TODO probably won't need all these fields, such as 'id'
         // DATE might want to use `Calendar.getInstance.getTime` to create a Date in your constructor
         // ID might want to use 0 for your `id` field in constructor
-        ((${fieldsAsInsertCsvString}) => ${classname}(${fieldsAsInsertCsvString}))
+        ((${fieldsAsCamelCaseCsvString}) => ${classname}(<@compress single_line=true><@getFieldsForConstructor the_fields=fields/></@compress>))
         //
         // (2) ${classname} -> ${objectname}Form (form fields must match above)
-        ((${objectname}: ${classname}) => Some(
+        ((${objectname}: ${classname}) => Some((
         <#list fields as field>
-            ${objectname}.${field.camelCaseFieldName}<#if field_has_next>,</#if>
+            <#if field.isRequired()>
+                ${objectname}.${field.camelCaseFieldName}<#if field_has_next>,</#if>
+            <#else>
+                ${objectname}.${field.camelCaseFieldName}.getOrElse("")<#if field_has_next>,</#if>
+            </#if>
         </#list>
-        ))
+        )))
     )
 
 //

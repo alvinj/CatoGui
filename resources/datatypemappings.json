@@ -64,13 +64,13 @@
             "language"  : "scala",
             "blob"      : "Object",
             "boolean"   : "Boolean",
-            "date"      : "java.util.Date",
+            "date"      : "java.sql.Date",
             "double"    : "Double",
             "float"     : "Float",
             "integer"   : "Int",
             "long"      : "Long",
             "text"      : "String",
-            "timestamp" : "java.util.Date"
+            "timestamp" : "java.sql.Date"
         }},
         { "datatype": {
             "language"  : "sencha",

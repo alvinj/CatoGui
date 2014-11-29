@@ -2,6 +2,10 @@
     // Use one of the three options below in your controller file,
     // app/controllers/${classname}.scala
     // ===========================================================
+    
+    /**
+     * NOTE you need to generate the ${objectname}Form before this will work
+     */
 
     // (A) non-async with a Play view
     // ------------------------------

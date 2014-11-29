@@ -11,6 +11,7 @@ import com.alvinalexander.annotations.impure
 import com.devdaily.dbgrinder.model.ColumnData
 import java.sql.DatabaseMetaData
 import com.alvinalexander.cato.controllers.DataTypeMappingsController.DataTypeMap
+import com.alvinalexander.inflector.Inflections
     
 object CodeGenerator {
 
@@ -36,7 +37,9 @@ object CodeGenerator {
         
         // create the single values that the templates need
         data += ("tablename" -> dbTablename)
-        data += ("classname" -> TableUtils.convertTableNameToClassName(dbTablename))
+        val classname = TableUtils.convertTableNameToClassName(dbTablename)
+        data += ("classname" -> classname)
+        data += ("classnamePlural" -> Inflections.pluralize(classname))
         data += ("objectname" -> TableUtils.convertTableNameToObjectName(dbTablename))
         
         // TODO - NEED TO VERIFY THESE

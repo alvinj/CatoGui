@@ -9,7 +9,7 @@ import views._
 import models._
 import scala.collection.mutable.ArrayBuffer
 
-object ${classname} extends Controller {
+object ${classnamePlural} extends Controller {
 
     def list = TODO
     

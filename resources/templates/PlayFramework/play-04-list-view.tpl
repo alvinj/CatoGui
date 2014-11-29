@@ -26,7 +26,6 @@
       <thead>
         <tr>
 <#list fields as field>
-          <!-- TODO this may not be right -->
           @header(${field_index + 1}, "${field.camelCaseFieldName}")
 </#list>
         </tr>
