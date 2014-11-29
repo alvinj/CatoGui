@@ -36,7 +36,6 @@
      }
 
 <#list fields as field>
-          val "${field.camelCaseFieldName}" -> (json \ "${field.camelCaseFieldName}").as[${field.scalaFieldType}] 
      @inputText(
        ${objectname}Form("${field.camelCaseFieldName}"), 
        '_label -> "${field.fieldName?capitalize}"

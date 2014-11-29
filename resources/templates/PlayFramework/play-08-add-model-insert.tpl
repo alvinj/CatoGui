@@ -1,5 +1,7 @@
+//
+// add this code to your model object
+//
 
-    // TODO delete the 'id' field (if it's fixed, delete this comment)
     def insert(${objectname}: ${classname}): Option[Long] = {
         val id: Option[Long] = DB.withConnection { implicit c =>
             SQL("""
@@ -16,7 +18,6 @@
             .on(
             <#list fields as field>
             <#if field.camelCaseFieldName != "id" >
-                  {${field.camelCaseFieldName}},
                   '${field.camelCaseFieldName} -> ${objectname}.${field.camelCaseFieldName}<#if field_has_next>,</#if>
             </#if>
             </#list>

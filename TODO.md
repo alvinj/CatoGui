@@ -2,6 +2,9 @@ To-Do List
 ==========
 
 * merge Play templates 3a and 3b?
+* video:
+  * make 'models' dir ahead of time
+  * make catogui taller
 
 * rename 1.0 to 0.1
 * delete old, dead code
