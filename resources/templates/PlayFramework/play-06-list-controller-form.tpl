@@ -9,6 +9,15 @@
     </#list>
 </#macro>
 
+<#macro accountForDateField f>
+    <#if f.databaseFieldType == "timestamp">
+        ${f.camelCaseFieldName}.asInstanceOf[java.sql.Date]
+    <#else>
+        ${f.camelCaseFieldName}
+    </#if>
+</#macro>
+
+
     // TODO - may need to adjust these field types; see the documentation below.
     // TODO - i should be able to handle "optional" fields here now 
     
@@ -28,7 +37,7 @@
         ((${objectname}: ${classname}) => Some((
         <#list fields as field>
             <#if field.isRequired()>
-                ${objectname}.${field.camelCaseFieldName}<#if field_has_next>,</#if>
+                ${objectname}.<@compress single_line=true><@accountForDateField f=field/></@compress><#if field_has_next>,</#if>
             <#else>
                 ${objectname}.${field.camelCaseFieldName}.getOrElse("")<#if field_has_next>,</#if>
             </#if>
