@@ -10,7 +10,7 @@ Ext.define('${my.applicationName}.view.${classname}List', {
     alias: 'widget.${classname?lower_case}List',                    //VERIFY should be singular
 
     frame: true,
-    store: Ext.create('${my.applicationName}.store.${classname}s'),  //VERIFY - should be plural
+    store: Ext.create('${my.applicationName}.store.${classnamePlural}'),  //VERIFY - should be plural
 
     // valid column xtypes are:
     // none, 'numbercolumn', 'datecolumn'

@@ -1,6 +1,6 @@
     // ======================================================
     // Use one of the  options below in your controller file,
-    // app/controllers/${classname}s.scala
+    // app/controllers/${classnamePlural}.scala
     // ======================================================
   
     // (1A) non-async controller method with a Play view
@@ -19,7 +19,7 @@
                 } else {
                     val res = ${classname}.update(${objectname})
                 }
-                Redirect(routes.${classname}s.list)
+                Redirect(routes.${classnamePlural}.list)
           }
         )
     }

@@ -1,7 +1,7 @@
 
     // =========================================================
     // Use one of the two options below in your controller file,
-    // app/controllers/${classname}s.scala
+    // app/controllers/${classnamePlural}.scala
     // =========================================================
   
   

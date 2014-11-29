@@ -6,7 +6,7 @@
 // (name should be plural, like 'Stocks')
 
 // TODO the store name should be plural (like 'Stocks', not 'Stock')
-Ext.define('${my.applicationName}.store.${classname}s', {
+Ext.define('${my.applicationName}.store.${classnamePlural}', {
     extend: 'Ext.data.Store',
 
     requires: [

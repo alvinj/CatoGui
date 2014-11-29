@@ -14,7 +14,7 @@
   </th>
 }
 
-@main("${classname}s") {
+@main("${classnamePlural}") {
   
   <h1>There are @${objectname}s.size ${classname}(s)</h1>
   
@@ -36,7 +36,7 @@
         @${objectname}s.map { ${objectname} =>
            <tr>
               @* TODO - DELETE EXTRA "ID" COLUMN *@
-             <td><a href="@routes.${classname}s.edit(${objectname}.id)">@${objectname}.id</a></td>
+             <td><a href="@routes.${classnamePlural}.edit(${objectname}.id)">@${objectname}.id</a></td>
 
 <#list fields as field>
 <#if field.isRequired() >
@@ -46,7 +46,7 @@
 </#if>
 </#list>
              <td>
-               <a href="@routes.${classname}s.delete(${objectname}.id)" onclick="return confirm('Really delete?');">Delete</a>
+               <a href="@routes.${classnamePlural}.delete(${objectname}.id)" onclick="return confirm('Really delete?');">Delete</a>
              </td>
            </tr>
         }
@@ -63,7 +63,7 @@
   }
 
   <p>
-  <a href="@routes.${classname}s.add">add a new ${classname}</a>
+  <a href="@routes.${classnamePlural}.add">add a new ${classname}</a>
   </p>
   
   

@@ -6,7 +6,7 @@
 @import helper._
 @import helper.twitterBootstrap._
 
-@main("${classname}s") {
+@main("${classnamePlural}") {
   
   @if(${objectname}Form.hasErrors) {
     <div class="alert-message error">
@@ -19,7 +19,7 @@
     </div>
   }
 
-  @helper.form(routes.${classname}s.submit) {
+  @helper.form(routes.${classnamePlural}.submit) {
     
      <h1>${classname} information</h1>
 
@@ -42,7 +42,7 @@
      
     <div class="actions">
       <input type="submit" class="btn primary" value="Insert">
-      <a href="@routes.${classname}s.list" class="btn">Cancel</a>
+      <a href="@routes.${classnamePlural}.list" class="btn">Cancel</a>
     </div>
     
   }

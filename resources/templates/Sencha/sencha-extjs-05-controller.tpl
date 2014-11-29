@@ -13,7 +13,7 @@ Ext.define('${my.applicationName}.controller.${classname}', {
 
     //VERIFY - should be plural and uc, like 'Stocks'
     stores: [
-        '${classname}s'
+        '${classnamePlural}'
     ],
 
     //VERIFY - both of these should be singular and lc, like 'stockList'
@@ -47,8 +47,8 @@ Ext.define('${my.applicationName}.controller.${classname}', {
         });
 
         // VERIFY - these should both be uc and plural
-        if (!Ext.getStore('${classname}s')) {
-            Ext.create('${my.applicationName}.store.${classname}s');
+        if (!Ext.getStore('${classnamePlural}')) {
+            Ext.create('${my.applicationName}.store.${classnamePlural}');
         }    
     },
 
@@ -106,7 +106,7 @@ Ext.define('${my.applicationName}.controller.${classname}', {
         }
     },
 
-    // delete one or more ${classname}s
+    // delete one or more ${classnamePlural}
     onDelete${classname}ButtonClicked: function (button, e, options) {
         var grid = this.get${classname}List(),
             record = grid.getSelectionModel().getSelection(), 
