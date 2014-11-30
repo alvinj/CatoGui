@@ -12,13 +12,12 @@ package com.devdaily.dbgrinder.model;
 
 public class ColumnData
 {
-  // NB "TEXT" is my own add on!
-  static String[] sqlTypes = { "CHAR","TINYINT","BIGINT","INT",
-                               "SMALLINT","FLOAT","REAL","DOUBLE",
-                               "NUMERIC","DECIMAL","DATE","VARCHAR",
-                               "LONGVARCHAR","TIMESTAMP","TIME","BIT",
-                               "BINARY","VARBINARY","LONGVARBINARY","NULL",
-                               "OTHER","TEXT" };
+  static String[] sqlTypes = { "CHAR", "TINYINT", "BIGINT", "INT",
+                               "SMALLINT", "FLOAT", "REAL", "DOUBLE",
+                               "NUMERIC", "DECIMAL", "DATE", "VARCHAR",
+                               "LONGVARCHAR", "TIMESTAMP", "TIME", "BIT",
+                               "BINARY", "VARBINARY", "LONGVARBINARY", "NULL",
+                               "OTHER", "TEXT" };
 
   int type;
   int columns;
@@ -37,6 +36,8 @@ public class ColumnData
     this.type = origType;
     this.columns = columns;
     this.isRequired = isRequired;
+    
+    System.err.println("ColumnData Constructor, origType = " + origType);
     
     switch (type)
     {
@@ -316,15 +317,18 @@ public class ColumnData
         break;
 
       case 3:
+        System.err.println("CASE 3");
         cType = "long";
         break;
 
       case 4:
+        System.err.println("CASE 4");
         cType = "integer";
         break;
 
       case 5:
-        cType = "integer";  // short
+        System.err.println("CASE 5");
+        cType = "short";  // short
         break;
 
       case 6:
