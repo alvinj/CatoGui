@@ -53,13 +53,17 @@
  * -------
  * HELPERS
  * -------
+ *
+ * DATE:
+ *
+ *    @inputDate(
+ *      ${objectname}Form("date"), 
+ *      '_label -> "Date"
+ *    ) 
+ *
  *@
 
-DATE:
-     @inputDate(
-       ${objectname}Form("date"), 
-       '_label -> "Date"
-     ) 
+
 
 
 

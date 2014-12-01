@@ -1,11 +1,8 @@
 
+<#-- you don't need to account for optional fields here; see the resulting, generated code -->
 <#macro getFieldsForConstructor the_fields>
     <#list the_fields as f>
-        <#if f.isRequired()>
-            ${f.camelCaseFieldName}<#if f_has_next>,</#if>
-        <#else>
-            Some(${f.camelCaseFieldName})<#if f_has_next>,</#if>
-        </#if>
+        ${f.camelCaseFieldName}<#if f_has_next>,</#if>
     </#list>
 </#macro>
 
@@ -17,33 +14,44 @@
     </#if>
 </#macro>
 
-
-    // TODO - may need to adjust these field types; see the documentation below.
-    // TODO - i should be able to handle "optional" fields here now 
-    
+    /**
+     * -----------------
+     *    CODE STARTS
+     * -----------------
+     */
+    // TODO you may need to adjust these field types; see the documentation below.
     val ${objectname}Form: Form[${classname}] = Form(
         mapping(
         <#list fields as field>
+          <#if field.isRequired()>
             "${field.camelCaseFieldName}" -> ${field.playFieldType}<#if field_has_next>,</#if>
+          <#else>
+            "${field.camelCaseFieldName}" -> ${field.playOptionalFieldType}<#if field_has_next>,</#if>
+          </#if>
         </#list>
         )
-        // (1) ${objectname}Form -> ${classname}
-        // TODO probably won't need all these fields, such as 'id'
-        // DATE might want to use `Calendar.getInstance.getTime` to create a Date in your constructor
-        // ID might want to use 0 for your `id` field in constructor
+        // --------------------------------------------------------
+        // (1) convert ${objectname}Form -> ${classname}
+        // --------------------------------------------------------
+        // NOTE: probably won't need all these fields, such as 'id'
+        // NOTE: might want to use `Calendar.getInstance.getTime` to create a Date in your constructor
+        // NOTE: might want to use 0 for your `id` field in constructor
         ((${fieldsAsCamelCaseCsvString}) => ${classname}(<@compress single_line=true><@getFieldsForConstructor the_fields=fields/></@compress>))
-        //
-        // (2) ${classname} -> ${objectname}Form (form fields must match above)
+        // -----------------------------------------------------------
+        // (2) convert ${classname} -> ${objectname}Form (form fields must match above)
+        // -----------------------------------------------------------
         ((${objectname}: ${classname}) => Some((
-        <#list fields as field>
-            <#if field.isRequired()>
+            <#list fields as field>
+            <#-- don't need 'getOrElse("")' here, as i initially thought -->
                 ${objectname}.<@compress single_line=true><@accountForDateField f=field/></@compress><#if field_has_next>,</#if>
-            <#else>
-                ${objectname}.${field.camelCaseFieldName}.getOrElse("")<#if field_has_next>,</#if>
-            </#if>
-        </#list>
+            </#list>
         )))
     )
+    /**
+     * ---------------
+     *    CODE ENDS
+     * ---------------
+     */
 
 //
 // see this url for play framework form field mapping examples:

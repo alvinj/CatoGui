@@ -1,13 +1,14 @@
     // ===========================================================
-    // Use one of the three options below in your controller file,
-    // app/controllers/${classname}.scala
+    // Use ONE of the three options below in your controller file,
+    // app/controllers/${classname}.scala (depending on your
+    // need/intent)
     // ===========================================================
     
     /**
-     * NOTE you need to generate the ${objectname}Form before this will work
+     * NOTE you need to generate the ${objectname}Form before this code will work
      */
 
-    // (A) non-async with a Play view
+    // (1) non-async with a Play view
     // ------------------------------
     def list = Action {
         Ok(html.${objectname}.list(${classname}.selectAll, ${objectname}Form))
@@ -18,13 +19,13 @@
     import play.api.libs.json.Json
     import play.api.libs.json.Json._
 
-    // (B) non-async with json
+    // (2) non-async with json
     // -----------------------
     def list = Action {
         Ok(Json.toJson(${classname}.selectAll))
     }
 
-    // (C) async with json
+    // (3) async with json
     // -------------------
 
     // needed to return async results

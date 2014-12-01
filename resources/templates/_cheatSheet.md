@@ -39,12 +39,13 @@ Scalar Variables
 
 Cato makes the following scalar variable variables available to you:
 
-    ${classname}                      EmailAddress
-    ${classnamePlural}                EmailAddresses
-    ${objectname}                     emailAddress
-    ${tablename}                      email_address
-    ${fieldsAsInsertCsvString}        id, user_id, email_address
-    ${fieldsAsCamelCaseCsvString}     id, userId, emailAddress
+    ${classname}                          EmailAddress
+    ${classnamePlural}                    EmailAddresses
+    ${objectname}                         emailAddress
+    ${tablename}                          email_address
+    ${fieldsAsInsertCsvString}            id, user_id, email_address
+    ${fieldsAsInsertCsvStringWoIdField}   user_id, email_address       // this may go away
+    ${fieldsAsCamelCaseCsvString}         id, userId, emailAddress
     ${prepStmtAsInsertCsvString}
     ${prepStmtAsUpdateCsvString}
 

@@ -4,12 +4,13 @@
 
     def insert(${objectname}: ${classname}): Option[Long] = {
         val id: Option[Long] = DB.withConnection { implicit c =>
+            // NOTE: intentionally skipping `id` field in insert "columns" list
             SQL("""
-                insert into ${tablename} (${fieldsAsInsertCsvString})
+                insert into ${tablename} (${fieldsAsInsertCsvStringWoIdField})
                 values (
                 <#list fields as field>
                 <#if field.camelCaseFieldName != "id" >
-                    {${field.camelCaseFieldName}},
+                    {${field.camelCaseFieldName}}<#if field_has_next>,</#if>
                 </#if>
                 </#list>
                 )

@@ -43,11 +43,12 @@ object CodeGenerator {
         data += ("objectname" -> TableUtils.convertTableNameToObjectName(dbTablename))
         
         // TODO - NEED TO VERIFY THESE
-        data += ("fieldsAsInsertCsvString" -> getFieldNamesAsCsvString(metaData, dbTablename, userSelectedFields))
-        data += ("fieldsAsCamelCaseCsvString" -> getFieldNamesCamelCasedAsCsvString(metaData, dbTablename, userSelectedFields))
-        data += ("prepStmtAsInsertCsvString" -> getPreparedStatementInsertString(metaData, dbTablename, userSelectedFields))
-        data += ("prepStmtAsUpdateCsvString" -> getPreparedStatementUpdateString(metaData, dbTablename, userSelectedFields))
-        
+        data += ("fieldsAsInsertCsvString"          -> getFieldNamesAsCsvString(metaData, dbTablename, userSelectedFields, false))
+        data += ("fieldsAsInsertCsvStringWoIdField" -> getFieldNamesAsCsvString(metaData, dbTablename, userSelectedFields, true))
+        data += ("fieldsAsCamelCaseCsvString"       -> getFieldNamesCamelCasedAsCsvString(metaData, dbTablename, userSelectedFields))
+        data += ("prepStmtAsInsertCsvString"        -> getPreparedStatementInsertString(metaData, dbTablename, userSelectedFields))
+        data += ("prepStmtAsUpdateCsvString"        -> getPreparedStatementUpdateString(metaData, dbTablename, userSelectedFields))
+
         // TODO need to add some more conversions here ...
     
         // create the array for "fields" for the template
@@ -144,11 +145,25 @@ object CodeGenerator {
      * the Seq you supply, which should just be the fields you supply,
      * in the order returned by the database.)
      */
-    def getFieldNamesAsCsvString(metaData: DatabaseMetaData, dbTableName: String, desiredFields: Seq[String] = null): String = {
-        if (desiredFields == null) {
-            TableUtils.getFieldNamesAsCsvString(getColumnData(metaData, dbTableName))
+    def getFieldNamesAsCsvString(metaData: DatabaseMetaData, 
+                                 dbTableName: String,
+                                 desiredFields: Seq[String] = null,
+                                 excludeIdField: Boolean): String = {
+        // TODO refactor this code, it's gotten out of control.
+        //      related: is the getFieldNamesAsCsvStringWithoutIdField() method that important?
+        //      can it be done in a template instead of here?
+        if (excludeIdField) {
+            if (desiredFields == null) {
+                TableUtils.getFieldNamesAsCsvStringWithoutIdField(getColumnData(metaData, dbTableName), None)
+            } else {
+                TableUtils.getFieldNamesAsCsvStringWithoutIdField(getColumnData(metaData, dbTableName), Some(desiredFields))
+            }
         } else {
-            TableUtils.getFieldNamesAsCsvString(getColumnData(metaData, dbTableName), desiredFields)
+            if (desiredFields == null) {
+                TableUtils.getFieldNamesAsCsvString(getColumnData(metaData, dbTableName))
+            } else {
+                TableUtils.getFieldNamesAsCsvString(getColumnData(metaData, dbTableName), desiredFields)
+            }
         }
     }
     

@@ -153,6 +153,22 @@ object TableUtils {
         loopOverTableFieldsAndReturnCsvString(ltdColumnData, noOp)
     }
     
+    /**
+     * returns the table field names as a csv string.
+     */
+    def getFieldNamesAsCsvStringWithoutIdField(tableColumns: Seq[ColumnData],
+                                               desiredFields: Option[Seq[String]]): String = {
+        def noOp(fieldName: String) = fieldName
+        def exclude(cd: ColumnData) = { cd.getColumnName != "id" }
+        desiredFields match {
+            case None =>
+                loopOverTableFieldsAndReturnCsvString(tableColumns, noOp, exclude)
+            case Some(fields) =>
+                val ltdColumnData = getSubsetOfColumnData(tableColumns, fields)
+                loopOverTableFieldsAndReturnCsvString(ltdColumnData, noOp, exclude)
+        }
+    }
+  
     def getFieldNamesCamelCasedAsCsvString(tableColumns: Seq[ColumnData]): String = {
         def camelCaseField(fieldName: String) = StringUtils.convertUnderscoreNameToUpperCase(fieldName)
         loopOverTableFieldsAndReturnCsvString(tableColumns, camelCaseField)
@@ -172,12 +188,16 @@ object TableUtils {
         tableColumns.filter(col => desiredFields.contains(col.getColumnName))
     }
   
-    private def loopOverTableFieldsAndReturnCsvString(tableColumns: Seq[ColumnData], f:(String) => String): String = {
+    private def returnTrue(cd: ColumnData) = true
+    private def loopOverTableFieldsAndReturnCsvString(tableColumns: Seq[ColumnData], 
+                                                      f:(String) => String,
+                                                      filterFunction:(ColumnData) => Boolean = returnTrue): String = {
         val sb = new StringBuilder
         var count = 0
-        for (column <- tableColumns) {
+        val filteredTableColumns = tableColumns.filter(filterFunction)
+        for (column <- filteredTableColumns) {
             sb.append(f(column.getColumnName))
-            if (count < tableColumns.length-1) sb.append(", ")
+            if (count < filteredTableColumns.length-1) sb.append(", ")
             count += 1
         }
         sb.toString

@@ -1,7 +1,9 @@
-
-//-----------------------------------------------------
-// NAME THIS FILE views/${objectname}/list.scala.html
-//-----------------------------------------------------
+@*
+ * --------------------------------------------------
+ * NAME THIS FILE views/${objectname}/list.scala.html
+ * -----------------------------------------------------
+ *
+ *@
 
 @(${objectname}s: List[${classname}], ${objectname}Form: Form[${classname}])
 
