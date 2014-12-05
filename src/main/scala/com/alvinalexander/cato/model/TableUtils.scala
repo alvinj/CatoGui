@@ -278,7 +278,11 @@ object TableUtils {
             while (rs.next) {
                 val colName = rs.getString(4)
                 if (typesAreStrings) {
-                    colStringType = rs.getString(5)
+                    colStringType = rs.getString(5)  // is "4" for an int
+                    val dataSourceDependentTypeName = rs.getString(6)
+                    if (colStringType == "4" && intReallyNeedsToBeLong(dataSourceDependentTypeName)) {
+                        colStringType = "3"  // 3 is "long"
+                    }
 
 //                    System.err.println(s"\n$colName")
 //                    System.err.println(s"~~~~~~~~~~~~~~~")
@@ -314,6 +318,16 @@ object TableUtils {
             DatabaseUtils.closeResultSetIgnoringExceptions(rs)
             colData
         }
+    }
+    
+    /**
+     * TODO this is a bit of a kludge
+     */
+    def intReallyNeedsToBeLong(dataSourceDependentTypeName: String) = dataSourceDependentTypeName match {
+        case "INT UNSIGNED" => true
+        case "MEDIUMINT" => true
+        case "MEDIUMINT UNSIGNED" => true
+        case _ => false
     }
     
     // isRequired is the opposite of isNullable

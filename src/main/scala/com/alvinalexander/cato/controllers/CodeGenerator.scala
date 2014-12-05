@@ -174,30 +174,6 @@ object CodeGenerator {
             TableUtils.getFieldNamesCamelCasedAsCsvString(getColumnData(metaData, dbTableName), desiredFields)
         }
     }    
-//    /**
-//     * This code shows a demo of how this needs to work with FreeMarker.
-//     * The real method will need to accept (templateAsString, data) as
-//     * arguments, and return the transformed String.
-//     */
-//    def generateCodeExample(templateAsString: String, data: Map[String, Object]): String = {
-//        val data = scala.collection.mutable.Map[String, Object]()
-//        data += ("message" -> "Hello, world!")
-//    
-//        val countries = new ArrayBuffer[String]
-//        countries += ("India")
-//        countries += ("United States")
-//        countries += ("Germany")
-//        countries += ("France")
-//    
-//        // convert the data to java data types before calling the freemarker-based method.
-//        // http://www.scala-lang.org/api/current/index.html#scala.collection.JavaConversions$
-//        val jlist : java.util.List[String] = countries
-//        data.put("countries", jlist)    
-//        val jmap = new java.util.HashMap[String, Object](data)
-//        
-//        val result = TemplateEngine.applyDataToTemplate(null, templateAsString, jmap)
-//        result
-//    }
   
 }
 

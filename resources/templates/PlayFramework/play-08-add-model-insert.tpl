@@ -1,7 +1,11 @@
-//
-// add this code to your model object
-//
+    //
+    // add this code to your model object (the object, not the class)
+    //
 
+    //
+    // NOTE the type "Long" is hard-coded in these first two lines.
+    //      this is probably desired, just letting you know.
+    //
     def insert(${objectname}: ${classname}): Option[Long] = {
         val id: Option[Long] = DB.withConnection { implicit c =>
             // NOTE: intentionally skipping `id` field in insert "columns" list
