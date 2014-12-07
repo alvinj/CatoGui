@@ -8,7 +8,7 @@
 
 <#macro accountForDateField f>
     <#if f.databaseFieldType == "timestamp">
-        ${f.camelCaseFieldName}.asInstanceOf[java.sql.Date]
+        ${f.camelCaseFieldName}.asInstanceOf[java.util.Date]
     <#else>
         ${f.camelCaseFieldName}
     </#if>

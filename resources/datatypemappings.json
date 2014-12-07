@@ -40,25 +40,25 @@
             "language"  : "play",
             "blob"      : "nonEmptyText",
             "boolean"   : "boolean",
-            "date"      : "sqlDate",
+            "date"      : "date",
             "double"    : "number",
             "float"     : "number",
             "integer"   : "number",
             "long"      : "longNumber",
             "text"      : "nonEmptyText",
-            "timestamp" : "sqlDate"
+            "timestamp" : "date"
         }},
         { "datatype": {
             "language"  : "playOptional",
             "blob"      : "optional(text)",
             "boolean"   : "optional(boolean)",
-            "date"      : "optional(sqlDate)",
+            "date"      : "optional(date)",
             "double"    : "optional(number)",
             "float"     : "optional(number)",
             "integer"   : "optional(number)",
             "long"      : "optional(longNumber)",
             "text"      : "optional(text)",
-            "timestamp" : "optional(sqlDate)"
+            "timestamp" : "optional(date)"
         }},
         { "datatype": {
             "language"  : "scala",
