@@ -1,8 +1,10 @@
+"Read Me" for Developers
+========================
 
-I'm trying to make the "types" better (more accurate).
-here are some notes from current work
+I'm currently working to make the data types more accurate.
+As a result, these are some notes from my current work.
 
-* if i can do anything, it will be in TableUtils::getColumnData
+* The main method to focus on is TableUtils::getColumnData
 
 Here's a new MySQL table I'm using to test the code:
 
@@ -121,57 +123,67 @@ sqlDataType          = 0
 isAutoIncrementField = NO
 ````
 
+
+MySQL - Numeric Data Types
+--------------------------
+
 Notes on MySQL data types:
 
-````
-MySQL Data Type Sizes
----------------------
+	MySQL Data Type Sizes
+	---------------------
+	
+	Type	Storage	Minimum Value	Maximum Value
+	 	(Bytes)	(Signed/Unsigned)	(Signed/Unsigned)
+	TINYINT	1	-128	127
+	 	 	0	255
+	SMALLINT	2	-32768	32767
+	 	 	0	65535
+	MEDIUMINT	3	-8388608	8388607
+	 	 	0	16777215
+	INT	4	-2147483648	2147483647
+	 	 	0	4294967295
+	BIGINT	8	-9223372036854775808	9223372036854775807
+	 	 	0	18446744073709551615
 
-Type	Storage	Minimum Value	Maximum Value
- 	(Bytes)	(Signed/Unsigned)	(Signed/Unsigned)
-TINYINT	1	-128	127
- 	 	0	255
-SMALLINT	2	-32768	32767
- 	 	0	65535
-MEDIUMINT	3	-8388608	8388607
- 	 	0	16777215
-INT	4	-2147483648	2147483647
- 	 	0	4294967295
-BIGINT	8	-9223372036854775808	9223372036854775807
- 	 	0	18446744073709551615
-````
-
-that came from here:
+Those numbers come from here:
 http://dev.mysql.com/doc/refman/5.0/en/integer-types.html
 
-Notes on mapping MySQL types to Java:
 
-````
-MySQL Type      Java Type
-----------      ---------
-CHAR            String
-VARCHAR         String
-LONGVARCHAR     String
-NUMERIC         java.math.BigDecimal
-DECIMAL         java.math.BigDecimal
-BIT             boolean
-TINYINT         byte
-SMALLINT        short
-INTEGER         int
-BIGINT          long
-REAL            float
-FLOAT           double
-DOUBLE          double
-BINARY          byte[]
-VARBINARY       byte[]
-LONGVARBINARY   byte[]
-DATE            java.sql.Date
-TIME            java.sql.Time
-TIMESTAMP       java.sql.Tiimestamp
-````
+Mapping MySQL Numeric Types to Java
+-----------------------------------
 
-those are from me:
+Notes on mapping MySQL numeric types to Java:
+
+	MySQL Type      Java Type
+	----------      ---------
+	CHAR            String
+	VARCHAR         String
+	LONGVARCHAR     String
+	NUMERIC         java.math.BigDecimal
+	DECIMAL         java.math.BigDecimal
+	BIT             boolean
+	TINYINT         byte
+	SMALLINT        short
+	INTEGER         int
+	BIGINT          long
+	REAL            float
+	FLOAT           double
+	DOUBLE          double
+	BINARY          byte[]
+	VARBINARY       byte[]
+	LONGVARBINARY   byte[]
+	DATE            java.sql.Date
+	TIME            java.sql.Time
+	TIMESTAMP       java.sql.Tiimestamp
+
+Those notes come from me at this URL:
 http://alvinalexander.com/java/mysql-to-java-field-mappings-decimal-bigdecimal-scala
+
+
+
+
+
+
 
 
 
