@@ -18,12 +18,18 @@
      * -----------------
      *    CODE STARTS
      * -----------------
+     * Date Handling:
+     * -----------------
+     * how to handle `dateCreated` or `dateUpdated`:
+     *     make it "dateCreated" -> optional(date)" in the mapping
+     *     make it "Calendar.getInstance.getTime" in the ${objectname}Form -> ${classname} mapping
+     *     make it "Some(user.dateCreated.asInstanceOf[java.util.Date])" in the ${classname} -> ${objectname}Form
      */
     // TODO you may need to adjust these field types; see the documentation below.
     val ${objectname}Form: Form[${classname}] = Form(
         mapping(
         <#list fields as field>
-          <#if field.isRequired()>
+          <#if field.isRequired() && field.camelCaseFieldName != "dateCreated">
             "${field.camelCaseFieldName}" -> ${field.playFieldType}<#if field_has_next>,</#if>
           <#else>
             "${field.camelCaseFieldName}" -> ${field.playOptionalFieldType}<#if field_has_next>,</#if>
@@ -61,20 +67,20 @@
 //--------------------------------------
 // OTHER PLAY FRAMEWORK EXAMPLES & TYPES
 //--------------------------------------
-"date" -> optional(date("yyyy-MM-dd")),   // java.util.Date
-"date" -> date("yyyy-MM-dd"),   // java.util.Date
-"username" -> nonEmptyText,
-"username" -> nonEmptyText(6),       // requires a minimum of six characters
-"notes" -> text,
-"password" -> text(minLength = 10),
-"count" -> number,
+"date"             -> optional(date("yyyy-MM-dd")),   // java.util.Date
+"date"             -> date("yyyy-MM-dd"),   // java.util.Date
+"username"         -> nonEmptyText,
+"username"         -> nonEmptyText(6),       // requires a minimum of six characters
+"notes"            -> text,
+"password"         -> text(minLength = 10),
+"count"            -> number,
 "addToMailingList" -> boolean,
-"email" -> email,
-"company" -> optional(text),
-"numberOfShares" -> optional(number),
-"stocks" -> list(text),
-"emailAddresses" -> list(email),
-"id" -> ignored(1234),
+"email"            -> email,
+"company"          -> optional(text),
+"numberOfShares"   -> optional(number),
+"stocks"           -> list(text),
+"emailAddresses"   -> list(email),
+"id"               -> ignored(1234),
 
 boolean
 checked

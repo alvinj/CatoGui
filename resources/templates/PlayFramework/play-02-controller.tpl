@@ -7,7 +7,7 @@ import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import views._
 import models._
-import scala.collection.mutable.ArrayBuffer
+import java.util.Calendar
 
 object ${classnamePlural} extends Controller {
 
