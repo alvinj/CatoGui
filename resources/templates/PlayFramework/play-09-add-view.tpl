@@ -35,7 +35,7 @@
      <#if field.camelCaseFieldName != "id" && field.camelCaseFieldName != "dateCreated" && field.camelCaseFieldName != "dateUpdated" >
      @inputText(
        ${objectname}Form("${field.camelCaseFieldName}"), 
-       '_label -> "${field.fieldName?capitalize}"
+       '_label -> "${field.fieldNameAsLabel}"
      )
      </#if>
      </#list>

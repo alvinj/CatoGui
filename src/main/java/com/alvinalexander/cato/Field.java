@@ -1,10 +1,14 @@
 package com.alvinalexander.cato;
 
-// TODO delete this class
+/**
+ * This class is deprecated because I'd like to move it to Scala, but I haven't been
+ * able to get the Scala version to play well with FreeMarker (or vice-versa).
+ */
 @Deprecated
 public class Field {
 
     String fieldName;
+    String fieldNameAsLabel;
     String camelCaseFieldName;
     String javaFieldType;
     String jsonFieldType;
@@ -18,6 +22,7 @@ public class Field {
 
     public Field (
         String fieldName, 
+        String fieldNameAsLabel,
         String camelCaseFieldName, 
         String javaFieldType,
         String jsonFieldType,
@@ -30,6 +35,7 @@ public class Field {
         boolean isRequired
     ) {
         this.fieldName = fieldName;
+        this.fieldNameAsLabel = fieldNameAsLabel;
         this.camelCaseFieldName = camelCaseFieldName;
         this.javaFieldType = javaFieldType;
         this.jsonFieldType = jsonFieldType;
@@ -44,6 +50,10 @@ public class Field {
     
     public String getFieldName() {
         return fieldName;
+    }
+
+    public String getFieldNameAsLabel() {
+        return fieldNameAsLabel;
     }
 
     public boolean isRequired() {

@@ -42,14 +42,11 @@ object CodeGenerator {
         data += ("classnamePlural" -> Inflections.pluralize(classname))
         data += ("objectname" -> TableUtils.convertTableNameToObjectName(dbTablename))
         
-        // TODO - NEED TO VERIFY THESE
         data += ("fieldsAsInsertCsvString"          -> getFieldNamesAsCsvString(metaData, dbTablename, userSelectedFields, false))
         data += ("fieldsAsInsertCsvStringWoIdField" -> getFieldNamesAsCsvString(metaData, dbTablename, userSelectedFields, true))
         data += ("fieldsAsCamelCaseCsvString"       -> getFieldNamesCamelCasedAsCsvString(metaData, dbTablename, userSelectedFields))
         data += ("prepStmtAsInsertCsvString"        -> getPreparedStatementInsertString(metaData, dbTablename, userSelectedFields))
         data += ("prepStmtAsUpdateCsvString"        -> getPreparedStatementUpdateString(metaData, dbTablename, userSelectedFields))
-
-        // TODO need to add some more conversions here ...
     
         // create the array for "fields" for the template
         val fields = getFieldDataForTableName(metaData, allDataTypesAsMap, dbTablename, userSelectedFields)
@@ -68,8 +65,9 @@ object CodeGenerator {
                                                   catalog=null, 
                                                   schema=null, 
                                                   typesAreStrings=true).get
-        val fieldNames = TableUtils.getFieldNames(columnData, fieldsTheUserSelected)
-        val camelCasefieldNames = TableUtils.getCamelCaseFieldNames(columnData, fieldsTheUserSelected)
+        val fieldNames             = TableUtils.getFieldNames(columnData, fieldsTheUserSelected)
+        val fieldNamesAsLabels     = TableUtils.getFieldNamesAsLabels(columnData, fieldsTheUserSelected)
+        val camelCasefieldNames    = TableUtils.getCamelCaseFieldNames(columnData, fieldsTheUserSelected)
         
         val javaTypesMap           = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.JAVA, allDataTypesAsMap)
         val jsonTypesMap           = DataTypeMappingsController.getDataTypeMap(DataTypeMappingsController.JSON, allDataTypesAsMap)
@@ -95,6 +93,7 @@ object CodeGenerator {
         for (i <- 0 until numFields) {
             fields += new Field(
                               fieldNames(i), 
+                              fieldNamesAsLabels(i), 
                               camelCasefieldNames(i), 
                               javaFieldTypes(i),
                               jsonFieldTypes(i),

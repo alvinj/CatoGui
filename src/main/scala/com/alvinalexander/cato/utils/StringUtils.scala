@@ -11,6 +11,8 @@ object StringUtils {
         val sw = new StringWriter
         t.printStackTrace(new PrintWriter(sw))
         sw.toString
-    } 
+    }
+    
+    def capitalizeAllWordsInString(s: String) = s.split(' ').map(_.capitalize).mkString(" ")
 
 }

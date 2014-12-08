@@ -77,6 +77,7 @@ can use in a `Field` loop in your templates:
 
 ````
 fieldName              // String,   ex: first_name  (the field name in the db table)
+fieldNameAsLabel       // String,   ex: First Name  (good for labels on textfields, textareas, etc.) 
 camelCaseFieldName     // String,   ex: firstName
 javaFieldType          // String,   ex: String
 jsonFieldType          // String,   ex: JsString

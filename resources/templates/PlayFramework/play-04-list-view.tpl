@@ -28,8 +28,9 @@
       <thead>
         <tr>
 <#list fields as field>
-          @header(${field_index + 1}, "${field.camelCaseFieldName}")
+          @header(${field_index + 1}, "${field.fieldNameAsLabel}")
 </#list>
+          <th>Actions</th>
         </tr>
       </thead>
 
@@ -37,14 +38,16 @@
 
         @${objectname}s.map { ${objectname} =>
            <tr>
-              @* TODO - DELETE EXTRA "ID" COLUMN *@
              <td><a href="@routes.${classnamePlural}.edit(${objectname}.id)">@${objectname}.id</a></td>
-
 <#list fields as field>
 <#if field.isRequired() >
+    <#if field.camelCaseFieldName != "id" >
              <td>@${objectname}.${field.camelCaseFieldName}</td>
+    </#if>
 <#else>
+    <#if field.camelCaseFieldName != "id" >
              <td>@${objectname}.${field.camelCaseFieldName}.getOrElse { <em>-</em> }</td>
+    </#if>
 </#if>
 </#list>
              <td>

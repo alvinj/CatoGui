@@ -6,6 +6,7 @@ import scala.collection.mutable.ArrayBuffer
 import java.sql.ResultSet
 import scala.util.{Try,Success,Failure}
 import com.devdaily.dbgrinder.utility.StringUtils
+import com.alvinalexander.inflector.Inflections
 
 object TableUtils {
 
@@ -70,7 +71,17 @@ object TableUtils {
         val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
         ltdTableColumns.map((cd: ColumnData) => cd.getColumnName)
     }
-  
+
+    /**
+     * Converts field names like `employee_salary` to "Employee Salary", so these can be used as
+     * labels for text fields and text areas on forms, column headings, etc.
+     */
+    def getFieldNamesAsLabels(tableColumns: Seq[ColumnData], desiredFields: Seq[String]): Seq[String] = {
+        // TODO this import is a kludge until i merge the old and new StringUtils
+        import com.alvinalexander.cato.utils.{StringUtils => SU}
+        val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
+        ltdTableColumns.map((cd: ColumnData) => SU.capitalizeAllWordsInString(Inflections.humanize(cd.getColumnName)))
+    }
 
     /**
      * converts field names from `email_address` to `emailAddress`
