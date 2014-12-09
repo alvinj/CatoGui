@@ -37,7 +37,7 @@ public class ColumnData
     this.columns = columns;
     this.isRequired = isRequired;
     
-    System.err.println("ColumnData Constructor, origType = " + origType);
+    //System.err.println("ColumnData Constructor, origType = " + origType);
     
     switch (type)
     {
@@ -317,17 +317,14 @@ public class ColumnData
         break;
 
       case 3:
-        System.err.println("CASE 3");
         cType = "long";
         break;
 
       case 4:
-        System.err.println("CASE 4");
         cType = "integer";
         break;
 
       case 5:
-        System.err.println("CASE 5");
         cType = "short";  // short
         break;
 

@@ -130,7 +130,7 @@ object TableUtils {
         val ltdTableColumns = getSubsetOfColumnData(tableColumns, desiredFields)
         //ltdTableColumns.map((cd: ColumnData) => dataTypesMap(cd.getDatabaseColumnType))
         ltdTableColumns.map((cd: ColumnData) => {
-            System.err.println(s"COLTYPE: ${cd.getColumnName} = ${cd.getDatabaseColumnType}")
+            //System.err.println(s"COLTYPE: ${cd.getColumnName} = ${cd.getDatabaseColumnType}")
             dataTypesMap(cd.getDatabaseColumnType)
         })
     }
